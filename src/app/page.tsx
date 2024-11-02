@@ -1,7 +1,9 @@
 'use client';
 import Image from "next/image";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { KeyboardEvent } from "react";
+import CircleIcon from '@/app/icons/CircleIcon.svg';
+import ArrowDownIcon from '@/app/icons/ArrowDownIcon.svg';
 
 export default function Home() {
 
@@ -58,37 +60,52 @@ export default function Home() {
     },
   ]
 
-  const onlyNumberInput = (e: KeyboardEvent) => {if(!/[0-9]|Delete|Backspace|ArrowLeft|ArrowRight/i.test(e.key)){e.preventDefault()}};
+  const [showCategories, setShowCategories] = useState(false);
+
+  const categories = ["Categoría 1", "Categoría 2", "Categoría 3", "Categoría 4"];
+
+  const onlyNumberInput = (e: KeyboardEvent) => { if (!/[0-9]|Delete|Backspace|ArrowLeft|ArrowRight/i.test(e.key)) { e.preventDefault() } };
 
   return (
-    <div className="next.svg">
-      <main className="next.svg">
-        <aside>
+    <div className="catalog">
+      <main className="main">
+        <aside className="filter">
           <h1>Filtros</h1>
           <article>
-            <h2>Categorias</h2>
-            <input type="radio" id="cat1" name="categorias" placeholder="Categoria 1" value={"Categoria 1"} />
-            <label htmlFor="cat1">Categoria 1</label>
-            <input type="radio" id="cat2" name="categorias" placeholder="Categoria 2" value={"Categoria 2"} />
-            <label htmlFor="cat2">Categoria 2</label>
-            <input type="radio" id="cat3" name="categorias" placeholder="Categoria 3" value={"Categoria 3"} />
-            <label htmlFor="cat3">Categoria 3</label>
-            <input type="radio" id="cat4" name="categorias" placeholder="Categoria 4" value={"Categoria 4"} />
-            <label htmlFor="cat4">Categoria 4</label>
+            <h2 onClick={() => setShowCategories(!showCategories)} style={{ cursor: 'pointer' }}>
+              <CircleIcon /> Categorías <ArrowDownIcon/>
+            </h2>
+
+            {showCategories && (
+              <div className="category-options">
+                {categories.map((category, index) => (
+                  <div key={index}>
+                    <input type="radio" id={`cat${index + 1}`} name="categorias" value={category} />
+                    <label htmlFor={`cat${index + 1}`}>{category}</label>
+                  </div>
+                ))}
+              </div>
+            )}
+          </article>
+
+          <article className="price">
+            <h2><CircleIcon />Precio</h2>
+            <input type="input" placeholder="Min" onKeyDown={onlyNumberInput} /> <p>a</p>
+            <input type="input" placeholder="Max" onKeyDown={onlyNumberInput} />
           </article>
 
           <article>
-            <h2>Precio</h2>
-            <input type="input" placeholder="Min" onKeyDown={onlyNumberInput}/> <p>-</p>
-            <input type="input" placeholder="Max" onKeyDown={onlyNumberInput}/>
-          </article>
-
-          <article>
-            <h2>Ordenar por</h2>
-            <input type="radio" id="cat1" name="ordenar-por" placeholder="Nombre" value={"Nombre"} />
-            <label htmlFor="cat1">Nombre</label>
-            <input type="radio" id="cat2" name="ordenar-por" placeholder="Precio" value={"Precio"} />
-            <label htmlFor="cat2">Precio</label>
+            <h2><CircleIcon />Ordenar por</h2>
+            <div className="order-by">
+              <div className="option">
+                <input type="radio" id="cat1" name="ordenar-por" value="Nombre" />
+                <label htmlFor="cat1">Nombre</label>
+              </div>
+              <div className="option">
+                <input type="radio" id="cat2" name="ordenar-por" value="Precio" />
+                <label htmlFor="cat2">Precio</label>
+              </div>
+            </div>
             <select>
               <option hidden></option>
               <option>Ascendente</option>
@@ -98,20 +115,24 @@ export default function Home() {
 
           <button>Filtrar</button>
         </aside>
-        <section>
+        <section className="content">
           <h1>Productos</h1>
           <Suspense fallback={<div>Loading...</div>}>
-            <div>
+            <div className="list-product">
               {products.map((product, index) => (
                 <article key={index}>
-                  <Image src={product.imagen} alt={product.nombre} height={150} width={150} />
-                  <h2>{product.nombre}</h2>
-                  <p>{product.precio}</p>
-                  <button>Añadir al carrito</button>
+                  <div className="img">
+                    <Image src={product.imagen} alt={product.nombre} height={150} width={150} />
+                  </div>
+                  <div className="details">
+                    <h2>{product.nombre}</h2>
+                    <p>$ {product.precio}</p>
+                    <button>Añadir al carrito</button>
+                  </div>
                 </article>
-                ))
+              ))
               }
-          </div>
+            </div>
           </Suspense>
         </section>
       </main>

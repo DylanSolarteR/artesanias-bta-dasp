@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Artesanias Bogota LTDA",
-  description: "Comercio Electronico de Artesanias",
+  title: "Artesanías Bogotá LTDA",
+  description: "Comercio Electrónico de Artesanías",
 };
 
 export default function RootLayout({
