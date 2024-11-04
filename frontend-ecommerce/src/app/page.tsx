@@ -1,9 +1,10 @@
 'use client';
 import Image from "next/image";
 import { Suspense, useState } from "react";
-import { KeyboardEvent } from "react";
 import CircleIcon from '@/app/icons/CircleIcon.svg';
 import ArrowDownIcon from '@/app/icons/ArrowDownIcon.svg';
+import { onlyNumberInput } from "@/app/util/utils";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -64,8 +65,6 @@ export default function Home() {
 
   const categories = ["Categoría 1", "Categoría 2", "Categoría 3", "Categoría 4"];
 
-  const onlyNumberInput = (e: KeyboardEvent) => { if (!/[0-9]|Delete|Backspace|ArrowLeft|ArrowRight/i.test(e.key)) { e.preventDefault() } };
-
   return (
     <div className="catalog">
       <main className="main">
@@ -122,10 +121,10 @@ export default function Home() {
               {products.map((product, index) => (
                 <article key={index}>
                   <div className="img">
-                    <Image src={product.imagen} alt={product.nombre} height={150} width={150} />
+                  <Link href={`/producto/${index}`}><Image src={product.imagen} alt={product.nombre} height={150} width={150} /></Link>
                   </div>
                   <div className="details">
-                    <h2>{product.nombre}</h2>
+                    <Link href={`/producto/${index}`}><h2>{product.nombre}</h2></Link>
                     <p>$ {product.precio}</p>
                     <button>Añadir al carrito</button>
                   </div>
