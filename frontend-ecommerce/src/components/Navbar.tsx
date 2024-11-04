@@ -24,7 +24,7 @@ function Navbar() {
                     </li>
                     <li>
                         <div className='shopping-cart'>
-                            <Link href="/Carrito">
+                            <Link href="/carrito">
                                 <Image src={CarritoIcon} alt='Icono de carrito' width={45} height={45} />
                             </Link>
                         </div>
