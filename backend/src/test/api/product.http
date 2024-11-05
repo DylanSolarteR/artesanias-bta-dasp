@@ -1,2 +1,7 @@
 
 http://localhost:3200/api/product/list?minPrice=22000&maxPrice=24000&orderBy[0]=name,asc&orderBy[1]=price,desc
+###
+http://localhost:3200/api/product/list?name=desc
+
+###
+http://localhost:3200/api/product/list

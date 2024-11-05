@@ -48,21 +48,3 @@ export class CriteriaPostgresConverter {
         return [query, params];
     }
 }
-
-// TEST
-import { Filter, Sort, matchType } from "../Criteria";
-let cri: Criteria = new Criteria({
-    filters: [
-        new Filter('papa', 'una papa', matchType.strictEqual),
-        new Filter('yuca', 'una yuca', matchType.nonStrictEqual),
-        new Filter('numero', 4, matchType.greaterThanOrEqual),
-    ],
-    sortBy: [
-        new Sort('orden 1', true),
-        new Sort('orden 2', false)
-    ],
-    limit: 50,
-    offset: 10
-})
-let res = CriteriaPostgresConverter.convert(cri)
-console.log(res)
