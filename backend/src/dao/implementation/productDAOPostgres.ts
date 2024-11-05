@@ -2,7 +2,7 @@
 import { Product } from "../../model/businessTypes";
 import { Criteria } from "../Criteria";
 import { IDAO, ObjectResponse } from "../dao";
-import { PostgresConnection } from "./connection";
+import { PostgresConnection } from "./postgresConnection";
 import { CriteriaPostgresConverter } from "./CriteriaPostgresConverter";
 
 export class ProductDAOPostgres implements IDAO<Product> {
@@ -20,7 +20,8 @@ export class ProductDAOPostgres implements IDAO<Product> {
         let [restriction, params] = CriteriaPostgresConverter.convert(criteria)
 
         query += restriction
-
+        console.log(query)
+        console.log(params)
         try {
             let pool = await PostgresConnection.getInstance().getPool()
 
@@ -38,7 +39,8 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     p.cat_id,
                     p.fk_id_prod_base,
                     p.valor,
-                    p.imagen
+                    p.imagen,
+                    p.pk_id
                 ))
             }
             return new ObjectResponse(true, products, null)

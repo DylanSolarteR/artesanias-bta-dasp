@@ -1,4 +1,4 @@
-import { Request, Response, RequestHandler } from 'express';
+import { Request, Response } from 'express';
 import { ProductDAOPostgres } from '../dao/implementation/productDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
 import { Product } from '../model/businessTypes';
@@ -6,7 +6,6 @@ import { Product } from '../model/businessTypes';
 
 
 export async function listProducts(req: Request, res: Response) {
-    console.log(req)
     let dao = new ProductDAOPostgres();
     let query: Object = req.query;
 
