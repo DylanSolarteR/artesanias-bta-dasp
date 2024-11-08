@@ -7,15 +7,20 @@ type productFilters = {
     category?: number,
     minPrice?: number,
     maxPrice?: number,
+    nameProd?: string,
 }
 export async function listProducts({
     orderBy,
     category = null,
     minPrice = null,
     maxPrice = null,
+    nameProd = null,
 }: productFilters) {
     let query = new URLSearchParams();
     query.append('orderBy', `${orderBy[0]},${orderBy[1]}`)
+    if (nameProd){
+        query.append('nameProd', category.toString())
+    }
     if (category) {
         query.append('category', category.toString())
     }
