@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #FDFDFD;
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     /* --background: #0a0a0a; */
-    --background: #fff;
+    --background: #FFFFFF;
     --foreground: #ededed;
   }
 }
@@ -23,136 +23,6 @@ body {
   font-weight: 500;
   font-style: inherit;
   font-size: 20px;
-}
-
-.catalog {
-  padding: 5px;
-  background-color: #ffffff;
-}
-
-.main {
-  display: flex;
-  gap: 5px;
-}
-
-.filter {
-  width: 18%; 
-  background-color: #ffffff;
-  padding: 10px;
-  border-right-color: #e0dfdf;
-  border-right-width: 1px;
-  align-items: center;
-}
-
-.filter h2, input, select, p, label {
-  margin-top: 10px;
-}
-
-.filter h1, .filter h2 {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  vertical-align: middle;
-}
-
-.filter h1{
-  font-size: 26px;
-}
-
-.filter input, .filter select, .filter p {
-  margin-left: 32px;
-}
-
-.filter select, .price input, .price label {
-  border-radius: 4%;
-  border-width: 1px;
-  width: 70%;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.option {
-  display: flex;
-  gap: 0rem; 
-}
-
-.category-options label, .order-by label {
-  margin-left: 5px;
-}
-
-.filter button {
-  background-color: #DC8148;
-  color: #fff;
-  padding: 4px 8px;
-  margin-top: 10px;
-  border-radius: 4px;
-  cursor: pointer;
   width: 100%;
-}
-
-.filter button:hover {
-  background-color: #eba278;
-}
-
-.content {
-  width: 90%;
-  padding: 10px;
-}
-
-.content h1 {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.list-product {
-  display: grid;
-  grid-template-columns: repeat(3,  1fr);
-  gap: 10px;
-}
-
-.list-product article {
-  background-color: #ffffff;
-  padding: 2px;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  gap: 5px;
-}
-
-.img {
-  display: flex;
-  width: 50%;
-  margin: 4px;
-  border-radius: 8px;
-}
-
-.details {
-  width: 50%;
-  margin: 4px;
-}
-
-.list-product h2 {
-  margin: 10px 0;
-  font-size: 22px;
-}
-
-.list-product p {
-  font-size: 22px;
-  color: #333;
-  margin: 10px 0;
-}
-
-.list-product button {
-  background-color: #DC8148;
-  color: #ffffff;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-}
-
-.list-product button:hover {
-  background-color: #eba278;
+  height: 100%;
 }
