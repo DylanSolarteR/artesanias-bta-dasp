@@ -12,11 +12,11 @@ export class ProductDAOPostgres implements IDAO<Product> {
 
     async query(criteria: Criteria): Promise<ObjectResponse<Product[]>> {
         let query = `SELECT 
-                        producto.*,
-                        categoria.nombre as cat_nom,
-                        categoria.pk_id as cat_id
-                    FROM producto
-                    INNER JOIN categoria ON categoria.pk_id = producto.fk_categoria`
+                        product.*,
+                        category.name as cat_name,
+                        category.pk_id as cat_id
+                    FROM product
+                    INNER JOIN category ON category.pk_id = product.fk_category`
         let [restriction, params] = CriteriaPostgresConverter.convert(criteria)
 
         query += restriction
@@ -33,13 +33,13 @@ export class ProductDAOPostgres implements IDAO<Product> {
             let products = [];
             if (res.rowCount > 0) {
                 products = res.rows.map(p => new Product(
-                    p.nombre,
-                    p.descripcion,
-                    p.cat_nom,
+                    p.name,
+                    p.description,
+                    p.cat_name,
                     p.cat_id,
                     p.fk_id_prod_base,
-                    p.valor,
-                    p.imagen,
+                    p.price,
+                    p.image,
                     p.pk_id
                 ))
             }

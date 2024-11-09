@@ -11,15 +11,15 @@ export async function listProducts(req: Request, res: Response) {
 
     let filters = []
     if (query.hasOwnProperty('minPrice')) {
-        filters.push(new Filter('valor',
+        filters.push(new Filter('price',
             <string>req.query['minPrice'], matchType.greaterThanOrEqual));
     }
     if (query.hasOwnProperty('maxPrice')) {
-        filters.push(new Filter('valor',
+        filters.push(new Filter('price',
             <string>req.query['maxPrice'], matchType.lessThanOrEqual));
     }
     if (query.hasOwnProperty('category')) {
-        filters.push(new Filter('categoria.pk_id',
+        filters.push(new Filter('category.pk_id',
             <string>req.query['category'], matchType.strictEqual));
     }
 

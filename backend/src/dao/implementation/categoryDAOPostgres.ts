@@ -10,7 +10,7 @@ export class CategoryDAOPostgres implements IDAO<ProductCategory> {
     }
 
     async query(criteria: Criteria): Promise<ObjectResponse<ProductCategory[]>> {
-        let query = `SELECT * FROM categoria`
+        let query = `SELECT * FROM category`
 
         try {
             let pool = await PostgresConnection.getInstance().getPool()
@@ -20,8 +20,8 @@ export class CategoryDAOPostgres implements IDAO<ProductCategory> {
             let categories = [];
             if (res.rowCount > 0) {
                 categories = res.rows.map(c => new ProductCategory(
-                    c.nombre,
-                    c.descripcion,
+                    c.name,
+                    c.description,
                     c.pk_id
                 ))
             }
