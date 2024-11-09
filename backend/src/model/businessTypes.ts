@@ -3,11 +3,11 @@
 export class Product {
 
     public static readonly filterDict = {
-        'minPrice': 'valor',
-        'maxPrice': 'valor',
-        'category': 'categoria',
-        'name': 'nombre',
-        'price': 'valor'
+        'minPrice': 'price',
+        'maxPrice': 'price',
+        'category': 'category',
+        'name': 'name',
+        'price': 'price',
     }
     constructor(
         public name: string,
