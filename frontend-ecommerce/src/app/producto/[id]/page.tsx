@@ -2,10 +2,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
-import Example from '@/app/icons/BagsadIcon.png';
-import { use, useEffect, useState } from "react";
+import Example from "@/app/icons/BagsadIcon.png";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { onlyNumberInput } from "@/app/util/utils";
+import { onlyNumberInput } from "@/util/utils";
 import PlusIcon from "@/app/icons/PlusIcon.svg?url";
 import MinusIcon from "@/app/icons/MinusIcon.svg?url";
 import "@/app/css/Detail-product.css";
@@ -42,7 +42,7 @@ function producto() {
 
   const mockProducto = {
     id: id,
-    nombre: "Producto 1",
+    nombre: `${"Producto " + id}`,
     precio: 100,
     descripcion: "Descripcion del producto 1",
     imagen: "../next.svg",
@@ -68,13 +68,18 @@ function producto() {
         <main className="main-detail">
           <div className="return">
             <Link href={"/"}>
-              <Image src={BackwardArrowIcon} alt={"ArrowReturn"} height={30} width={30} />
+              <Image
+                src={BackwardArrowIcon}
+                alt={"ArrowReturn"}
+                height={30}
+                width={30}
+              />
             </Link>
             <Link href={"/"}>Seguir mirando productos</Link>
           </div>
           <section className="details-product">
             <div className="image-product">
-            <Image src={Example} alt={""} height={500} width={500} />
+              <Image src={Example} alt={""} height={500} width={500} />
               {/*
               <Image
                 src={producto?.imagen ?? ""}
@@ -90,7 +95,9 @@ function producto() {
               <p>{producto?.descripcion ?? "Por asignar"}</p>
               <p>{"Referencia: " + producto?.ref ?? "Por asignar"}</p>
               <p>{"Categoría: " + producto?.categoria ?? "Por asignar"}</p>
-              <p>{"Cantidad disponible: " + producto?.stock ?? "Por asignar"}</p>
+              <p>
+                {"Cantidad disponible: " + producto?.stock ?? "Por asignar"}
+              </p>
             </div>
           </section>
           <div className="cantProduct">

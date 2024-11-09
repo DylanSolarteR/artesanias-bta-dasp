@@ -12,6 +12,7 @@ const app: Application = express();
 app.use(cors());
 
 const port = process.env.PORT || 8000;
+console.log(process.env.PORT);
 
 app.use('/api/product', productRoutes)
 app.use('/api/category', categoryRoutes)
