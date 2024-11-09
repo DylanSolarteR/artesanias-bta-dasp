@@ -6,7 +6,8 @@ import PlusIcon from "@/app/icons/PlusIcon.svg?url";
 import MinusIcon from "@/app/icons/MinusIcon.svg?url";
 import DeleteIcon from "@/app/icons/DeleteIcon.svg?url";
 import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
-import { onlyNumberInput } from "@/app/util/utils";
+import { onlyNumberInput } from "@/util/utils";
+import "@/app/css/Detail-shoppingCart.css";
 
 function Carrito() {
   const [carrito, setCarrito] = useState([
