@@ -67,15 +67,7 @@ export default function Home() {
   const nameProdRef = useRef(null);
 
   const filterhandle = () => {
-    // console.log({
-    //   orderBy: [
-    //     selectedOrder === "Precio" ? "price" : "name",
-    //     orderTypeRef.current.selectedOptions[0].value,
-    //   ],
-    //   category: selectedCategory,
-    //   minPrice: minPriceRef.current.value || null,
-    //   maxPrice: maxPriceRef.current.value || null,
-    // });
+    console.log('filtrando')
     apiProduct
       .listProducts({
         orderBy: [
@@ -225,13 +217,13 @@ export default function Home() {
               />
             </div>
             <div className="search-product">
-              <input type="input" placeholder="Buscar" ref={nameProdRef} />
+              <input type="input" placeholder="Buscar" ref={ nameProdRef }/>
               <Image
                 src={SearchIcon}
                 alt="Search"
                 width={30}
                 height={25}
-                onClick={() => filterhandle}
+                onClick={ filterhandle }
                 style={{ cursor: "pointer" }}
               />
             </div>

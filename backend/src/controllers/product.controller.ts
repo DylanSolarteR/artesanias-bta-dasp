@@ -10,6 +10,11 @@ export async function listProducts(req: Request, res: Response) {
     let query: Object = req.query;
 
     let filters = []
+    if (query.hasOwnProperty('name')) {
+        console.log('hay name:', req.query['name'])
+        filters.push(new Filter('product.name',
+            <string>req.query['name'], matchType.nonStrictEqual));
+    }
     if (query.hasOwnProperty('minPrice')) {
         filters.push(new Filter('price',
             <string>req.query['minPrice'], matchType.greaterThanOrEqual));
