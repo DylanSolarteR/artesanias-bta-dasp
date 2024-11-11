@@ -1,4 +1,4 @@
-import { Criteria } from "../Criteria";
+import { Criteria, matchType } from "../Criteria";
 
 type columns = true | string[]
 

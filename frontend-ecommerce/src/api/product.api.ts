@@ -18,8 +18,8 @@ export async function listProducts({
 }: productFilters) {
     let query = new URLSearchParams();
     query.append('orderBy', `${orderBy[0]},${orderBy[1]}`)
-    if (nameProd){
-        query.append('nameProd', category.toString())
+    if (nameProd) {
+        query.append('name', nameProd.toString())
     }
     if (category) {
         query.append('category', category.toString())
