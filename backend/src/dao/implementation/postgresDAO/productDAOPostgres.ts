@@ -1,9 +1,9 @@
 
-import { Product } from "../../model/businessTypes";
-import { Criteria } from "../Criteria";
-import { IDAO, ObjectResponse } from "../dao";
-import { PostgresConnection } from "./postgresConnection";
-import { CriteriaPostgresConverter } from "./CriteriaPostgresConverter";
+import { Product } from "../../../model/businessTypes";
+import { Criteria } from "../../Criteria";
+import { IDAO, ObjectResponse } from "../../dao";
+import { PostgresConnection } from "../postgresConnection";
+import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class ProductDAOPostgres implements IDAO<Product> {
     async create(object: Product): Promise<ObjectResponse<Product>> {
@@ -20,8 +20,6 @@ export class ProductDAOPostgres implements IDAO<Product> {
         let [restriction, params] = CriteriaPostgresConverter.convert(criteria)
 
         query += restriction
-        console.log(query)
-        console.log(params)
         try {
             let pool = await PostgresConnection.getInstance().getPool()
 
