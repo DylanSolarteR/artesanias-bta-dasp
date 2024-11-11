@@ -1,8 +1,8 @@
 
-import { ProductCategory } from "../../model/businessTypes";
-import { Criteria } from "../Criteria";
-import { IDAO, ObjectResponse } from "../dao";
-import { PostgresConnection } from "./postgresConnection";
+import { ProductCategory } from "../../../model/businessTypes";
+import { Criteria } from "../../Criteria";
+import { IDAO, ObjectResponse } from "../../dao";
+import { PostgresConnection } from "../postgresConnection";
 
 export class CategoryDAOPostgres implements IDAO<ProductCategory> {
     async create(object: ProductCategory): Promise<ObjectResponse<ProductCategory>> {

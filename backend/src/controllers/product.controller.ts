@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ProductDAOPostgres } from '../dao/implementation/productDAOPostgres';
+import { ProductDAOPostgres } from '../dao/implementation/postgresDAO/productDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
 import { Product } from '../model/businessTypes';
 
@@ -11,7 +11,6 @@ export async function listProducts(req: Request, res: Response) {
 
     let filters = []
     if (query.hasOwnProperty('name')) {
-        console.log('hay name:', req.query['name'])
         filters.push(new Filter('product.name',
             <string>req.query['name'], matchType.nonStrictEqual));
     }

@@ -51,3 +51,45 @@ export class ProductCategory {
         return this._id;
     }
 }
+
+export enum employeeRoles {
+    administrator = 'administrator',
+    manager = 'manager',
+    cashier = 'cashier'
+}
+export class Employee {
+    constructor(
+        public name: string,
+        public lastName: string,
+        public telephone: string,
+        public role: employeeRoles,
+        public hashedPassword: string,
+        public locationId: number | null,
+        private _id?: number
+    ) {
+        // Validate role in runtime
+        if (!Employee.validateRole(this.role)) {
+            throw Error(`Invalid role for Employee type, ${this.role} not in ${Object.values(employeeRoles)}`)
+        }
+    }
+
+    public static validateRole(role: string) {
+        return Object.values(employeeRoles).includes(role as employeeRoles)
+    }
+
+    set id(_id) {
+        if (this._id != null) {
+            throw Error('id is inmutable')
+        }
+        this._id = _id;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    public getSecureEmployee() {
+        let { hashedPassword, ...secureEmployee } = this
+        return secureEmployee
+    }
+}
