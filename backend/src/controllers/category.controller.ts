@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
-import { Product } from '../model/businessTypes';
 import { CategoryDAOPostgres } from '../dao/implementation/postgresDAO/categoryDAOPostgres';
 
 
