@@ -17,6 +17,7 @@ export class Product {
         public baseProductId: number,
         public price: number,
         public img: string,
+        public isActive: boolean,
         private _id?: number
     ) { }
 

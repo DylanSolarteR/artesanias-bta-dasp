@@ -9,7 +9,7 @@ export async function listProducts(req: Request, res: Response) {
     let dao = new ProductDAOPostgres();
     let query: Object = req.query;
 
-    let filters = []
+    let filters = [new Filter('active', true, matchType.strictEqual)]
     if (query.hasOwnProperty('name')) {
         filters.push(new Filter('product.name',
             <string>req.query['name'], matchType.nonStrictEqual));

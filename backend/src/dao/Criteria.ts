@@ -38,7 +38,7 @@ export enum matchType {
 export class Filter {
     constructor(
         public name: string,
-        public value: string | number,
+        public value: string | number | boolean,
         public type: matchType
     ) { };
 }
