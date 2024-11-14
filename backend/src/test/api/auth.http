@@ -21,11 +21,16 @@ Content-Type: application/json
 ### Ejemplo registro
 POST http://localhost:3200/api/auth/singup
 Content-Type: application/json
-Authorization: barer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzMxMzE1NTE5LCJleHAiOjE3MzEzMjI3MTl9.N_ByzZhrwqMcH9-fpCTsu5VGywvsZyl2Aq5d6vWWYm8
+Authorization: barer untokenrandom
 
 {
     "name": "James",
     "lastName": "Soliban",
     "telephone": "111011",
-    "role": "administrator"
+    "role": "cashier"
 }
+
+### Ejemplo peticion del role del usuario
+GET http://localhost:3200/api/auth/get-role
+Content-Type: application/json
+Authorization: barer untokenrandom

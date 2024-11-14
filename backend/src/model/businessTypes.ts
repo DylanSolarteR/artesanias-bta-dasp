@@ -78,6 +78,16 @@ export class Employee {
         return Object.values(employeeRoles).includes(role as employeeRoles)
     }
 
+    public static validateRoleHierarchy(roleA: employeeRoles, roleB: employeeRoles): boolean {
+        if (roleA === employeeRoles.administrator) {
+            return true
+        }
+        if (roleA === employeeRoles.manager && roleB === employeeRoles.cashier) {
+            return true
+        }
+        return false
+    }
+
     set id(_id) {
         if (this._id != null) {
             throw Error('id is inmutable')

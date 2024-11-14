@@ -119,7 +119,7 @@ INSERT INTO department VALUES (DEFAULT, 'Amazonas'),
 INSERT INTO physical_location VALUES (DEFAULT, 'Av. La Esmeralda #44-100', '2123213');
 INSERT INTO physical_location VALUES (DEFAULT, 'Aut SUR No. 50-11, C.P 11001', '312231');
 -- Default employees
-INSERT INTO employee values (DEFAULT, null, 'Gas', 'Noble', '1123', 'administrator', '$2a$12$G5wNjXbxfTxwS/uB3T2MFua7YrlDHkWSEPBtuM5fKdW/48/aB.V9m');
+INSERT INTO employee values (DEFAULT, null, 'Gas', 'Noble', '1123', 'administrator', '$2a$12$17yT0ne3NTuCqZo7Ifgzqu5k8U1rppaWU2UEP6sbv5iNiGpsp3iJC');
 INSERT INTO employee values (DEFAULT, 1, 'James', 'Soliban', '313444', 'manager', '$2a$12$RYBjQk5rNfwy1bLNLLfgYuaKaW82fookwo7wVj1MZ9co0x3JEc5fa');
 INSERT INTO employee values (DEFAULT, 1, 'José', 'Vélez', '3135555', 'cashier', '$2a$12$RYBjQk5rNfwy1bLNLLfgYuaKaW82fookwo7wVj1MZ9co0x3JEc5fa');
 
