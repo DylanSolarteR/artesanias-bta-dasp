@@ -20,8 +20,8 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
 
             if (res.rowCount === 1) {
                 const createdLocation = new PhysicalLocation(
-                    res.rows[0].telephone,
                     res.rows[0].direction,
+                    res.rows[0].telephone,
                     res.rows[0].pk_id
                 )
                 console.log(createdLocation)
