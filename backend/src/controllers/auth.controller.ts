@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
-import { Employee } from '../model/businessTypes';
+import { Employee, employeeRoles } from '../model/businessTypes';
 import { EmployeeDAOPostgres } from '../dao/implementation/postgresDAO/employeeDAOPostrgres';
-import { comparePassword, hashPassword, singToken } from '../helpers/auth';
+import { comparePassword, hashPassword, singToken } from '../helpers/auth.helper';
 
 
 
@@ -47,6 +47,7 @@ export async function singIn(req: Request, res: Response) {
     let isCorrectPassword = await comparePassword(password, employee.hashedPassword)
     if (!isCorrectPassword) {
         res.status(401).send('Wrong password')
+        return
     }
     res.status(200).send({
         authToken: singToken({ id: employee.id, }),
@@ -56,6 +57,7 @@ export async function singIn(req: Request, res: Response) {
 
 export async function singUp(req: Request, res: Response) {
 
+    const userRole: employeeRoles = req['user_role']; //Require identifyRole middleware
     let name, lastName, telephone, role, locationId;
 
     const dao = new EmployeeDAOPostgres();
@@ -67,9 +69,15 @@ export async function singUp(req: Request, res: Response) {
         return
     }
     if (!Employee.validateRole(role)) {
-        res.status(400).send('Invalid role')
+        res.status(400).send('Invalid role selected for new user')
         return
     }
+
+    if (!Employee.validateRoleHierarchy(userRole, role)) {
+        res.status(401).send(`The role ${userRole} its no enought to create a new user with the role ${role}`)
+        return
+    }
+
     // TODO validar los otros campos
     locationId ?? null;
     const newEmployee = new Employee(
@@ -91,4 +99,10 @@ export async function singUp(req: Request, res: Response) {
     console.log('final:', employee)
 
     res.status(200).send({ createdEmployee: employee.getSecureEmployee() })
+}
+
+export async function getRole(req: Request, res: Response) {
+
+    const userRole = req['user_role']; //Require identifyRole middleware
+    res.status(200).send({ role: userRole });
 }
