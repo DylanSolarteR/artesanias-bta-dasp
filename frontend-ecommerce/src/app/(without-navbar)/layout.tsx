@@ -1,24 +1,23 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
+import "@/app/css/globals.css";
+
+export const metadata: Metadata = {
+  title: "Artesanías Bogotá LTDA",
+  description: "Aplicación web para empleados de Artesanías Bogotá LTDA",
+};
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
+  src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
+  src: "../fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
-export const metadata: Metadata = {
-  title: "Artesanías Bogotá LTDA",
-  description: "Comercio Electrónico de Artesanías",
-};
 
 export default function RootLayout({
   children,
@@ -30,7 +29,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar></Navbar>
         <Providers>{children}</Providers>
       </body>
     </html>
