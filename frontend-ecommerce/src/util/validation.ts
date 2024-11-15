@@ -1,15 +1,15 @@
 import z from 'zod';
 
 export const loginSchema = z.object({
-    user: 
-        z.string()
-        .min(4, {message:"El nombre de usuario debe tener mínimo 4 caracteres"})
-        .max(20, {message:"El nombre de usuario debe tener máximo 20 caracteres"}),
+    // user: 
+    //     z.string()
+    //     .min(4, {message:"Nombre de usuario no valido"})
+    //     .max(20, {message:"Nombre de usuario no valido"}),
+    userId: z.number(),
     password: 
         z.string()
-        .min(6, {message: "La contraseña debe tener mínimo 6 caracteres"})
-        .max(20, {message:"La contraseña debe tener máximo 20 caracteres"})
-        .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/, {message:"La contraseña debe tener mínimo 6, máximo 20 caracteres, al menos una letra mayúscula, una letra minúscula y un número"}),
+        .min(6, {message: "Contraseña incorrecta1"})
+        .max(20, {message:"Contraseña incorrecta2"})
 });
 
 export const PurchaseDataScheme = z.object({
