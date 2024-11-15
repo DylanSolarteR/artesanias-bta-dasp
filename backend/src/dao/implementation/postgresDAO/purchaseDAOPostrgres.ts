@@ -1,0 +1,245 @@
+
+import { Purchase, EcommercePurchase, PhysicalPurchase, purchaseDocType, ProductInPurchase, ProductRequest } from "../../../model/purchase";
+import { Criteria } from "../../Criteria";
+import { IDAO, ObjectResponse } from "../../dao";
+import { PostgresConnection } from "../postgresConnection";
+
+export class PurchaseDAOPostgres implements IDAO<Purchase> {
+    async create(purchase: Purchase): Promise<ObjectResponse<Purchase>> {
+        const insertPurchase = `INSERT INTO purchase(
+                date, email, name, doc_type, identification, telephone)
+                VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`
+
+        let client = await PostgresConnection.getInstance().getClient()
+        try {
+            client.query('BEGIN')
+            let purchaseInsertRes = await client.query({
+                text: insertPurchase,
+                values: [
+                    purchase.date,
+                    purchase.email,
+                    purchase.name,
+                    purchase.docType,
+                    purchase.identification,
+                    purchase.telephone,
+                ]
+            })
+
+            purchase.id = purchaseInsertRes.rows[0].pk_id;
+
+            if (purchaseInsertRes.rowCount !== 1) {
+                client.query('ROLLBACK');
+                return new ObjectResponse(false, null, 'Failed to create the base purchase')
+            }
+
+            if (purchase instanceof EcommercePurchase) {
+                const insertEcomPurchase = `INSERT INTO ecommerce_purchase(
+                    pk_fk_purchase, fk_department, delivery_address, zip_code)
+                    VALUES ($1, $2, $3, $4) RETURNING *;`
+                let ecomPurchaseInsertRes = await client.query({
+                    text: insertEcomPurchase,
+                    values: [
+                        purchase.id,
+                        purchase.departmentId,
+                        purchase.deliveryAddress,
+                        purchase.zipCode,
+                    ]
+                })
+                if (ecomPurchaseInsertRes.rowCount !== 1) {
+                    client.query('ROLLBACK');
+                    return new ObjectResponse(false, null, 'Failed to create the ecommerce purchase')
+                }
+            }
+            else if (purchase instanceof PhysicalPurchase) {
+                const insertPhysicalPurchase = `INSERT INTO physical_purchase(
+                    pk_fk_purchase, fk_employee)
+                    VALUES ($1, $2) RETURNING *;`
+                let physicalPurchaseInsertRes = await client.query({
+                    text: insertPhysicalPurchase,
+                    values: [
+                        purchase.id,
+                        purchase.employeeId
+                    ]
+                })
+                if (physicalPurchaseInsertRes.rowCount !== 1) {
+                    client.query('ROLLBACK');
+                    return new ObjectResponse(false, null, 'Failed to create the physical purchase')
+                }
+            }
+            else {
+                // This should not be able to happen
+                throw Error('Invalid purchase implementation')
+            }
+
+            const insertProductPurchase = `INSERT INTO product_in_purchase(
+                            pk_fk_product, pk_fk_purchase, quantity, unit_price)
+                            VALUES ($1, $2, $3, $4) RETURNING *;`
+            const insertProductRequestPurchase = `INSERT INTO product_request(
+                            pk_fk_product, pk_fk_purchase, pk_fk_physical_location, quantity, request_complete)
+                            VALUES ($1, $2, $3, $4, $5) RETURNING *;`
+            for (let product of purchase.products) {
+                let productInsertRes = await client.query({
+                    text: insertProductPurchase,
+                    values: [
+                        product.productId,
+                        purchase.id,
+                        product.quantity,
+                        product.unitPrice,
+                    ]
+                })
+                if (productInsertRes.rowCount !== 1) {
+                    client.query('ROLLBACK');
+                    return new ObjectResponse(false, null,
+                        `Failed to add the product with id ${product.productId} to the pruschase`
+                    )
+                }
+
+                for (let request of product.productRequests) {
+                    let requestInsertRes = await client.query({
+                        text: insertProductRequestPurchase,
+                        values: [
+                            product.productId,
+                            purchase.id,
+                            request.locationId,
+                            request.quantity,
+                            purchase instanceof PhysicalPurchase
+                        ]
+                    })
+                    if (requestInsertRes.rowCount !== 1) {
+                        client.query('ROLLBACK');
+                        return new ObjectResponse(false, null,
+                            `Fallo al solicitar el producto ${product.productId}\n` +
+                            `al punto fisico con id ${request.locationId}`
+                        )
+                    }
+
+                    // Update inventory for physical purchases
+                    if (purchase instanceof PhysicalPurchase) {
+                        const updateInventory = `UPDATE inventory
+                                SET quantity = quantity-$1, display_quantity = display_quantity-$1
+                                WHERE pk_fk_product = $2 AND pk_fk_physical_location = $3;`
+                        let inventoryUpdateRes = await client.query({
+                            text: updateInventory,
+                            values: [
+                                request.quantity,
+                                product.productId,
+                                request.locationId,
+                            ]
+                        })
+                        if (inventoryUpdateRes.rowCount !== 1) {
+                            client.query('ROLLBACK');
+                            return new ObjectResponse(false, null,
+                                `Fallo al actualizar el inventario`
+                            )
+                        }
+                    }
+                    else { // Update ecommerce avaialablity
+                        const updateInventory = `UPDATE inventory
+                                SET ecommerce_available_quantity = ecommerce_available_quantity-$1
+                                WHERE pk_fk_product = $2 AND pk_fk_physical_location = $3;`
+                        let inventoryUpdateRes = await client.query({
+                            text: updateInventory,
+                            values: [
+                                request.quantity,
+                                product.productId,
+                                request.locationId,
+                            ]
+                        })
+                        if (inventoryUpdateRes.rowCount !== 1) {
+                            client.query('ROLLBACK');
+                            return new ObjectResponse(false, null,
+                                `Fallo al actualizar el inventario`
+                            )
+                        }
+                    }
+                }
+            }
+
+            client.query('COMMIT')
+            return new ObjectResponse(true, purchase, null)
+
+        }
+        catch (e) {
+            client.query('ROLLBACK');
+            return new ObjectResponse(false, null,
+                'Falla al registrar la compra.\n' +
+                (!e.constraint ? e.message ?? '' : '')
+            )
+        }
+        finally {
+            client.release()
+        }
+    }
+
+    async query(criteria: Criteria): Promise<ObjectResponse<Purchase[]>> {
+        throw Error('Unimplemented')
+    }
+
+    async delete(object: Purchase): Promise<boolean> {
+        throw Error('Unimplemented')
+
+    }
+
+    async update(object: Purchase): Promise<boolean> {
+        throw Error('Unimplemented')
+
+    }
+}
+
+export async function test() {
+    let compra1 = new EcommercePurchase(
+        new Date(),
+        'pepe@gmail.com',
+        'Comprador1',
+        purchaseDocType.cc,
+        '111',
+        '313',
+        null,
+        1,
+        null,
+        'Carrera compra1',
+        '123',
+        [new ProductInPurchase(1, 3, 4000, [new ProductRequest(1, 2), new ProductRequest(2, 1)])]
+    )
+    let com1prod2 = new ProductInPurchase(2, 4, 1111);
+    com1prod2.addProductRequest(new ProductRequest(1, 2));
+    com1prod2.addProductRequest(new ProductRequest(2, 2));
+    compra1.addProduct(com1prod2)
+
+    let dao = new PurchaseDAOPostgres()
+    let rcomp1 = await dao.create(compra1)
+
+    let compra2 = new PhysicalPurchase(
+        new Date(),
+        'james@si.com',
+        'yeims',
+        purchaseDocType.ce,
+        '888',
+        '317',
+        null,
+        3,
+        [new ProductInPurchase(3, 5, 1000, [new ProductRequest(2, 5, true)]),
+        new ProductInPurchase(4, 6, 10000, [new ProductRequest(2, 6, true)]),
+        ]
+    )
+
+    let rcomp2 = await dao.create(compra2)
+    console.log()
+}
+
+
+export async function test2() {
+    let query = `UPDATE inventory
+	SET quantity = quantity-$1, display_quantity = display_quantity-$1
+	WHERE pk_fk_product = 1;`
+
+    let pool = await PostgresConnection.getInstance().getPool();
+    let res = await pool.query({
+        text: query,
+        values: [
+            5
+        ]
+    });
+
+    console.log()
+}
