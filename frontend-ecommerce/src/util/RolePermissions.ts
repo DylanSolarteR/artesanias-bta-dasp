@@ -1,8 +1,8 @@
-export type Role = "Administrator" | "Manager" | "Cashier";
+export type Role = "administrator" | "manager" | "cashier" | undefined;
 type Permission = (typeof ROLES)[Role][number];
 
 const ROLES = {
-  Administrator: [
+  administrator: [
     "view:employees",
     "create:employees",
     "update:employees",
@@ -15,26 +15,26 @@ const ROLES = {
     "create:physical-stores",
     "update:physical-stores",
     "delete:physical-stores",
-    "view:ownReports",
+    "view:reports",
     "view:inventory",
     "raise:inventory",
     "lower:inventory",
     "view:POS"
   ],
-    Manager: [
-        "view:employees",
-        "create:employees",
-        "update:employees",
-        "delete:employees",
-        "view:reports",
-        "view:inventory",
-        "raise:inventory",
-        "lower:inventory",
-        "view:POS"
-    ],
-    Cashier: [
-        "view:POS"
-    ]
+  manager: [
+    "view:employees",
+    "create:employees",
+    "update:employees",
+    "delete:employees",
+    "view:reports",
+    "view:inventory",
+    "raise:inventory",
+    "lower:inventory",
+    "view:POS"
+  ],
+  cashier: [
+    "view:POS"
+  ]
 } as const;
 
 export function hasPermission(role: Role, permission: Permission): boolean {
