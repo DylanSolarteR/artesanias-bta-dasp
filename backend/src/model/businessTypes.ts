@@ -100,8 +100,8 @@ export class Employee {
     }
 
     public getSecureEmployee() {
-        let { hashedPassword, ...secureEmployee } = this
-        return secureEmployee
+        let { hashedPassword, _id, ...secureEmployee } = this
+        return { ...secureEmployee, id: _id }
     }
 }
 
