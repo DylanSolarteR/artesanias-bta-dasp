@@ -12,7 +12,8 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
 
         let client = await PostgresConnection.getInstance().getClient()
         try {
-            client.query('BEGIN')
+            await client.query('BEGIN')
+            await client.query('LOCK TABLE inventory IN SHARE MODE')
             let purchaseInsertRes = await client.query({
                 text: insertPurchase,
                 values: [
@@ -28,7 +29,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
             purchase.id = purchaseInsertRes.rows[0].pk_id;
 
             if (purchaseInsertRes.rowCount !== 1) {
-                client.query('ROLLBACK');
+                await client.query('ROLLBACK');
                 return new ObjectResponse(false, null, 'Failed to create the base purchase')
             }
 
@@ -46,7 +47,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                     ]
                 })
                 if (ecomPurchaseInsertRes.rowCount !== 1) {
-                    client.query('ROLLBACK');
+                    await client.query('ROLLBACK');
                     return new ObjectResponse(false, null, 'Failed to create the ecommerce purchase')
                 }
             }
@@ -62,7 +63,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                     ]
                 })
                 if (physicalPurchaseInsertRes.rowCount !== 1) {
-                    client.query('ROLLBACK');
+                    await client.query('ROLLBACK');
                     return new ObjectResponse(false, null, 'Failed to create the physical purchase')
                 }
             }
@@ -88,7 +89,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                     ]
                 })
                 if (productInsertRes.rowCount !== 1) {
-                    client.query('ROLLBACK');
+                    await client.query('ROLLBACK');
                     return new ObjectResponse(false, null,
                         `Failed to add the product with id ${product.productId} to the pruschase`
                     )
@@ -106,7 +107,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                         ]
                     })
                     if (requestInsertRes.rowCount !== 1) {
-                        client.query('ROLLBACK');
+                        await client.query('ROLLBACK');
                         return new ObjectResponse(false, null,
                             `Fallo al solicitar el producto ${product.productId}\n` +
                             `al punto fisico con id ${request.locationId}`
@@ -127,7 +128,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                             ]
                         })
                         if (inventoryUpdateRes.rowCount !== 1) {
-                            client.query('ROLLBACK');
+                            await client.query('ROLLBACK');
                             return new ObjectResponse(false, null,
                                 `Fallo al actualizar el inventario`
                             )
@@ -146,7 +147,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                             ]
                         })
                         if (inventoryUpdateRes.rowCount !== 1) {
-                            client.query('ROLLBACK');
+                            await client.query('ROLLBACK');
                             return new ObjectResponse(false, null,
                                 `Fallo al actualizar el inventario`
                             )
@@ -155,12 +156,12 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                 }
             }
 
-            client.query('COMMIT')
+            await client.query('COMMIT')
             return new ObjectResponse(true, purchase, null)
 
         }
         catch (e) {
-            client.query('ROLLBACK');
+            await client.query('ROLLBACK');
             return new ObjectResponse(false, null,
                 'Falla al registrar la compra.\n' +
                 (!e.constraint ? e.message ?? '' : '')
