@@ -125,10 +125,12 @@ INSERT INTO employee values (DEFAULT, 1, 'José', 'Vélez', '3135555', 'cashier'
 
 
 --- Inventario (provicional) más adelante se expandirá
-INSERT INTO inventory VALUES (1, 1, 50, 15), 
+INSERT INTO inventory (pk_fk_product, pk_fk_physical_location, quantity, display_quantity) 
+						 VALUES (1, 1, 50, 15), 
 								(2, 1, 75, 10), 
+								(1, 2, 50, 15),
+								(2, 2, 23, 3),
 								(3, 2, 25, 5), 
 								(4, 2, 38, 6);
-SELECT * FROM inventory
 
 

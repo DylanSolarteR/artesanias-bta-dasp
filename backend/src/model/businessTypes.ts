@@ -104,3 +104,14 @@ export class Employee {
         return secureEmployee
     }
 }
+
+export class Inventory {
+    constructor(
+        public readonly productId: number,
+        public readonly locationId: number,
+        public quantity: number,
+        public displayQuantity: number,
+        public ecommerceAvailable: number
+    ) { }
+}
+
