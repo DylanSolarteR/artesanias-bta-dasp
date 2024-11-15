@@ -49,9 +49,10 @@ export async function singIn(req: Request, res: Response) {
         res.status(401).send('Wrong password')
         return
     }
+    let toSendEmployee = employee.getSecureEmployee()
     res.status(200).send({
-        authToken: singToken({ id: employee.id, }),
-        employee: employee.getSecureEmployee()
+        authToken: singToken(toSendEmployee),
+        employee: toSendEmployee
     })
 }
 
