@@ -1,0 +1,100 @@
+
+
+### Ejemplo base
+POST http://localhost:3200/api/purchase/complete-purchase
+Content-Type: application/json
+
+{
+    "basicUserData": {
+        "email": "elpepe@gmail.com",
+        "name": "Pedro Sanchez",
+        "docType": "CC",
+        "identification": "10005",
+        "telephone": "312"
+    },
+    "addressData": {
+        "departmentId": 1,
+        "deliveryAddress": "Carrera del pepe",
+        "zipCode": "12399"
+    }, 
+    "productList": [
+        {
+            "id": 1,
+            "quantity": 3
+        },
+        {
+            "id": 2,
+            "quantity": 3
+        },
+        {
+            "id": 3,
+            "quantity": 3
+        }
+    ]
+}
+
+### Prueba asignacion de stock con puntos fisicos variados
+POST http://localhost:3200/api/purchase/complete-purchase
+Content-Type: application/json
+
+{
+    "basicUserData": {
+        "email": "elpepe@gmail.com",
+        "name": "Pedro Sanchez",
+        "docType": "CC",
+        "identification": "10005",
+        "telephone": "312"
+    },
+    "addressData": {
+        "departmentId": 1,
+        "deliveryAddress": "Carrera del pepe",
+        "zipCode": "12399"
+    }, 
+    "productList": [
+        {
+            "id": 1,
+            "quantity": 37
+        },
+        {
+            "id": 2,
+            "quantity": 3
+        },
+        {
+            "id": 3,
+            "quantity": 3
+        }
+    ]
+}
+
+### No deberia aceptarla porque no hay stock
+POST http://localhost:3200/api/purchase/complete-purchase
+Content-Type: application/json
+
+{
+    "basicUserData": {
+        "email": "elpepe@gmail.com",
+        "name": "Pedro Sanchez",
+        "docType": "CC",
+        "identification": "10005",
+        "telephone": "312"
+    },
+    "addressData": {
+        "departmentId": 1,
+        "deliveryAddress": "Carrera del pepe",
+        "zipCode": "12399"
+    }, 
+    "productList": [
+        {
+            "id": 1,
+            "quantity": 2
+        },
+        {
+            "id": 2,
+            "quantity": 300
+        },
+        {
+            "id": 3,
+            "quantity": 3
+        }
+    ]
+}

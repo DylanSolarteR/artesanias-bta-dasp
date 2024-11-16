@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ProductDAOPostgres } from '../dao/implementation/productDAOPostgres';
+import { ProductDAOPostgres } from '../dao/implementation/postgresDAO/productDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
 import { Product } from '../model/businessTypes';
 
@@ -9,17 +9,21 @@ export async function listProducts(req: Request, res: Response) {
     let dao = new ProductDAOPostgres();
     let query: Object = req.query;
 
-    let filters = []
+    let filters = [new Filter('active', true, matchType.strictEqual)]
+    if (query.hasOwnProperty('name')) {
+        filters.push(new Filter('product.name',
+            <string>req.query['name'], matchType.nonStrictEqual));
+    }
     if (query.hasOwnProperty('minPrice')) {
-        filters.push(new Filter('valor',
+        filters.push(new Filter('price',
             <string>req.query['minPrice'], matchType.greaterThanOrEqual));
     }
     if (query.hasOwnProperty('maxPrice')) {
-        filters.push(new Filter('valor',
+        filters.push(new Filter('price',
             <string>req.query['maxPrice'], matchType.lessThanOrEqual));
     }
     if (query.hasOwnProperty('category')) {
-        filters.push(new Filter('categoria.pk_id',
+        filters.push(new Filter('category.pk_id',
             <string>req.query['category'], matchType.strictEqual));
     }
 

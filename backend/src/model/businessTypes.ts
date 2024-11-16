@@ -3,11 +3,11 @@
 export class Product {
 
     public static readonly filterDict = {
-        'minPrice': 'valor',
-        'maxPrice': 'valor',
-        'category': 'categoria',
-        'name': 'nombre',
-        'price': 'valor'
+        'minPrice': 'price',
+        'maxPrice': 'price',
+        'category': 'category',
+        'name': 'name',
+        'price': 'price',
     }
     constructor(
         public name: string,
@@ -17,6 +17,7 @@ export class Product {
         public baseProductId: number,
         public price: number,
         public img: string,
+        public isActive: boolean,
         private _id?: number
     ) { }
 
@@ -32,6 +33,7 @@ export class Product {
     }
 
 }
+
 
 export class ProductCategory {
     constructor(
@@ -51,3 +53,86 @@ export class ProductCategory {
         return this._id;
     }
 }
+
+export enum employeeRoles {
+    administrator = 'administrator',
+    manager = 'manager',
+    cashier = 'cashier'
+}
+
+export class Employee {
+    constructor(
+        public name: string,
+        public lastName: string,
+        public telephone: string,
+        public role: employeeRoles,
+        public hashedPassword: string,
+        public locationId: number | null,
+        private _id?: number
+    ) {
+        // Validate role in runtime
+        if (!Employee.validateRole(this.role)) {
+            throw Error(`Invalid role for Employee type, ${this.role} not in ${Object.values(employeeRoles)}`)
+        }
+    }
+
+    public static validateRole(role: string) {
+        return Object.values(employeeRoles).includes(role as employeeRoles)
+    }
+
+    public static validateRoleHierarchy(roleA: employeeRoles, roleB: employeeRoles): boolean {
+        if (roleA === employeeRoles.administrator) {
+            return true
+        }
+        if (roleA === employeeRoles.manager && roleB === employeeRoles.cashier) {
+            return true
+        }
+        return false
+    }
+
+    set id(_id) {
+        if (this._id != null) {
+            throw Error('id is inmutable')
+        }
+        this._id = _id;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    public getSecureEmployee() {
+        let { hashedPassword, _id, ...secureEmployee } = this
+        return { ...secureEmployee, id: _id }
+    }
+}
+
+export class PhysicalLocation{
+    constructor(
+        public direction: string,
+        public telephone: string,
+        private _id?: number
+    ){}
+
+    get id(){
+        return this._id;
+    }
+    
+    set id(_id){
+        if(this._id !=null){
+            throw Error('id is inmutable')
+        }
+        this._id=_id;
+    }
+
+}
+export class Inventory {
+    constructor(
+        public readonly productId: number,
+        public readonly locationId: number,
+        public quantity: number,
+        public displayQuantity: number,
+        public ecommerceAvailable: number
+    ) { }
+}
+
