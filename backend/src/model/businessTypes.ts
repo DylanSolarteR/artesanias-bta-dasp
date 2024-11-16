@@ -102,8 +102,8 @@ export class Employee {
     }
 
     public getSecureEmployee() {
-        let { hashedPassword, ...secureEmployee } = this
-        return secureEmployee
+        let { hashedPassword, _id, ...secureEmployee } = this
+        return { ...secureEmployee, id: _id }
     }
 }
 
@@ -126,3 +126,13 @@ export class PhysicalLocation{
     }
 
 }
+export class Inventory {
+    constructor(
+        public readonly productId: number,
+        public readonly locationId: number,
+        public quantity: number,
+        public displayQuantity: number,
+        public ecommerceAvailable: number
+    ) { }
+}
+

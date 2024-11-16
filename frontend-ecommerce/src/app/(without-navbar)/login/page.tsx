@@ -2,13 +2,17 @@
 import Image from "next/image";
 import UserLogo from "@/app/icons/UserLogo.svg?url";
 import LoginForm from "@/components/LoginForm";
+import LoginSideImage from "@/app/images/LoginSideImage.png";
 
 function Login() {
   return (
     <div>
       <main>
-        <div>
-          <h1>Bienvenido a Artesanías Bogotá Ldta.</h1>
+        <aside>
+          <Image alt="Imagen de Usuario" src={LoginSideImage}></Image>
+        </aside>
+        <section>
+          <h1>Bienvenido a Artesanías Bogotá Ltda.</h1>
           <Image
             alt="Imagen de Usuario"
             src={UserLogo}
@@ -16,7 +20,7 @@ function Login() {
             width={200}
           ></Image>
           <LoginForm />
-        </div>
+        </section>
       </main>
     </div>
   );

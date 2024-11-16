@@ -4,8 +4,8 @@ import productRoutes from "./src/routes/product.routes";
 import categoryRoutes from "./src/routes/category.routes";
 import authRoutes from "./src/routes/auth.routes";
 import physicalLocationRoutes from "./src/routes/physicalLocation.routes"
+import purchaseRoutes from "./src/routes/purchase.routes";
 import cors from 'cors'
-import jwt from 'jsonwebtoken';
 
 //For env File 
 dotenv.config();
@@ -21,6 +21,8 @@ app.use('/api/product', productRoutes)
 app.use('/api/category', categoryRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/location', physicalLocationRoutes)
+app.use('/api/purchase', purchaseRoutes)
+
 app.get('/', (req: Request, res: Response) => {
   res.send('Panthousand api :)');
 });
