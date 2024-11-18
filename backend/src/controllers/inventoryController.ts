@@ -58,14 +58,11 @@ export async function updateInventory(req: Request, res: Response) {
     )
 
     let insertResult = await dao.decreaseQuantity(newInventory)
-    if (!insertResult.hasResponse()) {
-        res.status(500).send(insertResult.error)
+    if (insertResult == false) {
+        res.status(500).send("Error")
         return
     }
 
-    let inventory = insertResult.value
-    console.log('final:', inventory)
-
-    res.status(200).send({ inventory })
+    res.status(200).send({ "Product remove" })
 }
 
