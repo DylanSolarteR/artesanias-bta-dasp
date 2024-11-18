@@ -30,7 +30,6 @@ export default function Home() {
     apiProduct
       .listProducts({ orderBy: ["price", "desc"] })
       .then((products) => {
-        console.log(products);
         setProducts(products);
       })
       .catch((error) => {
@@ -67,7 +66,7 @@ export default function Home() {
   const nameProdRef = useRef(null);
 
   const filterhandle = () => {
-    console.log('filtrando')
+    console.log("filtrando");
     apiProduct
       .listProducts({
         orderBy: [
@@ -105,14 +104,18 @@ export default function Home() {
               style={{ cursor: "pointer" }}
             >
               Categorías
-              <span className={`arrow-icon ${showCategories ? "open" : ""}`}>
+              <span
+                className={`arrow-icon ${showCategories ? "open" : "close"}`}
+              >
                 <Image src={ArrowDownIcon} alt="Arrow" width={10} height={10} />
               </span>
             </h2>
 
             <div
               ref={categoryOptionsRef} // Asigna la referencia al contenedor de opciones
-              className={`category-options ${showCategories ? "open" : ""}`}
+              className={`category-options ${
+                showCategories ? "open" : "close"
+              }`}
               style={{
                 maxHeight: maxHeight, // Aplica el maxHeight calculado
               }}
@@ -217,13 +220,13 @@ export default function Home() {
               />
             </div>
             <div className="search-product">
-              <input type="input" placeholder="Buscar" ref={ nameProdRef }/>
+              <input type="input" placeholder="Buscar" ref={nameProdRef} />
               <Image
                 src={SearchIcon}
                 alt="Search"
                 width={30}
                 height={25}
-                onClick={ filterhandle }
+                onClick={filterhandle}
                 style={{ cursor: "pointer" }}
               />
             </div>

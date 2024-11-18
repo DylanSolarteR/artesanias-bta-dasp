@@ -1,12 +1,15 @@
 "use client";
 import { Toaster } from "react-hot-toast";
-import { MainContextProvider } from "@/app/context";
+import { MainContextProvider } from "@/app/context/MainContext";
+import { AuthContextProvider } from "@/app/context/AuthContext";
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <>
       <MainContextProvider>
-        <Toaster />
-        {children}
+        <AuthContextProvider>
+          <Toaster position="bottom-right" />
+          {children}
+        </AuthContextProvider>
       </MainContextProvider>
     </>
   );

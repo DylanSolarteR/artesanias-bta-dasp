@@ -34,6 +34,7 @@ export class Product {
 
 }
 
+
 export class ProductCategory {
     constructor(
         public name: string,
@@ -58,6 +59,7 @@ export enum employeeRoles {
     manager = 'manager',
     cashier = 'cashier'
 }
+
 export class Employee {
     constructor(
         public name: string,
@@ -105,6 +107,25 @@ export class Employee {
     }
 }
 
+export class PhysicalLocation{
+    constructor(
+        public direction: string,
+        public telephone: string,
+        private _id?: number
+    ){}
+
+    get id(){
+        return this._id;
+    }
+    
+    set id(_id){
+        if(this._id !=null){
+            throw Error('id is inmutable')
+        }
+        this._id=_id;
+    }
+
+}
 export class Inventory {
     constructor(
         public readonly productId: number,

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { geistSans, geistMono } from "@/app/fonts/fonts";
 import Providers from "@/components/Providers";
 import "@/app/css/globals.css";
 
@@ -7,17 +7,6 @@ export const metadata: Metadata = {
   title: "Artesanías Bogotá LTDA",
   description: "Aplicación web para empleados de Artesanías Bogotá LTDA",
 };
-
-const geistSans = localFont({
-  src: "../fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "../fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export default function RootLayout({
   children,

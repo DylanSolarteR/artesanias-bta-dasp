@@ -1,5 +1,3 @@
-
-
 const API_RESOURCE = 'http://localhost:3200/api/category'
 
 export async function listCategories() {
