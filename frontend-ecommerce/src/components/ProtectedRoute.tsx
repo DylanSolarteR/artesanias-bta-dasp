@@ -9,7 +9,6 @@ const ProtectedRoute = async ({
   const { contextValue, isTokenExpired, clearToken } = useAuthContext();
   const authToken = contextValue.authToken;
   const router = useRouter();
-
   // Check if the user is authenticated
   if (!authToken || isTokenExpired()) {
     // If not authenticated, redirect to the login page
