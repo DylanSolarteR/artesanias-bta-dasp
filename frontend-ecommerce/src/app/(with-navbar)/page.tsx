@@ -248,10 +248,12 @@ export default function Home() {
                   <article key={index}>
                     <div className="img">
                       <Image
-                        src={product.imagen}
+                        src={
+                          "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+                        }
                         alt={product.nombre}
-                        height={150}
-                        width={150}
+                        height={200}
+                        width={300}
                       />
                     </div>
                     <div className="details">
