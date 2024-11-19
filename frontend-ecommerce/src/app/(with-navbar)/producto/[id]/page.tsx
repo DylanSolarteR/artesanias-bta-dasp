@@ -10,57 +10,42 @@ import PlusIcon from "@/app/icons/PlusIcon.svg?url";
 import MinusIcon from "@/app/icons/MinusIcon.svg?url";
 import "@/app/css/Detail-product.css";
 import Loading from "@/components/Loading";
-import { listProducts } from "@/api/product.api";
+import { getProductById, PRODUCT } from "@/api/product.api";
 
-function producto() {
+function product() {
   const [ready, setReady] = useState(false);
   const { id } = useParams<{ id: string }>();
-  const [producto, setProducto] = useState<{
-    nombre: string;
-    precio: number;
-    descripcion: string;
-    ref: string;
-    categoria: string;
-    stock: number;
-    imagen: string;
-  }>();
-  const [cantidad, setCantidad] = useState<any>(0);
+  const [product, setProduct] = useState<PRODUCT>();
+  const [quantity, setQuantity] = useState<any>(0);
   const aumentarCantidad = () => {
-    if (producto.stock === 0) return;
-    if (cantidad >= producto?.stock) {
-      setCantidad(producto?.stock);
+    if (product.stock === 0) return;
+    if (quantity >= product?.stock) {
+      setQuantity(product?.stock);
       return;
     }
-    setCantidad(cantidad + 1);
+    setQuantity(quantity + 1);
   };
   const disminuirCantidad = () => {
-    if (producto.stock === 0) return;
-    if (cantidad <= 1) {
-      setCantidad(1);
+    if (product.stock === 0) return;
+    if (quantity <= 1) {
+      setQuantity(1);
       return;
     }
-    setCantidad(cantidad - 1);
+    setQuantity(quantity - 1);
   };
 
-  const mockProducto = {
-    id: id,
-    nombre: `${"Producto " + id}`,
-    precio: 100,
-    descripcion: "Descripcion del producto 1",
-    imagen: "../next.svg",
-    ref: "REF-001",
-    categoria: "Categoria 1",
-    stock: 20,
-  };
   useEffect(() => {
     //Añadir el fetch aca
     // setProducto(mockProducto);
-    setReady(true);
+    getProductById(parseInt(id)).then((data) => {
+      setProduct(data);
+      setReady(true);
+    });
   }, []);
 
   useEffect(() => {
     if (ready) {
-      producto.stock > 0 ? setCantidad(1) : setCantidad(0);
+      product?.stock > 0 ? setQuantity(1) : setQuantity(0);
     }
   }, [ready]);
 
@@ -82,27 +67,26 @@ function producto() {
         </div>
         <section className="details-product">
           <div className="image-product">
-            <Image src={Example} alt={""} height={500} width={500} />
-            {/*
-              <Image
-                src={producto?.imagen ?? ""}
-                alt={producto?.nombre ?? ""}
-                height={1000}
-                width={700}
-              />*/}
+            <Image
+              src={
+                "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+              }
+              alt={"Imagen " + product?.name}
+              height={500}
+              width={500}
+            />
           </div>
           <div className="detail-product">
-            <h1>{producto?.nombre ?? "Por asignar "}</h1>
-            <h2>{"Precio: $" + producto?.precio ?? "Por asignar"}</h2>
+            <h1>{product?.name ?? "Por asignar "}</h1>
+            <h2>{"Precio: $" + product?.price ?? "Por asignar"}</h2>
             <h3>Descripción del producto</h3>
-            <p>{producto?.descripcion ?? "Por asignar"}</p>
-            <p>{"Referencia: " + producto?.ref ?? "Por asignar"}</p>
-            <p>{"Categoría: " + producto?.categoria ?? "Por asignar"}</p>
-            <p>{"Cantidad disponible: " + producto?.stock ?? "Por asignar"}</p>
+            <p>{product?.description ?? "Por asignar"}</p>
+            <p>{"Categoría: " + product?.categoryName ?? "Por asignar"}</p>
+            <p>{"Cantidad disponible: " + product?.stock ?? "Por asignar"}</p>
           </div>
         </section>
         <div className="cantProduct">
-          {/* Aquí va la cantidad de productos, con posibilidad de aumentar y disminuir*/}
+          {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
           {/*Boton más*/}
           <button onClick={() => aumentarCantidad()}>
             <Image
@@ -112,33 +96,33 @@ function producto() {
               height={20}
             />
           </button>
-          {/*Input cantidad*/}
+          {/*Input quantity*/}
           <input
             type="input"
             onKeyDown={onlyNumberInput}
-            disabled={producto?.stock === 0}
-            value={cantidad}
+            disabled={product?.stock === 0}
+            value={quantity}
             onBlur={() => {
-              if (cantidad === "") {
-                setCantidad(1);
+              if (quantity === "") {
+                setQuantity(1);
               }
             }}
             onChange={(e) => {
               if (e.target.value === "") {
-                setCantidad("");
+                setQuantity("");
                 return;
               }
               if (parseInt(e.target.value) <= 0) {
                 // cuando el input es 0, cambia a 1
-                setCantidad(1);
+                setQuantity(1);
                 return;
               }
 
-              if (parseInt(e.target.value) > producto?.stock) {
-                setCantidad(producto?.stock);
+              if (parseInt(e.target.value) > product?.stock) {
+                setQuantity(product?.stock);
                 return;
               }
-              setCantidad(parseInt(e.target.value));
+              setQuantity(parseInt(e.target.value));
             }}
           />
           {/*Boton menos*/}
@@ -157,4 +141,4 @@ function producto() {
   );
 }
 
-export default producto;
+export default product;
