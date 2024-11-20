@@ -12,7 +12,7 @@ function DashboardCard({
   href: string;
 }) {
   return (
-    <div>
+    <div className="cards">
       <Link href={href}>
         <h1>{title}</h1>
         <Image alt={`${"tarjeta " + title}`} src={icon}></Image>

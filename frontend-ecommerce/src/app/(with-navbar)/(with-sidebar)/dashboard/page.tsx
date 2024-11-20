@@ -11,6 +11,8 @@ import { hasPermission } from "@/util/RolePermissions";
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 
+
+
 function dashboard() {
   const { role } = useMainContext();
   const [mounted, setMounted] = useState(false);
@@ -26,10 +28,10 @@ function dashboard() {
   } else {
     return (
       <>
-        <main>
-          <section>
+        <main className="dashboard-container">
+          <section className="dashboard">
             <h1>DASHBOARD</h1>
-            <div>
+            <div className="view-main">
               {hasPermission(role, "view:employees") && (
                 <DashboardCard
                   title="Empleado"
