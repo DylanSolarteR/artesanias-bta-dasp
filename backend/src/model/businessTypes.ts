@@ -18,7 +18,8 @@ export class Product {
         public price: number,
         public img: string,
         public isActive: boolean,
-        private _id?: number
+        private _id?: number,
+        public stock?: number,
     ) { }
 
     set id(_id) {
@@ -107,22 +108,22 @@ export class Employee {
     }
 }
 
-export class PhysicalLocation{
+export class PhysicalLocation {
     constructor(
         public direction: string,
         public telephone: string,
         private _id?: number
-    ){}
+    ) { }
 
-    get id(){
+    get id() {
         return this._id;
     }
-    
-    set id(_id){
-        if(this._id !=null){
+
+    set id(_id) {
+        if (this._id != null) {
             throw Error('id is inmutable')
         }
-        this._id=_id;
+        this._id = _id;
     }
 
 }

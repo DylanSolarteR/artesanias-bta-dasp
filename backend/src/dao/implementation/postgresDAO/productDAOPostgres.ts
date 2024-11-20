@@ -45,15 +45,21 @@ export class ProductDAOPostgres implements IDAO<Product> {
     }
 
     async query(criteria: Criteria): Promise<ObjectResponse<Product[]>> {
-        let query = `SELECT 
-                        product.*,
-                        category.name as cat_name,
-                        category.pk_id as cat_id
-                    FROM product
-                    INNER JOIN category ON category.pk_id = product.fk_category`
-        let [restriction, params] = CriteriaPostgresConverter.convert(criteria)
+        let [_, params, { filter, order, limit, offset }] = CriteriaPostgresConverter.convert(criteria)
+        let query =
+            `SELECT ` +
+            `product.*, ` +
+            `category.name as cat_name, ` +
+            `category.pk_id as cat_id, ` +
+            `SUM(ecommerce_available_quantity) as stock ` +
+            `FROM product ` +
+            `INNER JOIN category ON category.pk_id = product.fk_category ` +
+            `LEFT JOIN inventory ON product.pk_id = inventory.pk_fk_product ` +
+            filter +
+            `GROUP BY product.pk_id, cat_name, cat_id ` +
+            order + limit + offset;
 
-        query += restriction
+
         try {
             let pool = await PostgresConnection.getInstance().getPool()
 
@@ -73,7 +79,8 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     p.price,
                     p.image,
                     p.active,
-                    p.pk_id
+                    p.pk_id,
+                    p.stock | 0
                 ))
             }
             return new ObjectResponse(true, products, null)
@@ -83,7 +90,6 @@ export class ProductDAOPostgres implements IDAO<Product> {
         }
 
     }
-
     async delete(product: Product): Promise<boolean> {
         const query = ` UPDATE product 
                         SET 
@@ -103,7 +109,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
             });
 
             if (res.rowCount === 1) {
-                
+
                 return true;
             } else {
                 return false;
