@@ -8,6 +8,7 @@ type AuthContextType = {
   };
   isTokenExpired: () => boolean;
   clearToken: () => void;
+  isLogged: () => boolean;
 };
 
 // Crear el contexto
@@ -17,13 +18,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // Definir los estados y funciones
   const [authToken, setAuthToken_] = useState<string>(
-    localStorage.getItem("authToken")
+    localStorage.getItem("authToken") || ""
   );
   // Agregar aquí las funciones
   const setAuthToken = (newToken: string) => {
     setAuthToken_(newToken);
+  };
+
+  const isLogged = () => {
+    return authToken !== "";
   };
 
   useEffect(() => {
@@ -55,7 +59,14 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Retornar el proveedor del contexto con los valores que se desean compartir
   return (
-    <AuthContext.Provider value={{ contextValue, isTokenExpired, clearToken }}>
+    <AuthContext.Provider
+      value={{
+        contextValue,
+        isTokenExpired,
+        clearToken,
+        isLogged,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
