@@ -47,16 +47,16 @@ export class ProductDAOPostgres implements IDAO<Product> {
     async query(criteria: Criteria): Promise<ObjectResponse<Product[]>> {
         let [_, params, { filter, order, limit, offset }] = CriteriaPostgresConverter.convert(criteria)
         let query =
-            `SELECT ` +
-            `product.*, ` +
-            `category.name as cat_name, ` +
-            `category.pk_id as cat_id, ` +
-            `SUM(ecommerce_available_quantity) as stock ` +
-            `FROM product ` +
-            `INNER JOIN category ON category.pk_id = product.fk_category ` +
-            `LEFT JOIN inventory ON product.pk_id = inventory.pk_fk_product ` +
+            `SELECT \n` +
+            `product.*, \n` +
+            `category.name as cat_name, \n` +
+            `category.pk_id as cat_id, \n` +
+            `SUM(ecommerce_available_quantity) as stock \n` +
+            `FROM product \n` +
+            `INNER JOIN category ON category.pk_id = product.fk_category \n` +
+            `LEFT JOIN inventory ON product.pk_id = inventory.pk_fk_product \n` +
             filter +
-            `GROUP BY product.pk_id, cat_name, cat_id ` +
+            `\nGROUP BY product.pk_id, cat_name, cat_id \n` +
             order + limit + offset;
 
 

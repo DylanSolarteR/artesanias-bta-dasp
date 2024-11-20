@@ -1,4 +1,4 @@
-import { Pool, Client } from "pg";
+import { Pool, Client, PoolConfig } from "pg";
 
 
 
@@ -13,12 +13,18 @@ export class PostgresConnection {
         }
 
         PostgresConnection.instance = this;
-        let config = {
+        let config: PoolConfig = {
             user: process.env.BD_USER,
             password: process.env.BD_PASSWORD,
             host: process.env.BD_HOST,
             port: parseInt(process.env.BD_PORT),
             database: process.env.BD_NAME,
+        }
+
+        if (process.env.NODE_ENV === 'production') {
+            config.ssl = {
+                rejectUnauthorized: false
+            }
         }
 
         this.singletonVerify = Math.random()
