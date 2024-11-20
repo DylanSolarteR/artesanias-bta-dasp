@@ -63,6 +63,6 @@ export async function updateInventory(req: Request, res: Response) {
         return
     }
 
-    res.status(200).send({ "Product remove" })
+    res.status(200).send( "Product remove" )
 }
 
