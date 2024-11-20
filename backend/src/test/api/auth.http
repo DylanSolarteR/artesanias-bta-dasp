@@ -1,0 +1,36 @@
+
+### Ejemplo loguin 1
+POST http://localhost:3200/api/auth/singin
+Content-Type: application/json
+
+# body
+{
+    "userId": 1,
+    "password": "AdminB)343" 
+}
+### Ejemplo loguin 2
+POST http://localhost:3200/api/auth/singin
+Content-Type: application/json
+
+# body
+{
+    "userId": 6,
+    "password": "0 James Soliban" 
+}
+
+### Ejemplo registro
+POST http://localhost:3200/api/auth/singup
+Content-Type: application/json
+Authorization: barer untokenrandom
+
+{
+    "name": "James",
+    "lastName": "Soliban",
+    "telephone": "111011",
+    "role": "cashier"
+}
+
+### Ejemplo peticion del role del usuario
+GET http://localhost:3200/api/auth/get-role
+Content-Type: application/json
+Authorization: barer untokenrandom

@@ -1,0 +1,144 @@
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
+import Example from "@/app/icons/BagsadIcon.png";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { onlyNumberInput } from "@/util/utils";
+import PlusIcon from "@/app/icons/PlusIcon.svg?url";
+import MinusIcon from "@/app/icons/MinusIcon.svg?url";
+import "@/app/css/Detail-product.css";
+import Loading from "@/components/Loading";
+import { getProductById, PRODUCT } from "@/api/product.api";
+
+function product() {
+  const [ready, setReady] = useState(false);
+  const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<PRODUCT>();
+  const [quantity, setQuantity] = useState<any>(0);
+  const aumentarCantidad = () => {
+    if (product.stock === 0) return;
+    if (quantity >= product?.stock) {
+      setQuantity(product?.stock);
+      return;
+    }
+    setQuantity(quantity + 1);
+  };
+  const disminuirCantidad = () => {
+    if (product.stock === 0) return;
+    if (quantity <= 1) {
+      setQuantity(1);
+      return;
+    }
+    setQuantity(quantity - 1);
+  };
+
+  useEffect(() => {
+    //Añadir el fetch aca
+    // setProducto(mockProducto);
+    getProductById(parseInt(id)).then((data) => {
+      setProduct(data);
+      setReady(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (ready) {
+      product?.stock > 0 ? setQuantity(1) : setQuantity(0);
+    }
+  }, [ready]);
+
+  return !ready ? (
+    <Loading />
+  ) : (
+    <div className="container">
+      <main className="main-detail">
+        <div className="return">
+          <Link href={"/"}>
+            <Image
+              src={BackwardArrowIcon}
+              alt={"ArrowReturn"}
+              height={30}
+              width={30}
+            />
+          </Link>
+          <Link href={"/"}>Seguir mirando productos</Link>
+        </div>
+        <section className="details-product">
+          <div className="image-product">
+            <Image
+              src={
+                "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+              }
+              alt={"Imagen " + product?.name}
+              height={500}
+              width={500}
+            />
+          </div>
+          <div className="detail-product">
+            <h1>{product?.name ?? "Por asignar "}</h1>
+            <h2>{"Precio: $" + product?.price ?? "Por asignar"}</h2>
+            <h3>Descripción del producto</h3>
+            <p>{product?.description ?? "Por asignar"}</p>
+            <p>{"Categoría: " + product?.categoryName ?? "Por asignar"}</p>
+            <p>{"Cantidad disponible: " + product?.stock ?? "Por asignar"}</p>
+          </div>
+        </section>
+        <div className="cantProduct">
+          {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
+          {/*Boton más*/}
+          <button onClick={() => aumentarCantidad()}>
+            <Image
+              src={PlusIcon}
+              alt="Aumentar cantidad del producto"
+              width={20}
+              height={20}
+            />
+          </button>
+          {/*Input quantity*/}
+          <input
+            type="input"
+            onKeyDown={onlyNumberInput}
+            disabled={product?.stock === 0}
+            value={quantity}
+            onBlur={() => {
+              if (quantity === "") {
+                setQuantity(1);
+              }
+            }}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                setQuantity("");
+                return;
+              }
+              if (parseInt(e.target.value) <= 0) {
+                // cuando el input es 0, cambia a 1
+                setQuantity(1);
+                return;
+              }
+
+              if (parseInt(e.target.value) > product?.stock) {
+                setQuantity(product?.stock);
+                return;
+              }
+              setQuantity(parseInt(e.target.value));
+            }}
+          />
+          {/*Boton menos*/}
+          <button onClick={() => disminuirCantidad()}>
+            <Image
+              src={MinusIcon}
+              alt="Disminuir cantidad del producto"
+              width={20}
+              height={20}
+            />
+          </button>
+        </div>
+        <button className="buttonCart">Añadir al carrito</button>
+      </main>
+    </div>
+  );
+}
+
+export default product;
