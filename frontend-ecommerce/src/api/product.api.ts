@@ -1,6 +1,7 @@
 
 
-const API_RESOURCE = 'http://localhost:3200/api/product'
+import { AxiosInstance } from '@/api/axios'
+import { isAxiosError } from 'axios'
 
 type productFilters = {
     orderBy: [name: 'name' | 'price', type: string],
@@ -30,20 +31,49 @@ export async function listProducts({
     if (maxPrice) {
         query.append('maxPrice', maxPrice.toString())
     }
-    let response = await fetch(API_RESOURCE + '/list?' + query.toString())
-
-    if (!response.ok) {
-        // TODO hacer algo con el error
-        throw Error()
+    try {
+        let response = await AxiosInstance.get('/product/list?' + query.toString())
+        let products: Array<any> = response.data
+        // TODO No hay imagenes de los productos
+        // NOTE En las pages no se usa el id, lo dejo por si acaso
+        return products.map(p => ({
+            imagen: "next.svg",
+            nombre: <string>p.name,
+            precio: <number>p.price,
+            id: <number>p._id
+        }))
+    } catch (err) {
+        if (isAxiosError(err)) {
+            console.log("Error de extracción de datos")
+        }
     }
-    let products: Array<any> = await response.json()
-    // TODO No hay imagenes de los productos
-    // NOTE En las pages no se usa el id, lo dejo por si acaso
-    return products.map(p => ({
-        imagen: "next.svg",
-        nombre: <string>p.name,
-        precio: <number>p.price,
-        id: <number>p._id
-    }))
 
+}
+
+export interface PRODUCT {
+    stock: number
+    name: string
+    description: string
+    categoryName: string
+    categoryId: number
+    price: number
+    img: string
+    isActive: boolean
+    _id: number
+}
+
+
+export async function getProductById(id: number) {
+    let query = new URLSearchParams();
+    query.append('id', id.toString())
+    try {
+        let response = await AxiosInstance.get('/product/list?' + query.toString())
+        let product: PRODUCT = response.data[0]
+        console.log(product)
+        return product
+    } catch (err) {
+        if (isAxiosError(err)) {
+            console.log("Error de extracción de datos")
+        }
+    }
 }

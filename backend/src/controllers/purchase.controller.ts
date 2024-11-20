@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { EcommercePurchase, ProductInPurchase, ProductRequest, Purchase } from "../model/purchase";
 import { Criteria, Filter, matchType, Sort } from "../dao/Criteria";
-import { InventoryDAOPostgres } from "../dao/implementation/postgresDAO/inventoryDAOPostrgres";
+import { InventoryDAOPostgres } from "../dao/implementation/postgresDAO/inventoryDAOPostgres";
 import { Inventory } from "../model/businessTypes";
 import { ProductDAOPostgres } from "../dao/implementation/postgresDAO/productDAOPostgres";
 import { PurchaseDAOPostgres } from "../dao/implementation/postgresDAO/purchaseDAOPostrgres";

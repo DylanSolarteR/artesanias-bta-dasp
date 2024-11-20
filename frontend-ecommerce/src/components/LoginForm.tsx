@@ -4,11 +4,9 @@ import toast from "react-hot-toast";
 import { onlyNumberInput } from "@/util/utils";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { useMainContext } from "@/app/context/MainContext";
 function LoginForm() {
   const router = useRouter();
   const { contextValue } = useAuthContext();
-  const { setRole } = useMainContext();
   const [message, formAction, isPending] = useActionState(loginAuth, {
     success: false,
     message: "",
