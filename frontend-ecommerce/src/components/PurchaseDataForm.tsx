@@ -3,12 +3,12 @@ import { loginAuth } from "@/api/auth.api";
 import Image from "next/image";
 import StripeLogo from "@/app/icons/StripeLogo.svg?url";
 import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
-import CardIcon from "@/app/icons/cardIcon.svg"
-import GroupIcon from "@/app/icons/groupIcon.svg"
-import UserIcon from "@/app/icons/UserIcon.svg"
-import CheckIcon from "@/app/icons/tickcircleIcon.svg"
+import CardIcon from "@/app/icons/cardIcon.svg";
+import GroupIcon from "@/app/icons/groupIcon.svg";
+import UserIcon from "@/app/icons/UserIcon.svg";
+import CheckIcon from "@/app/icons/tickcircleIcon.svg";
 import toast from "react-hot-toast";
-import "@/app/css/Buy.css"
+import "@/app/css/Buy.css";
 
 const steps = [
   { Icon: <UserIcon />, step: 1 },
@@ -17,11 +17,6 @@ const steps = [
 ];
 
 function PurchaseDataForm() {
-  const [message, formAction, isPending] = useActionState(loginAuth, {
-    success: false,
-    message: "",
-    status: 0,
-  }); //Ignorar esto por ahora, no hay la parte de la api
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [documentType, setDocumentType] = useState<string>("");
@@ -33,15 +28,6 @@ function PurchaseDataForm() {
   const [zip, setZip] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
 
-  useEffect(() => {
-    if (message.status === 400) {
-      toast.error(message.message);
-    }
-    if (message.status === 200) {
-      toast.success(message.message);
-    }
-  }, [message]);
-
   const [activeStep, setActiveStep] = useState(1);
   const totalSteps = 3; // Número total de pasos
   const nextStep = () => setActiveStep(activeStep + 1);
@@ -51,11 +37,8 @@ function PurchaseDataForm() {
   return (
     <div className="main-container">
       <div className="step-container">
-
         {/* Barra de progreso */}
-        <div
-          className="progress-bar-background"
-        ></div>
+        <div className="progress-bar-background"></div>
         <div
           className="progress-bar-foreground"
           style={{ height: `${progressPercentage}%` }} // Se ajusta el porcentaje de la barra
@@ -63,9 +46,15 @@ function PurchaseDataForm() {
 
         {steps.map(({ step, Icon }) => (
           <div key={step} className="step-wrapper">
-            <div className={`step-circle ${activeStep >= step ? 'completed' : 'incomplete'}`}>
+            <div
+              className={`step-circle ${
+                activeStep >= step ? "completed" : "incomplete"
+              }`}
+            >
               {activeStep > step ? (
-                <span><CheckIcon /></span>
+                <span>
+                  <CheckIcon />
+                </span>
               ) : (
                 <span>{Icon}</span>
               )}
@@ -75,8 +64,7 @@ function PurchaseDataForm() {
       </div>
 
       <div className="container-inf-step">
-
-        <form className="form-inf-buy" action={formAction}>
+        <form className="form-inf-buy" onSubmit={(e) => e.preventDefault()}>
           {/* Paso 1: Datos personales */}
           {activeStep === 1 && (
             <>
@@ -87,14 +75,14 @@ function PurchaseDataForm() {
                 value={name}
                 name="name"
                 onChange={(e) => setName(e.target.value)}
-              /> 
+              />
               <label htmlFor="email">Correo electrónico: </label>
               <input
                 type="text"
                 value={email}
                 name="email"
                 onChange={(e) => setEmail(e.target.value)}
-              /> 
+              />
               <label htmlFor="documentType">Tipo de Documento: </label>
               <input
                 type="text"
@@ -108,14 +96,14 @@ function PurchaseDataForm() {
                 value={documentNum}
                 name="documentNum"
                 onChange={(e) => setDocumentNum(e.target.value)}
-              /> 
+              />
               <label htmlFor="phone">Teléfono: </label>
               <input
                 type="text"
                 value={phone}
                 name="phone"
                 onChange={(e) => setPhone(e.target.value)}
-              /> 
+              />
             </>
           )}
 
@@ -136,7 +124,7 @@ function PurchaseDataForm() {
                 value={department}
                 name="department"
                 onChange={(e) => setDepartment(e.target.value)}
-              /> 
+              />
               <label htmlFor="city">Ciudad: </label>
               <input
                 type="text"
@@ -164,14 +152,13 @@ function PurchaseDataForm() {
                     type="radio"
                     name="paymentMethod"
                     value="stripe"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setPaymentMethod(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setPaymentMethod(e.target.value)
+                    }
                     checked={paymentMethod === "stripe"}
                   />
                   <div className="plan-details">
-                    <Image
-                      alt="Logo Stripe"
-                      src={StripeLogo}
-                    />
+                    <Image alt="Logo Stripe" src={StripeLogo} />
                   </div>
                 </label>
 
@@ -181,7 +168,9 @@ function PurchaseDataForm() {
                     type="radio"
                     name="paymentMethod"
                     value="mercadopago"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setPaymentMethod(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setPaymentMethod(e.target.value)
+                    }
                     checked={paymentMethod === "mercadopago"}
                   />
                   <div className="plan-details">
@@ -197,15 +186,25 @@ function PurchaseDataForm() {
           )}
           <div className="buttons-container">
             {/* Mostrar "Anterior" solo si no estamos en el primer paso */}
-            <button type="button" onClick={prevStep} disabled={activeStep === 1}>Anterior</button>
+            <button
+              type="button"
+              onClick={prevStep}
+              disabled={activeStep === 1}
+            >
+              Anterior
+            </button>
 
             {/* Mostrar "Siguiente" en los pasos intermedios y "Proceder a la pasarela de pagos" en el último paso */}
             {activeStep !== 3 ? (
-              <button type="button" onClick={nextStep} disabled={activeStep === totalSteps}>Siguiente</button>
-            ) : (
-              <button type="submit">
-                {isPending ? "Validando..." : "Proceder a la pasarela de pagos"}
+              <button
+                type="button"
+                onClick={nextStep}
+                disabled={activeStep === totalSteps}
+              >
+                Siguiente
               </button>
+            ) : (
+              <button type="submit">Proceder a la pasarela de pagos</button>
             )}
           </div>
         </form>

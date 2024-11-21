@@ -13,13 +13,15 @@ function Carrito() {
   const [carrito, setCarrito] = useState([
     {
       nombre: "Producto 1",
-      imagen: "next.svg",
+      imagen:
+        "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder",
       precio: 100,
       cantidad: 1,
     },
     {
       nombre: "Producto 2",
-      imagen: "next.svg",
+      imagen:
+        "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder",
       precio: 200,
       cantidad: 2,
     },
@@ -69,7 +71,12 @@ function Carrito() {
       <h1>CARRITO</h1>
       <div className="return">
         <Link href={"/"}>
-          <Image src={BackwardArrowIcon} alt={"ArrowReturn"} height={30} width={30} />
+          <Image
+            src={BackwardArrowIcon}
+            alt={"ArrowReturn"}
+            height={30}
+            width={30}
+          />
         </Link>
         <Link href={"/"}>Seguir mirando productos</Link>
       </div>
@@ -82,18 +89,35 @@ function Carrito() {
               {/* Aquí va la lista de productos del carrito*/}
               {carrito.map((producto, index) => (
                 <div className="product" key={index}>
-                  <button className="delete" onClick={() => eliminarProducto(index)}>
-                    <Image src={DeleteIcon} alt="Eliminar producto" width={20} height={20} />
-                  </button>
-                  {" "}
+                  <button
+                    className="delete"
+                    onClick={() => eliminarProducto(index)}
+                  >
+                    <Image
+                      src={DeleteIcon}
+                      alt="Eliminar producto"
+                      width={20}
+                      height={20}
+                    />
+                  </button>{" "}
                   {/* Aquí va la información de cada producto*/}
-                  <Image src={producto.imagen} alt={producto.nombre} width={150} height={150} />
+                  <Image
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    width={150}
+                    height={150}
+                  />
                   <div className="product-info">
                     <h2>{producto.nombre}</h2>
                     <p>$ {producto.precio}</p>
                     <div className="cantProduct">
                       <button onClick={() => disminuirCantidad(index)}>
-                        <Image src={MinusIcon} alt="Disminuir cantidad" width={20} height={20} />
+                        <Image
+                          src={MinusIcon}
+                          alt="Disminuir cantidad"
+                          width={20}
+                          height={20}
+                        />
                       </button>
                       {/*Input cantidad*/}
                       <input
@@ -114,7 +138,12 @@ function Carrito() {
                         }}
                       />
                       <button onClick={() => aumentarCantidad(index)}>
-                        <Image src={PlusIcon} alt="Aumentar cantidad" width={20} height={20} />
+                        <Image
+                          src={PlusIcon}
+                          alt="Aumentar cantidad"
+                          width={20}
+                          height={20}
+                        />
                       </button>
                     </div>
                   </div>
