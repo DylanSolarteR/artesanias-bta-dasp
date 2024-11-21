@@ -71,6 +71,49 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
         }
     }
 
+    async queryInventory(criteria: Criteria): Promise<ObjectResponse<Inventory[]>> {
+        let [_, params, { filter, order, limit, offset }] = CriteriaPostgresConverter.convert(criteria);
+        let query = `
+            SELECT 
+                inventory.pk_fk_product AS product_id,
+                inventory.pk_fk_physical_location AS location_id,
+                inventory.quantity AS total_quantity,
+                inventory.display_quantity AS display_quantity,
+                inventory.ecommerce_available_quantity AS ecommerce_quantity,
+                product.name AS product_name
+            FROM inventory
+            INNER JOIN product ON inventory.pk_fk_product = product.pk_id
+            ${filter}
+            ${order} ${limit} ${offset};
+        `;
+    
+        try {
+            let pool = await PostgresConnection.getInstance().getPool();
+    
+            let res = await pool.query({
+                text: query,
+                values: params,
+            });
+    
+            let inventories = [];
+            if (res.rowCount > 0) {
+                inventories = res.rows.map(row => ({
+                    productId: row.product_id,
+                    locationId: row.location_id,
+                    productName: row.product_name,
+                    totalQuantity: row.total_quantity,
+                    displayQuantity: row.display_quantity,
+                    ecommerceQuantity: row.ecommerce_quantity,
+                }));
+            }
+    
+            return new ObjectResponse(true, inventories, null);
+        } catch (e) {
+            return new ObjectResponse(false, null, "Failed to query inventory");
+        }
+    }
+    
+
     async decreaseQuantity(inventory: Inventory): Promise<boolean> {
         const query = `
             UPDATE inventory
