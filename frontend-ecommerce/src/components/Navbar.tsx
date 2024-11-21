@@ -7,6 +7,7 @@ import Image from "next/image";
 import "@/app/css/Navbar.css";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { decodeBadEncodeStrings } from "@/util/utils";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,8 +21,12 @@ function Navbar() {
       if (!token) {
         return;
       }
+
       const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
-      setEmployeeName(jwtPayload.name + " " + jwtPayload.lastName);
+      let correctedName = decodeBadEncodeStrings(
+        jwtPayload.name + " " + jwtPayload.lastname
+      );
+      setEmployeeName(correctedName);
     }
   }, []);
 
