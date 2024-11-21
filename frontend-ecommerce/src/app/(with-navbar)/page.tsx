@@ -246,7 +246,7 @@ export default function Home() {
               <div className={`list-product ${gridClass}`}>
                 {products.map((product: Product, index) => (
                   <article key={index}>
-                    <div className="img">
+                    <div className="img-container">
                       <Image
                         src={
                           "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
