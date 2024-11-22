@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { completePurchase } from "../controllers/purchase.controller";
+import { initializePurchase } from "../controllers/purchase.controller";
 
 const router = Router();
 
-router.post("/complete-purchase", completePurchase);
+router.post("/initialize-purchase", initializePurchase);
 
 export default router;

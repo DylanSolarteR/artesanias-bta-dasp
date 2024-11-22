@@ -83,7 +83,7 @@ export abstract class Purchase {
     }
 
     public static validateDocType(docType: string) {
-        return Object.values(docType).includes(docType as docTypes)
+        return Object.values(docTypes).includes(docType as docTypes)
     }
 }
 

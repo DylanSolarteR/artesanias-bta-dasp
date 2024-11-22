@@ -1,7 +1,7 @@
 
 
 ### Ejemplo base
-POST http://localhost:3200/api/purchase/complete-purchase
+POST http://localhost:3200/api/purchase/initialize-purchase
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Prueba asignacion de stock con puntos fisicos variados
-POST http://localhost:3200/api/purchase/complete-purchase
+POST http://localhost:3200/api/purchase/initialize-purchase
 Content-Type: application/json
 
 {
@@ -67,7 +67,7 @@ Content-Type: application/json
 }
 
 ### No deberia aceptarla porque no hay stock
-POST http://localhost:3200/api/purchase/complete-purchase
+POST http://localhost:3200/api/purchase/initialize-purchase
 Content-Type: application/json
 
 {
