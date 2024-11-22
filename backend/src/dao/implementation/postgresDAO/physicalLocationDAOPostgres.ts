@@ -3,6 +3,7 @@ import { PhysicalLocation } from "../../../model/businessTypes";
 import { Criteria } from "../../Criteria";
 import { IDAO, ObjectResponse } from "../../dao";
 import { PostgresConnection } from "../postgresConnection";
+import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     async create(physicalLocation: PhysicalLocation): Promise<ObjectResponse<PhysicalLocation>> {
@@ -34,12 +35,18 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
         }
     }
 
-    async query(object: Criteria): Promise<ObjectResponse<PhysicalLocation[]>> {
-        let query = `SELECT * FROM physical_location;`
+    async query(criteria: Criteria): Promise<ObjectResponse<PhysicalLocation[]>> {
+        let query = `SELECT * FROM physical_location`
+        let [restriction, params] = CriteriaPostgresConverter.convert(criteria)
+        query += restriction
 
         try {
             let pool = await PostgresConnection.getInstance().getPool()
-            let res = await pool.query(query)
+            let res = await pool.query({
+                text: query,
+                values: params
+            })
+
             let locations = [];
             if (res.rowCount > 0) {
                 locations = res.rows.map(l => new PhysicalLocation(
@@ -51,30 +58,11 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
             return new ObjectResponse(true, locations, null)
         }
         catch (e) {
+            console.log(e);
             return new ObjectResponse(false, null, 'Failed to get physical locations')
         }
     }
 
-    async getById(id: number): Promise<ObjectResponse<PhysicalLocation[]>> {
-        let query = `SELECT * FROM physical_location WHERE pk_id = ${id};`
-
-        try {
-            let pool = await PostgresConnection.getInstance().getPool()
-            let res = await pool.query(query)
-            let locations = [];
-            if (res.rowCount > 0) {
-                locations = res.rows.map(l => new PhysicalLocation(
-                    l.direction,
-                    l.telephone,
-                    l.pk_id
-                ))
-            }
-            return new ObjectResponse(true, locations, null)
-        }
-        catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get physical locations')
-        }
-    }
 
     async delete(physicalLocation: PhysicalLocation): Promise<boolean> {
         let query = `DELETE FROM physical_location WHERE pk_id=$1;`
