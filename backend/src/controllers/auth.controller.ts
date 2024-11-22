@@ -59,16 +59,14 @@ export async function singIn(req: Request, res: Response) {
 export async function singUp(req: Request, res: Response) {
 
     const userRole: employeeRoles = req['user_role']; //Require identifyRole middleware
-    let name, lastName, telephone, role, locationId;
+    let { name, lastName, telephone, role, locationId, docType, docNumber } = req.body;
 
-    const dao = new EmployeeDAOPostgres();
-    try {
-        ({ name, lastName, telephone, role } = req.body);
-    }
-    catch (e) {
-        res.status(400).send('Nombre, apellido, teléfono, rol e id del punto físico son requeridos')
+    if (!name || !lastName || !telephone || !role || !docType || !docNumber) {
+        res.status(400).send('Todos los campos son requeridos')
         return
     }
+
+    const dao = new EmployeeDAOPostgres();
     if (!Employee.validateRole(role)) {
         res.status(400).send('Rol invalido para el nuevo empleado')
         return
@@ -79,7 +77,6 @@ export async function singUp(req: Request, res: Response) {
         return
     }
 
-    // TODO validar los otros campos
     locationId ?? null;
     const newEmployee = new Employee(
         name,
@@ -87,7 +84,9 @@ export async function singUp(req: Request, res: Response) {
         telephone,
         role,
         await hashPassword(`${locationId ?? 0} ${name} ${lastName}`),
-        locationId
+        locationId,
+        docType,
+        docNumber
     )
 
     let insertResult = await dao.create(newEmployee)

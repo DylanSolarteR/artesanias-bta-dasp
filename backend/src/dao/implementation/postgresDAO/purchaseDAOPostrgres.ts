@@ -1,5 +1,6 @@
 
-import { Purchase, EcommercePurchase, PhysicalPurchase, purchaseDocType, ProductInPurchase, ProductRequest } from "../../../model/purchase";
+import { docTypes } from "../../../model/businessTypes";
+import { Purchase, EcommercePurchase, PhysicalPurchase, ProductInPurchase, ProductRequest } from "../../../model/purchase";
 import { Criteria } from "../../Criteria";
 import { IDAO, ObjectResponse } from "../../dao";
 import { PostgresConnection } from "../postgresConnection";
@@ -192,7 +193,7 @@ export async function test() {
         new Date(),
         'pepe@gmail.com',
         'Comprador1',
-        purchaseDocType.cc,
+        docTypes.cc,
         '111',
         '313',
         null,
@@ -214,7 +215,7 @@ export async function test() {
         new Date(),
         'james@si.com',
         'yeims',
-        purchaseDocType.ce,
+        docTypes.ce,
         '888',
         '317',
         null,

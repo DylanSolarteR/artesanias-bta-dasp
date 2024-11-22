@@ -25,9 +25,12 @@ Authorization: barer untokenrandom
 
 {
     "name": "James",
+    "locationId": 1,
     "lastName": "Soliban",
     "telephone": "111011",
-    "role": "cashier"
+    "role": "cashier",
+    "docType": "CC",
+    "docNumber": "1001"
 }
 
 ### Ejemplo peticion del role del usuario
