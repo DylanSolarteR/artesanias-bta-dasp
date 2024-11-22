@@ -2,7 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
-import Example from "@/app/icons/BagsadIcon.png";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { onlyNumberInput } from "@/util/utils";
@@ -11,8 +10,10 @@ import MinusIcon from "@/app/icons/MinusIcon.svg?url";
 import "@/app/css/Detail-product.css";
 import Loading from "@/components/Loading";
 import { getProductById, PRODUCT } from "@/api/product.api";
+import { useCart } from "@/app/context/CartContext";
 
 function product() {
+  const { addToCart } = useCart();
   const [ready, setReady] = useState(false);
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<PRODUCT>();
@@ -34,9 +35,14 @@ function product() {
     setQuantity(quantity - 1);
   };
 
+  const handleAddToCart = (productId: number) => {
+    if (quantity > 0) {
+      const newItem = { productId, quantity: quantity };
+      addToCart(newItem);
+    }
+  };
+
   useEffect(() => {
-    //Añadir el fetch aca
-    // setProducto(mockProducto);
     getProductById(parseInt(id)).then((data) => {
       setProduct(data);
       setReady(true);
@@ -87,11 +93,11 @@ function product() {
         </section>
         <div className="cantProduct">
           {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
-          {/*Boton más*/}
-          <button onClick={() => aumentarCantidad()}>
+          {/*Boton menos*/}
+          <button onClick={() => disminuirCantidad()}>
             <Image
-              src={PlusIcon}
-              alt="Aumentar cantidad del producto"
+              src={MinusIcon}
+              alt="Disminuir cantidad del producto"
               width={20}
               height={20}
             />
@@ -124,18 +130,19 @@ function product() {
               }
               setQuantity(parseInt(e.target.value));
             }}
-          />
-          {/*Boton menos*/}
-          <button onClick={() => disminuirCantidad()}>
+          />{/*Boton más*/}
+          <button onClick={() => aumentarCantidad()}>
             <Image
-              src={MinusIcon}
-              alt="Disminuir cantidad del producto"
+              src={PlusIcon}
+              alt="Aumentar cantidad del producto"
               width={20}
               height={20}
             />
           </button>
         </div>
-        <button className="buttonCart">Añadir al carrito</button>
+        <button className="buttonCart" onClick={() => handleAddToCart(product._id)}>
+          Añadir al carrito
+        </button>
       </main>
     </div>
   );
