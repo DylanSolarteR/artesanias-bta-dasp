@@ -37,7 +37,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             }
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to add Products')
+            return new ObjectResponse(false, null, 'Fue imposible registrar el inventario')
         }
     }
 
@@ -67,7 +67,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             return new ObjectResponse(true, products, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get inventories')
+            return new ObjectResponse(false, null, 'Fuera imposible obtener el inventario')
         }
     }
 
@@ -86,15 +86,15 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             ${filter}
             ${order} ${limit} ${offset};
         `;
-    
+
         try {
             let pool = await PostgresConnection.getInstance().getPool();
-    
+
             let res = await pool.query({
                 text: query,
                 values: params,
             });
-    
+
             let inventories = [];
             if (res.rowCount > 0) {
                 inventories = res.rows.map(row => ({
@@ -106,13 +106,13 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
                     ecommerceQuantity: row.ecommerce_quantity,
                 }));
             }
-    
+
             return new ObjectResponse(true, inventories, null);
         } catch (e) {
-            return new ObjectResponse(false, null, "Failed to query inventory");
+            return new ObjectResponse(false, null, "Fuera imposible obtener el inventario");
         }
     }
-    
+
 
     async decreaseQuantity(inventory: Inventory): Promise<boolean> {
         const query = `

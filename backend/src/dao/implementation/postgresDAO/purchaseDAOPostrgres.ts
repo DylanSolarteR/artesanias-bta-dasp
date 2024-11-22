@@ -30,7 +30,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
 
             if (purchaseInsertRes.rowCount !== 1) {
                 await client.query('ROLLBACK');
-                return new ObjectResponse(false, null, 'Failed to create the base purchase')
+                return new ObjectResponse(false, null, 'Error al crear la compra')
             }
 
             if (purchase instanceof EcommercePurchase) {
@@ -48,7 +48,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                 })
                 if (ecomPurchaseInsertRes.rowCount !== 1) {
                     await client.query('ROLLBACK');
-                    return new ObjectResponse(false, null, 'Failed to create the ecommerce purchase')
+                    return new ObjectResponse(false, null, 'Error al registrar los detalles de la compra')
                 }
             }
             else if (purchase instanceof PhysicalPurchase) {
@@ -64,7 +64,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                 })
                 if (physicalPurchaseInsertRes.rowCount !== 1) {
                     await client.query('ROLLBACK');
-                    return new ObjectResponse(false, null, 'Failed to create the physical purchase')
+                    return new ObjectResponse(false, null, 'Error al registrar los detalles de la compra')
                 }
             }
             else {
@@ -91,7 +91,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                 if (productInsertRes.rowCount !== 1) {
                     await client.query('ROLLBACK');
                     return new ObjectResponse(false, null,
-                        `Failed to add the product with id ${product.productId} to the pruschase`
+                        `Error al añadir el producto con id ${product.productId} a la compra`
                     )
                 }
 

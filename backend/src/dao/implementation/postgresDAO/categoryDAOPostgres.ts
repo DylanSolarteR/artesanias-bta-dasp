@@ -28,7 +28,7 @@ export class CategoryDAOPostgres implements IDAO<ProductCategory> {
             return new ObjectResponse(true, categories, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get categories')
+            return new ObjectResponse(false, null, 'Fue imposible obtener las categorias')
         }
 
     }
