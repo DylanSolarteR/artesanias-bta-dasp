@@ -11,6 +11,7 @@ import Link from "next/link";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
 import "@/app/css/catalog-product.css";
+import Loading from "@/components/Loading";
 
 interface Product {
   id: number;
@@ -66,7 +67,7 @@ export default function Home() {
   const nameProdRef = useRef(null);
 
   const filterhandle = () => {
-    console.log("filtrando");
+    // console.log("filtrando");
     apiProduct
       .listProducts({
         orderBy: [
@@ -186,12 +187,10 @@ export default function Home() {
                 <label htmlFor="cat1">Nombre</label>
               </div>
             </div>
-            <select ref={orderTypeRef}>
+            <select ref={orderTypeRef} defaultValue={"desc"}>
               <option hidden></option>
               <option value={"asc"}>Ascendente</option>
-              <option value={"desc"} selected>
-                Descendente
-              </option>
+              <option value={"desc"}>Descendente</option>
             </select>
           </article>
 
@@ -232,7 +231,7 @@ export default function Home() {
             </div>
           </div>
 
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Loading />}>
             {products.length === 0 ? (
               <div className="empty-message">
                 <Image
@@ -247,12 +246,14 @@ export default function Home() {
               <div className={`list-product ${gridClass}`}>
                 {products.map((product: Product, index) => (
                   <article key={index}>
-                    <div className="img">
+                    <div className="img-container">
                       <Image
-                        src={product.imagen}
+                        src={
+                          "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+                        }
                         alt={product.nombre}
-                        height={150}
-                        width={150}
+                        height={200}
+                        width={300}
                       />
                     </div>
                     <div className="details">

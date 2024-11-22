@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { getRole } from "@/api/auth.api";
 
 import Image from "next/image";
+import MenuIcon from "@/app/icons/MenuIcon.svg?url";
+import CloseSquareIcon from "@/app/icons/closeSquareIcon.svg?url"
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
 import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
@@ -15,6 +17,8 @@ import Loading from "./Loading";
 import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
 import Link from "next/link";
+
+import '@/app/css/dashboard-sidebar.css'
 
 function DashboardSideBar() {
   const router = useRouter();
@@ -39,175 +43,170 @@ function DashboardSideBar() {
     });
   }, []);
 
+  const [collapsed, setCollapsed] = useState(false);
+
   if (!mounted) {
     return <Loading />;
   } else {
     return (
       <>
-        <aside>
-          <h1>CONTENIDO</h1>
+        <aside className={`main-container ${collapsed ? "collapsed" : ""}`}>
+          <div className="contents">{!collapsed && <span className="menu-content-text">Contenido</span>}
+            <button
+              className="toggle-button"
+              onClick={() => setCollapsed(!collapsed)}
+            >
+              {collapsed ? <Image src={MenuIcon} alt="Menú" /> : <Image className="close" src={CloseSquareIcon} alt="Cerrar" />}
+            </button>
+          </div>
+
           {/* Menú Empleado */}
           {hasPermission(role, "view:employees") && (
-            <div>
+            <div className="option-dashboard">
               <h2
                 onClick={() => setShowEmployeeMenu(!showEmployeeMenu)}
                 className="menu-title"
               >
-                <span>
+                <span className="icon-and-text">
                   <Image
                     src={UserIcon}
                     alt="Icono de empleado"
                     width={24}
                     height={24}
                   />
+                  {!collapsed && " Empleado"}
                 </span>
-                Empleado
-                <span
-                  className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
+                {!collapsed && <span className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
                 >
                   <Image
                     src={ArrowDownIcon}
                     alt="Flecha despliegue"
-                    width={24}
-                    height={24}
                   />
                 </span>
+                }
               </h2>
             </div>
           )}
           {/* Menú Productos */}
           {hasPermission(role, "view:products") && (
-            <div>
+            <div className="option-dashboard">
               <h2
                 onClick={() => setShowProductMenu(!showProductMenu)}
                 className="menu-title"
               >
-                <span>
+                <span className="icon-and-text">
                   <Image
                     src={UserIcon}
                     alt="Icono de producto"
                     width={24}
                     height={24}
                   />
+                  {!collapsed && " Producto"}
                 </span>
-                Producto
-                <span className={`arrow-icon ${showProductMenu ? "open" : ""}`}>
+                {!collapsed && <span className={`arrow-icon ${showProductMenu ? "open" : ""}`}
+                >
                   <Image
                     src={ArrowDownIcon}
                     alt="Flecha despliegue"
-                    width={24}
-                    height={24}
                   />
-                </span>
+                </span>}
               </h2>
             </div>
           )}
           {/* Menú Inventario */}
           {hasPermission(role, "view:inventory") && (
-            <div>
+            <div className="option-dashboard">
               <h2
                 onClick={() => setShowInventoryMenu(!showInventoryMenu)}
                 className="menu-title"
               >
-                <span>
+                <span className="icon-and-text">
                   <Image
                     src={InventoryIcon}
                     alt="Icono de inventario"
                     width={24}
                     height={24}
                   />
+                  {!collapsed && " Inventario"}
                 </span>
-                Inventario
-                <span
-                  className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}
-                >
+                {!collapsed && <span className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}>
                   <Image
                     src={ArrowDownIcon}
                     alt="Flecha despliegue"
-                    width={24}
-                    height={24}
                   />
-                </span>
+                </span>}
               </h2>
             </div>
           )}
           {/* Menú Puntos Fisicos */}
           {hasPermission(role, "view:physical-stores") && (
-            <div>
+            <div className="option-dashboard">
               <h2
                 onClick={() =>
                   setShowPhysicalPointsMenu(!showPhysicalPointsMenu)
                 }
                 className="menu-title"
               >
-                <span>
+                <span className="icon-and-text">
                   <Image
                     src={ShopIcon}
                     alt="Icono de puntos fisicos"
                     width={24}
                     height={24}
                   />
+                  {!collapsed && " Puntos Físicos"}
                 </span>
-                Puntos Físicos
-                <span
-                  className={`arrow-icon ${
-                    showPhysicalPointsMenu ? "open" : ""
-                  }`}
-                >
+                {!collapsed && <span className={`arrow-icon ${showPhysicalPointsMenu ? "open" : ""}`}>
                   <Image
                     src={ArrowDownIcon}
                     alt="Flecha despliegue"
-                    width={24}
-                    height={24}
                   />
-                </span>
+                </span>}
               </h2>
             </div>
           )}
           {/* Menú Reportes */}
           {hasPermission(role, "view:reports") && (
-            <div>
+            <div className="option-dashboard">
               <h2
                 onClick={() => setShowReportsMenu(!showReportsMenu)}
                 className="menu-title"
               >
-                <span>
+                <span className="icon-and-text">
                   <Image
                     src={ReportIcon}
                     alt="Icono de reportes"
                     width={24}
                     height={24}
                   />
+                  {!collapsed && " Reportes"}
                 </span>
-                Reportes
-                <span className={`arrow-icon ${showReportsMenu ? "open" : ""}`}>
+                {!collapsed && <span className={`arrow-icon ${showReportsMenu ? "open" : ""}`}>
                   <Image
                     src={ArrowDownIcon}
                     alt="Flecha despliegue"
-                    width={24}
-                    height={24}
                   />
-                </span>
+                </span>}
               </h2>
             </div>
           )}
           {/* Menú POS */}
           {hasPermission(role, "view:POS") && (
-            <div>
+            <div className="option-dashboard">
               <Link href={"/POS"}>
                 <h2
                   onClick={() => setShowReportsMenu(!showReportsMenu)}
                   className="menu-title"
                 >
-                  <span>
+                  <span className="icon-and-text">
                     <Image
                       src={ReportIcon}
                       alt="Icono de reportes"
                       width={24}
                       height={24}
                     />
+                    {!collapsed && " POS"}
                   </span>
-                  POS
                 </h2>
               </Link>
             </div>

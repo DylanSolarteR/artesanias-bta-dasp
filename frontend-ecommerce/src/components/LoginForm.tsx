@@ -4,11 +4,9 @@ import toast from "react-hot-toast";
 import { onlyNumberInput } from "@/util/utils";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { useMainContext } from "@/app/context/MainContext";
 function LoginForm() {
   const router = useRouter();
   const { contextValue } = useAuthContext();
-  const { setRole } = useMainContext();
   const [message, formAction, isPending] = useActionState(loginAuth, {
     success: false,
     message: "",
@@ -32,7 +30,7 @@ function LoginForm() {
   }, [message]);
 
   return (
-    <form action={formAction}>
+    <form className="form-login" action={formAction}>
       <label htmlFor="user">ID Usuario: </label>
       <input
         type="text"
@@ -40,14 +38,14 @@ function LoginForm() {
         name="userId"
         onChange={(e) => setUserId(e.target.value)}
         onKeyDown={onlyNumberInput}
-      />
+      /> <br />
       <label htmlFor="password">Contraseña: </label>
       <input
         type="password"
         value={password}
         name="password"
         onChange={(e) => setPassword(e.target.value)}
-      />
+      /><br />
       <button type="submit">{isPending ? "Validando..." : "Ingresar"}</button>
     </form>
   );

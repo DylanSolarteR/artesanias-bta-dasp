@@ -6,20 +6,60 @@ import { PostgresConnection } from "../postgresConnection";
 import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class ProductDAOPostgres implements IDAO<Product> {
-    async create(object: Product): Promise<ObjectResponse<Product>> {
-        throw Error('Unimplemented')
+    async create(product: Product): Promise<ObjectResponse<Product>> {
+        const query = `INSERT INTO product VALUES (DEFAULT, $1, $2, $3, $4, $5, true, $6) RETURNING *`
+
+        try {
+            let pool = await PostgresConnection.getInstance().getPool()
+
+            let res = await pool.query({
+                text: query,
+                values: [
+                    product.baseProductId,
+                    product.name,
+                    product.description,
+                    product.price,
+                    product.img,
+                    product.categoryId
+                ]
+            })
+
+            if (res.rowCount === 1) {
+                const createdProduct = new Product(
+                    res.rows[0].fk_id_base_product,
+                    res.rows[0].name,
+                    res.rows[0].description,
+                    res.rows[0].price,
+                    res.rows[0].image,
+                    res.rows[0].isActive,
+                    res.rows[0].fk_category,
+                    res.rows[0].pk_id
+                )
+                console.log(createdProduct)
+                return new ObjectResponse(true, createdProduct, null)
+            }
+        }
+        catch (e) {
+            return new ObjectResponse(false, null, 'Failed to create Product')
+        }
     }
 
     async query(criteria: Criteria): Promise<ObjectResponse<Product[]>> {
-        let query = `SELECT 
-                        product.*,
-                        category.name as cat_name,
-                        category.pk_id as cat_id
-                    FROM product
-                    INNER JOIN category ON category.pk_id = product.fk_category`
-        let [restriction, params] = CriteriaPostgresConverter.convert(criteria)
+        let [_, params, { filter, order, limit, offset }] = CriteriaPostgresConverter.convert(criteria)
+        let query =
+            `SELECT \n` +
+            `product.*, \n` +
+            `category.name as cat_name, \n` +
+            `category.pk_id as cat_id, \n` +
+            `SUM(ecommerce_available_quantity) as stock \n` +
+            `FROM product \n` +
+            `INNER JOIN category ON category.pk_id = product.fk_category \n` +
+            `LEFT JOIN inventory ON product.pk_id = inventory.pk_fk_product \n` +
+            filter +
+            `\nGROUP BY product.pk_id, cat_name, cat_id \n` +
+            order + limit + offset;
 
-        query += restriction
+
         try {
             let pool = await PostgresConnection.getInstance().getPool()
 
@@ -39,7 +79,8 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     p.price,
                     p.image,
                     p.active,
-                    p.pk_id
+                    p.pk_id,
+                    p.stock | 0
                 ))
             }
             return new ObjectResponse(true, products, null)
@@ -49,14 +90,85 @@ export class ProductDAOPostgres implements IDAO<Product> {
         }
 
     }
+    async delete(product: Product): Promise<boolean> {
+        const query = ` UPDATE product 
+                        SET 
+                            active = 'false'
+                        WHERE id = $1
+                        RETURNING *
+                    `;
 
-    async delete(object: Product): Promise<boolean> {
-        throw Error('Unimplemented')
+        try {
+            let pool = await PostgresConnection.getInstance().getPool();
+
+            let res = await pool.query({
+                text: query,
+                values: [
+                    product.id
+                ]
+            });
+
+            if (res.rowCount === 1) {
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (e) {
+            return false;
+        }
 
     }
 
-    async update(object: Product): Promise<boolean> {
-        throw Error('Unimplemented')
+    async update(product: Product): Promise<boolean> {
+        const query = ` UPDATE product 
+                        SET 
+                            base_product_id = $1,
+                            name = $2,
+                            description = $3,
+                            price = $4,
+                            img = $5,
+                            category_id = $6
+                        WHERE id = $7
+                        RETURNING *
+                    `;
 
+        try {
+            let pool = await PostgresConnection.getInstance().getPool();
+
+            let res = await pool.query({
+                text: query,
+                values: [
+                    product.baseProductId,
+                    product.name,
+                    product.description,
+                    product.price,
+                    product.img,
+                    product.categoryId,
+                    product.id
+                ]
+            });
+
+            if (res.rowCount === 1) {
+                const updatedProduct = new Product(
+                    res.rows[0].fk_id_base_product,
+                    res.rows[0].name,
+                    res.rows[0].description,
+                    res.rows[0].price,
+                    res.rows[0].image,
+                    res.rows[0].active,
+                    res.rows[0].fk_category,
+                    res.rows[0].pk_id
+                );
+                console.log(updatedProduct);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (e) {
+            return false;
+        }
     }
 }

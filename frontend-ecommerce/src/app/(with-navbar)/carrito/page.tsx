@@ -13,13 +13,15 @@ function Carrito() {
   const [carrito, setCarrito] = useState([
     {
       nombre: "Producto 1",
-      imagen: "next.svg",
+      imagen:
+        "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder",
       precio: 100,
       cantidad: 1,
     },
     {
       nombre: "Producto 2",
-      imagen: "next.svg",
+      imagen:
+        "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder",
       precio: 200,
       cantidad: 2,
     },
@@ -65,85 +67,94 @@ function Carrito() {
   };
 
   return (
-    <div>
-      <main>
-        <h1>Carrito</h1>
-        <section>
+    <div className="container">
+      <h1>CARRITO</h1>
+      <div className="return">
+        <Link href={"/"}>
+          <Image
+            src={BackwardArrowIcon}
+            alt={"ArrowReturn"}
+            height={30}
+            width={30}
+          />
+        </Link>
+        <Link href={"/"}>Seguir mirando productos</Link>
+      </div>
+      <main className="main-shoppingcart">
+        <section className="content-shoppingcart">
           {/* Aquí va el contenido del carrito*/}
           {
-            <div>
+            <div className="list-shoppingcart">
               {" "}
               {/* Aquí va la lista de productos del carrito*/}
               {carrito.map((producto, index) => (
-                <div key={index}>
-                  {" "}
-                  {/* Aquí va la información de cada producto*/}
-                  <h2>{producto.nombre}</h2>
-                  <Image
-                    src={producto.imagen}
-                    alt={producto.nombre}
-                    width={100}
-                    height={100}
-                  />
-                  {/*Boton eliminar*/}
+                <div className="product" key={index}>
                   <button
-                    onClick={() => {
-                      eliminarProducto(index);
-                    }}
+                    className="delete"
+                    onClick={() => eliminarProducto(index)}
                   >
                     <Image
                       src={DeleteIcon}
-                      alt="Aumentar cantidad del producto"
+                      alt="Eliminar producto"
                       width={20}
                       height={20}
                     />
-                  </button>
-                  <p>$ {producto.precio}</p>
-                  {/* Aquí va la cantidad de productos, con posibilidad de aumentar y disminuir*/}
-                  {/*Boton más*/}
-                  <button onClick={() => aumentarCantidad(index)}>
-                    <Image
-                      src={PlusIcon}
-                      alt="Aumentar cantidad del producto"
-                      width={20}
-                      height={20}
-                    />
-                  </button>
-                  {/*Input cantidad*/}
-                  <input
-                    type="input"
-                    onKeyDown={onlyNumberInput}
-                    value={producto.cantidad}
-                    onChange={(e) => {
-                      if (e.target.value === "") {
-                        return;
-                      }
-                      // cuando el input es 0, cambia a 1
-                      if (parseInt(e.target.value) === 0) {
-                        e.target.value = "1";
-                        onChangeCantidad(index, 1);
-                      } else {
-                        onChangeCantidad(index, parseInt(e.target.value));
-                      }
-                    }}
+                  </button>{" "}
+                  {/* Aquí va la información de cada producto*/}
+                  <Image
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    width={150}
+                    height={150}
                   />
-                  {/*Boton menos*/}
-                  <button onClick={() => disminuirCantidad(index)}>
-                    <Image
-                      src={MinusIcon}
-                      alt="Disminuir cantidad del producto"
-                      width={20}
-                      height={20}
-                    />
-                  </button>
+                  <div className="product-info">
+                    <h2>{producto.nombre}</h2>
+                    <p>$ {producto.precio}</p>
+                    <div className="cantProduct">
+                      <button onClick={() => disminuirCantidad(index)}>
+                        <Image
+                          src={MinusIcon}
+                          alt="Disminuir cantidad"
+                          width={20}
+                          height={20}
+                        />
+                      </button>
+                      {/*Input cantidad*/}
+                      <input
+                        type="input"
+                        onKeyDown={onlyNumberInput}
+                        value={producto.cantidad}
+                        onChange={(e) => {
+                          if (e.target.value === "") {
+                            return;
+                          }
+                          // cuando el input es 0, cambia a 1
+                          if (parseInt(e.target.value) === 0) {
+                            e.target.value = "1";
+                            onChangeCantidad(index, 1);
+                          } else {
+                            onChangeCantidad(index, parseInt(e.target.value));
+                          }
+                        }}
+                      />
+                      <button onClick={() => aumentarCantidad(index)}>
+                        <Image
+                          src={PlusIcon}
+                          alt="Aumentar cantidad"
+                          width={20}
+                          height={20}
+                        />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           }
         </section>
-        <section>
+        <section className="content-buys">
           {/* Aquí va los detalles de la compra*/}
-          <div>
+          <div className="details-buys">
             <h2>Detalles de la compra</h2>
             <span>Número total de artículos: {carrito.length}</span>
             <h3>Detalles</h3>
@@ -165,18 +176,13 @@ function Carrito() {
                 ))}
               </tbody>
             </table>
-            <h3>Total: $ {total}</h3>
+            <h4>Total: $ {total}</h4>
           </div>
           {/*Boton para proceder al pago*/}
           <Link href={"/"}>
-            <span>Proceder al pago</span>
+            <span className="buttom-buys">Proceder al pago</span>
           </Link>
         </section>
-
-        <Link href={"/"}>
-          <Image src={BackwardArrowIcon} alt={""} height={30} width={30} />
-          <span>Seguir mirando productos</span>
-        </Link>
       </main>
     </div>
   );

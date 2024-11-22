@@ -1,14 +1,19 @@
-const API_RESOURCE = 'http://localhost:3200/api/category'
-
+import { AxiosInstance } from '@/api/axios'
+import { isAxiosError } from 'axios'
+// '/category/list'
 export async function listCategories() {
+    try {
 
-    let response = await fetch(API_RESOURCE + '/list')
-
-    if (!response.ok) {
-        // TODO hacer algo con el error
-        throw Error()
+        let response = await AxiosInstance.get('/category/list')
+        let categories: Array<any> = response.data
+        return categories.map(c => ({ name: <string>c.name, id: <number>c._id }))
     }
-    let categories: Array<any> = await response.json()
-    return categories.map(c => ({ name: <string>c.name, id: <number>c._id }))
+    catch (err) {
+        if (isAxiosError(err)) {
+            console.log("Error de extracción de datos")
+        }
+    }
+
+
 
 }

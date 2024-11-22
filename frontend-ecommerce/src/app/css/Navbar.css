@@ -1,58 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=Josefin+Slab:ital,wght@0,400;1,400&display=swap');
+
 .Navbar {
-  background-color: #eba278;
-  width: 100%;
-  display: flex;
-  position: fixed;
-  z-index: 1000;
-  height: 70px;
-  justify-content: space-between;
-  padding: 0 1em;
-  padding-top: 10px;
-  padding-bottom: 10px;
+    background-color:#eba278;
+    width: 100%;
+    display: flex;
+    position: fixed;
+    z-index: 1000;
+    height: 70px;
+    justify-content: space-between;
+    padding: 0 1em;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .Navbar ul {
-  display: flex;
-  gap: 1rem;
+    display: flex;
+    gap: 1rem;
 }
 
 .title {
-  font-family: "Italiana", sans-serif;
-  font-weight: 700;
-  line-height: 1;
-  font-size: 25px;
+    font-family: "Italiana", sans-serif;
+    font-weight: 700;
+    line-height: 1;
+    font-size: 25px;
 }
 
-.count,
-.buttom-products,
-.Navbar h1 {
-  display: flex;
-  align-items: center;
+.count, .buttom-products, .Navbar h1 {
+    display: flex;
+    align-items: center;
 }
 
-.products {
-  border-left: 1px solid #333;
-  border-right: 1px solid #333;
-  padding: 10px;
+.products{
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+    padding: 10px;
 }
 
 .arrow-icon {
-  margin-left: 8px;
-  transition: transform 0.3s;
+    margin-left: 8px;
+    transition: transform 0.3s;
 }
 
 .arrow-icon.open {
-  transform: rotate(180deg);
+    transform: rotate(180deg);
 }
 
 .shopping-cart {
-  padding-top: 10px;
+    padding-top: 10px;
 }
 
 .Navbar li {
-  display: flex;
+   display: flex;
 }
 
 .Navbar h1 {
-  margin-right: 5px;
+    margin-right: 5px;
 }
