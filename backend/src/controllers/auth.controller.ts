@@ -14,11 +14,11 @@ export async function singIn(req: Request, res: Response) {
         ({ userId, password } = req.body);
     }
     catch (e) {
-        res.status(500).send('User id and password is required')
+        res.status(500).send('La id de usuario y la contraseña son requeridos')
         return
     }
     if (!userId) {
-        res.status(500).send('User id is required')
+        res.status(500).send('La id de usuario es requerida')
         return
     }
 
@@ -39,14 +39,14 @@ export async function singIn(req: Request, res: Response) {
         return
     }
     if (employeeResult.value.length === 0) {
-        res.status(404).send('User not found')
+        res.status(404).send('Usuario no encontrado')
         return
     }
 
     let employee = employeeResult.value[0];
     let isCorrectPassword = await comparePassword(password, employee.hashedPassword)
     if (!isCorrectPassword) {
-        res.status(401).send('Wrong password')
+        res.status(401).send('Contraseña incorrecta')
         return
     }
     let toSendEmployee = employee.getSecureEmployee()
@@ -66,16 +66,16 @@ export async function singUp(req: Request, res: Response) {
         ({ name, lastName, telephone, role } = req.body);
     }
     catch (e) {
-        res.status(400).send('Name, lastName, telephone, role and locationId are required')
+        res.status(400).send('Nombre, apellido, teléfono, rol e id del punto físico son requeridos')
         return
     }
     if (!Employee.validateRole(role)) {
-        res.status(400).send('Invalid role selected for new user')
+        res.status(400).send('Rol invalido para el nuevo empleado')
         return
     }
 
     if (!Employee.validateRoleHierarchy(userRole, role)) {
-        res.status(401).send(`The role ${userRole} its no enought to create a new user with the role ${role}`)
+        res.status(401).send(`El rol ${userRole} no es suficiente para crear un usuario con el rol ${role}`)
         return
     }
 
