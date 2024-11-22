@@ -39,7 +39,7 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
             }
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to create employee')
+            return new ObjectResponse(false, null, 'Fue imposible crear el empleado')
         }
     }
 
@@ -71,7 +71,7 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
             return new ObjectResponse(true, employees, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get employees')
+            return new ObjectResponse(false, null, 'Fue imposible obtener los empleados')
         }
 
     }

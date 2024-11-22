@@ -13,7 +13,7 @@ export async function createInventory(req: Request, res: Response) {
         ({ productId, physicalLocationId, quantity, displayquantity } = req.body);
     }
     catch (e) {
-        res.status(400).send('product id, physical Location Id, quantity and display quantity are required')
+        res.status(400).send('La id de producto, la id del punto físico, la cantidad y la cantidad de visualización son requeridos')
         return
     }
 
@@ -22,7 +22,7 @@ export async function createInventory(req: Request, res: Response) {
         physicalLocationId,
         quantity,
         displayquantity,
-        ecommerceAvailable    )
+        ecommerceAvailable)
 
     let insertResult = await dao.create(newInventory)
     if (!insertResult.hasResponse()) {
@@ -80,7 +80,7 @@ export async function listInventory(req: Request, res: Response) {
     }
 }
 
-    
+
 export async function updateInventory(req: Request, res: Response) {
 
     let productId, physicalLocationId, quantity, displayquantity, ecommerceavailable;
@@ -90,13 +90,13 @@ export async function updateInventory(req: Request, res: Response) {
         ({ productId, physicalLocationId, quantity } = req.body);
     }
     catch (e) {
-        res.status(400).send('Product Id, Physical location Id and quantity are required')
+        res.status(400).send('La id de producto, la id del punto físico y la cantidad son requeridos')
         return
     }
 
     const newInventory = new Inventory(
         productId,
-        physicalLocationId, 
+        physicalLocationId,
         quantity,
         displayquantity,
         ecommerceavailable

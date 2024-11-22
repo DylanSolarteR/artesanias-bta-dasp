@@ -86,7 +86,12 @@ function Carrito() {
       <h1>CARRITO</h1>
       <div className="return">
         <Link href={"/"}>
-          <Image src={BackwardArrowIcon} alt={"ArrowReturn"} height={30} width={30} />
+          <Image
+            src={BackwardArrowIcon}
+            alt={"ArrowReturn"}
+            height={30}
+            width={30}
+          />
         </Link>
         <Link href={"/"}>Seguir mirando productos</Link>
       </div>

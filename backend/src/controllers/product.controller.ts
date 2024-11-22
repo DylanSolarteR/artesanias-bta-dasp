@@ -116,7 +116,7 @@ export async function updateProduct(req: Request, res: Response) {
         ({ id, baseProductId, name, description, price, img, category_id } = req.body);
     }
     catch (e) {
-        res.status(400).send('baseProductId, name, description, price, img and category_id are required')
+        res.status(400).send('Campos invalidos')
         return
     }
 
@@ -137,7 +137,7 @@ export async function updateProduct(req: Request, res: Response) {
         return
     }
 
-    res.status(200).send("Product updated")
+    res.status(200).send("Producto actualizado")
 }
 
 export async function deleteProduct(req: Request, res: Response) {
@@ -164,5 +164,5 @@ export async function deleteProduct(req: Request, res: Response) {
         return
     }
 
-    res.status(200).send( "Product remove" )
+    res.status(200).send("Producto eliminado")
 }   
