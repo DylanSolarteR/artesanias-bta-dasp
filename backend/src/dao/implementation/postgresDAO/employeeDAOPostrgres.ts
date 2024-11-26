@@ -7,7 +7,9 @@ import { PostgresConnection } from "../postgresConnection";
 
 export class EmployeeDAOPostgres implements IDAO<Employee> {
     async create(employee: Employee): Promise<ObjectResponse<Employee>> {
-        const query = 'INSERT INTO employee VALUES (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING *'
+        const query = 'INSERT INTO public.employee(' +
+            'fk_physical_location, name, last_name, telephone, role, password, doc_type, identification)' +
+            'VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *'
 
         try {
             let pool = await PostgresConnection.getInstance().getPool()
@@ -20,7 +22,9 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
                     employee.lastName,
                     employee.telephone,
                     employee.role,
-                    employee.hashedPassword
+                    employee.hashedPassword,
+                    employee.docType,
+                    employee.docNumber
                 ]
             })
 
@@ -32,6 +36,8 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
                     res.rows[0].role,
                     res.rows[0].password,
                     res.rows[0].fk_physical_location,
+                    res.rows[0].doc_type,
+                    res.rows[0].identification,
                     res.rows[0].pk_id
                 )
                 console.log(createdEmployee)
@@ -39,7 +45,7 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
             }
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to create employee')
+            return new ObjectResponse(false, null, 'Fue imposible crear el empleado')
         }
     }
 
@@ -65,13 +71,15 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
                     c.role,
                     c.password,
                     c.fk_physical_location,
+                    c.doc_type,
+                    c.identification,
                     c.pk_id
                 ))
             }
             return new ObjectResponse(true, employees, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get employees')
+            return new ObjectResponse(false, null, 'Fue imposible obtener los empleados')
         }
 
     }

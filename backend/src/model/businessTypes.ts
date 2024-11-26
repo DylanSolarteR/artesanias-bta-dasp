@@ -60,6 +60,11 @@ export enum employeeRoles {
     manager = 'manager',
     cashier = 'cashier'
 }
+export enum docTypes {
+    cc = 'CC',
+    ce = 'CE',
+    ti = 'TI'
+}
 
 export class Employee {
     constructor(
@@ -69,6 +74,8 @@ export class Employee {
         public role: employeeRoles,
         public hashedPassword: string,
         public locationId: number | null,
+        public docType: string,
+        public docNumber: string,
         private _id?: number
     ) {
         // Validate role in runtime
@@ -89,6 +96,10 @@ export class Employee {
             return true
         }
         return false
+    }
+
+    public static validateDocType(docType: string) {
+        return Object.values(docType).includes(docType as docTypes)
     }
 
     set id(_id) {

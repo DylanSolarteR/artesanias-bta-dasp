@@ -7,7 +7,7 @@ import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     async create(physicalLocation: PhysicalLocation): Promise<ObjectResponse<PhysicalLocation>> {
-        let query='INSERT INTO physical_location VALUES (DEFAULT, $1, $2) RETURNING *'
+        let query = 'INSERT INTO physical_location VALUES (DEFAULT, $1, $2) RETURNING *'
         try {
             let pool = await PostgresConnection.getInstance().getPool()
             console.log(physicalLocation.direction, physicalLocation.telephone)
@@ -31,7 +31,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
         }
         catch (e) {
             console.log(e);
-            return new ObjectResponse(false, null, 'Failed to create Physical location')
+            return new ObjectResponse(false, null, 'Error al crear el punto físico')
         }
     }
 
@@ -59,7 +59,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
         }
         catch (e) {
             console.log(e);
-            return new ObjectResponse(false, null, 'Failed to get physical locations')
+            return new ObjectResponse(false, null, 'Fue imposible obtener los puntos físicos')
         }
     }
 
@@ -86,7 +86,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
         }
 
     }
-//
+    //
     async update(physical_location: PhysicalLocation): Promise<boolean> {
         let query = `UPDATE physical_location SET direction=$2, telephone=$3 WHERE pk_id=$1;`
         try {
@@ -99,7 +99,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                     physical_location.telephone
                 ]
             })
-            
+
             console.log(res);
             if (res.rowCount === 1) {
                 return true;
