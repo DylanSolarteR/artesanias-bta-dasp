@@ -106,3 +106,37 @@ export async function getRole(req: Request, res: Response) {
     const userRole = req['user_role']; //Require identifyRole middleware
     res.status(200).send({ role: userRole });
 }
+
+export async function updateUser(req: Request, res: Response) {
+
+    let id, idpl, name, lastname, telephone, role, password, doctype, identification;
+
+    const dao = new EmployeeDAOPostgres();
+    try {
+        ({ id, idpl, name, lastname, telephone, role, password, doctype, identification } = req.body);
+    }
+    catch (e) {
+        res.status(400).send('Campos invalidos')
+        return
+    }
+
+    const newEmployee = new Employee(
+        id,
+        idpl, 
+        name, 
+        lastname, 
+        telephone, 
+        role, 
+        password, 
+        doctype, 
+        identification
+    )
+
+    let insertResult = await dao.update(newEmployee)
+    if (insertResult == false) {
+        res.status(500).send("Error")
+        return
+    }
+
+    res.status(200).send("Usuario actualizado")
+}
