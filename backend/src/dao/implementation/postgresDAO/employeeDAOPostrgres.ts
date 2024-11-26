@@ -81,8 +81,31 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
 
     }
 
-    async update(object: Employee): Promise<boolean> {
-        throw Error('Unimplemented')
+    async update(employee: Employee): Promise<boolean> {
+        let query = `UPDATE employee SET fk_physical_location=$2, name=$3, last_name=$4, telephone=$5 WHERE pk_id=$1;`
+        try {
+            let pool = await PostgresConnection.getInstance().getPool()
+            let res = await pool.query({
+                text: query,
+                values: [
+                    employee.id,
+                    employee.locationId,
+                    employee.name,
+                    employee.lastName,
+                    employee.telephone
+                ]
+            })
+            
+            console.log(res);
+            if (res.rowCount === 1) {
+                return true;
+            }
+        }
+        catch (e) {
+            console.log(e);
+            console.log("meu deus ha fallado")
+            return false;
+        }
 
     }
 }
