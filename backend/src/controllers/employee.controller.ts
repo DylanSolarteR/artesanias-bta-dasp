@@ -45,10 +45,10 @@ export async function listEmployees(req: Request, res: Response) {
 export async function updateEmployee(req: Request, res: Response) {
     let dao= new EmployeeDAOPostgres();
     const userRole: employeeRoles = req['user_role']; //Require identifyRole middleware
-    let id, locationId, name, last_name, telephone;
+    let id, locationId, name, last_name, telephone, docType, docNumber;
 
     try {
-        ({ id, locationId, name, last_name, telephone} = req.body);
+        ({ id, locationId, name, last_name, telephone, docType, docNumber} = req.body);
     
     } catch (e) {
         res.status(400).send("Id, locationId, name, lastname and telephone are required")
@@ -70,7 +70,7 @@ export async function updateEmployee(req: Request, res: Response) {
     }
     
 
-    let result = await dao.update(new Employee(name, last_name,telephone, rol, password, locationId, id))
+    let result = await dao.update(new Employee(name, last_name,telephone, rol, password, locationId, id, docType, docNumber))
 
     if (result) {
         res.status(200).send(result)
