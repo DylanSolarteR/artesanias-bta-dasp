@@ -10,7 +10,7 @@ export async function listCategories() {
     }
     catch (err) {
         if (isAxiosError(err)) {
-            console.log("Error de extracción de datos")
+            throw err;
         }
     }
 

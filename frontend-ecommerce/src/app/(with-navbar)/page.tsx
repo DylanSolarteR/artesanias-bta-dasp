@@ -5,15 +5,15 @@ import Grid3Icon from "@/app/icons/Grid3x3Icon.png";
 import Grid4Icon from "@/app/icons/Grid4x4Icon.png";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import SearchIcon from "@/app/icons/searchIcon.png";
-import BagsadIcon from "@/app/icons/BagsadIcon.png";
 import { onlyNumberInput } from "@/util/utils";
-import Link from "next/link";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
 import "@/app/css/catalog-product.css";
 import Loading from "@/components/Loading";
+import { useMainContext } from "@/app/context/MainContext";
+import Catalog from "@/components/Catalog";
 
-interface Product {
+export interface PRODUCT {
   id: number;
   imagen: string;
   nombre: string;
@@ -21,11 +21,11 @@ interface Product {
 }
 
 export default function Home() {
-  const [gridClass, setGridClass] = useState("grid-3");
+  const { setGridClass } = useMainContext();
 
   const [categories, setCategories] = useState([]);
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<PRODUCT[]>([]);
 
   useEffect(() => {
     apiProduct
@@ -224,7 +224,7 @@ export default function Home() {
                 src={SearchIcon}
                 alt="Search"
                 width={30}
-                height={25}
+                height={30}
                 onClick={filterhandle}
                 style={{ cursor: "pointer" }}
               />
@@ -232,41 +232,7 @@ export default function Home() {
           </div>
 
           <Suspense fallback={<Loading />}>
-            {products.length === 0 ? (
-              <div className="empty-message">
-                <Image
-                  src={BagsadIcon}
-                  alt="Nothing"
-                  width={100}
-                  height={100}
-                />
-                <p>Lo sentimos, no se encuentran productos en este momento.</p>
-              </div>
-            ) : (
-              <div className={`list-product ${gridClass}`}>
-                {products.map((product: Product, index) => (
-                  <article key={index}>
-                    <div className="img-container">
-                      <Image
-                        src={
-                          "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
-                        }
-                        alt={product.nombre}
-                        height={200}
-                        width={300}
-                      />
-                    </div>
-                    <div className="details">
-                      <h2>{product.nombre}</h2>
-                      <p>${product.precio}</p>
-                    </div>
-                    <Link href={`/producto/${product.id}`} passHref>
-                      <div className="overlay">- Ver detalles -</div>
-                    </Link>
-                  </article>
-                ))}
-              </div>
-            )}
+            {<Catalog products={products} />}
           </Suspense>
         </section>
       </main>

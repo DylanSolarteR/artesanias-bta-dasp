@@ -5,7 +5,7 @@ import { getRole } from "@/api/auth.api";
 
 import Image from "next/image";
 import MenuIcon from "@/app/icons/MenuIcon.svg?url";
-import CloseSquareIcon from "@/app/icons/closeSquareIcon.svg?url"
+import CloseSquareIcon from "@/app/icons/closeSquareIcon.svg?url";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
 import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
@@ -18,7 +18,7 @@ import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
 import Link from "next/link";
 
-import '@/app/css/dashboard-sidebar.css'
+import "@/app/css/dashboard-sidebar.css";
 
 function DashboardSideBar() {
   const router = useRouter();
@@ -34,7 +34,6 @@ function DashboardSideBar() {
     getRole().then((response) => {
       if (response.status === 200) {
         setRole(response.role);
-        // console.log(response.role);
         setMounted(true);
       }
       if (response.status === 401) {
@@ -51,12 +50,17 @@ function DashboardSideBar() {
     return (
       <>
         <aside className={`main-container ${collapsed ? "collapsed" : ""}`}>
-          <div className="contents">{!collapsed && <span className="menu-content-text">Contenido</span>}
+          <div className="contents">
+            {!collapsed && <span className="menu-content-text">Contenido</span>}
             <button
               className="toggle-button"
               onClick={() => setCollapsed(!collapsed)}
             >
-              {collapsed ? <Image src={MenuIcon} alt="Menú" /> : <Image className="close" src={CloseSquareIcon} alt="Cerrar" />}
+              {collapsed ? (
+                <Image src={MenuIcon} alt="Menú" />
+              ) : (
+                <Image className="close" src={CloseSquareIcon} alt="Cerrar" />
+              )}
             </button>
           </div>
 
@@ -76,14 +80,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Empleado"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
-                >
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>
-                }
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h2>
             </div>
           )}
@@ -103,13 +106,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Producto"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showProductMenu ? "open" : ""}`}
-                >
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showProductMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h2>
             </div>
           )}
@@ -129,12 +132,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Inventario"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h2>
             </div>
           )}
@@ -156,12 +160,15 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Puntos Físicos"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showPhysicalPointsMenu ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${
+                      showPhysicalPointsMenu ? "open" : ""
+                    }`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h2>
             </div>
           )}
@@ -181,12 +188,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Reportes"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showReportsMenu ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showReportsMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h2>
             </div>
           )}
