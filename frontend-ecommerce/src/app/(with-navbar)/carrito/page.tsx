@@ -12,7 +12,7 @@ import { useCart } from "@/app/context/CartContext";
 import { getProductById, PRODUCT } from "@/api/product.api";
 
 function Carrito() {
-  const { cart, addToCart, removeFromCart, clearCart } = useCart();
+  const { cart, addToCart, removeFromCart } = useCart();
   const [productDetails, setProductDetails] = useState<PRODUCT[]>([]);
   const [total, setTotal] = useState(0);
 
