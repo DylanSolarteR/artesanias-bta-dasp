@@ -6,6 +6,6 @@ const router = Router();
 
 router.get("/list", identifyRole, listEmployees);
 router.get("/list/:id", identifyRole, listEmployees);
-router.put("/put/", identifyRole, updateEmployee);
+router.put("/", identifyRole, updateEmployee);
 
 export default router;
