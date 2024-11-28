@@ -10,16 +10,17 @@ import { hasPermission } from "@/util/RolePermissions";
 
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-
-
+import { useRouter } from "next/navigation";
 
 function dashboard() {
   const { role } = useMainContext();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (role) {
-      setMounted(true);
+      console.log(role === "cashier");
+      role === "cashier" ? router.push("/POS") : setMounted(true);
     }
   }, [role]);
 
@@ -36,35 +37,35 @@ function dashboard() {
                 <DashboardCard
                   title="Empleado"
                   icon={UserIcon}
-                  href="/empleados"
+                  href="/dashboard/empleados"
                 />
               )}
               {hasPermission(role, "view:products") && (
                 <DashboardCard
                   title="Productos"
                   icon={InventoryIcon}
-                  href="/productos"
+                  href="/dashboard/productos"
                 />
               )}
               {hasPermission(role, "view:inventory") && (
                 <DashboardCard
                   title="Inventario"
                   icon={InventoryIcon}
-                  href="/inventario"
+                  href="/dashboard/inventario"
                 />
               )}
               {hasPermission(role, "view:physical-stores") && (
                 <DashboardCard
                   title="Puntos Fisicos"
                   icon={ShopIcon}
-                  href="/puntos-fisicos"
+                  href="/dashboard/puntos-fisicos"
                 />
               )}
               {hasPermission(role, "view:reports") && (
                 <DashboardCard
                   title="Reportes"
                   icon={ReportIcon}
-                  href="/reportes"
+                  href="/dashboard/reportes"
                 />
               )}
               {hasPermission(role, "view:POS") && (

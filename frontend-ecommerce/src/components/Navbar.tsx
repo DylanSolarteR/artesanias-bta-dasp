@@ -24,7 +24,7 @@ function Navbar() {
 
       const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
       let correctedName = decodeBadEncodeStrings(
-        jwtPayload.name + " " + jwtPayload.lastname
+        jwtPayload.name + " " + jwtPayload.lastName
       );
       setEmployeeName(correctedName);
     }
