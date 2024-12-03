@@ -1,49 +1,68 @@
 import SearchIcon from "@/app/icons/searchIcon.png";
 import Image from "next/image";
-import { PRODUCTO_INV } from "@/app/(with-navbar)/(with-sidebar)/dashboard/inventario/types";
+import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 
 function ConsultaProducto({
   products_table,
 }: {
-  products_table: PRODUCTO_INV[];
+  products_table: PRODUCT_FROM_INVENTARY[];
 }) {
   return (
-    <div>
-      <div>
+    <div className="flex flex-col">
+      <div className="flex flex-row self-end">
         <input type="text" placeholder="Buscar producto" />
         <Image src={SearchIcon} alt="search" width={30} height={30} />
       </div>
-      <table>
-        <th>
-          <td>Identificador</td>
-          <td>Nombre producto</td>
-          <td>Categoría</td>
-          <td>Punto Físico</td>
-          <td>Cantidad</td>
-          <td>Acciones</td>
-        </th>
-        {products_table ? (
-          products_table.map((product) => (
-            <tr>
-              <td>{product.productId}</td>
-              <td>{product.physicalLocationId}</td>
-              <td>{product.quantity}</td>
-              <td>{product.displayquantity}</td>
-              <td>
-                <button>
-                  <Image src={SearchIcon} alt="search" width={30} height={30} />
-                </button>
-                <button>
-                  <Image src={SearchIcon} alt="search" width={30} height={30} />
-                </button>
-              </td>
-            </tr>
-          ))
-        ) : (
+      <table className="border-slate-950 border-2">
+        <thead>
           <tr>
-            <td></td>
+            <th scope="col">Identificador</th>
+            <th scope="col">Nombre producto</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Punto Físico</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Acciones</th>
           </tr>
-        )}
+        </thead>
+
+        <tbody>
+          {products_table.length !== 0
+            ? products_table.map((product) => (
+                <tr className="text-center">
+                  <td>{product.productId}</td>
+                  <td>{product.productName}</td>
+                  <td>{product.categoryName}</td>
+                  <td>{product.locationDirection}</td>
+                  <td>{product.totalQuantity}</td>
+                  <td>
+                    <button>
+                      <Image
+                        src={SearchIcon}
+                        alt="search"
+                        width={30}
+                        height={30}
+                      />
+                    </button>
+                    <button>
+                      <Image
+                        src={SearchIcon}
+                        alt="search"
+                        width={30}
+                        height={30}
+                      />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            : null}
+        </tbody>
+        <tfoot>
+          {products_table.length === 0 ? (
+            <tr className="text-center">
+              <td colSpan={6}>Añade un producto</td>
+            </tr>
+          ) : null}
+        </tfoot>
       </table>
     </div>
   );

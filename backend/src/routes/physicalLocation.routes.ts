@@ -4,7 +4,6 @@ import { createPhysicalLocation, deletePhysicalLocation, listPhysicalLocations, 
 const router = Router();
 
 router.get("/list", listPhysicalLocations);
-router.get("/list/:id", listPhysicalLocations);
 router.post("/", createPhysicalLocation);
 router.delete("/:id", deletePhysicalLocation);
 router.put("/:id", updatePhysicalLocation);
