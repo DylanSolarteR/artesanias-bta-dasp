@@ -1,116 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import "@/app/css/Buy.css";
+import Image from "next/image";
+import SearchIcon from "@/app/icons/searchIcon.png";
 
-const UserTable = () => {
-  const [data, setData] = useState([]); // Estado para los datos de la tabla
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para la barra de búsqueda
-  const [loading, setLoading] = useState(true);
-
-  /* Simulación de consulta de usuarios
-  const fetchUsers = async () => {
-    try {
-      const users = [
-        { id: 1, identificacion: '123456', nombre: 'Juan Pérez', rol: 'Admin', puntoFisico: 'Bogotá', celular: '3001234567' },
-        { id: 2, identificacion: '654321', nombre: 'Ana Gómez', rol: 'Usuario', puntoFisico: 'Medellín', celular: '3109876543' },
-        { id: 3, identificacion: '789012', nombre: 'Luis Rodríguez', rol: 'Supervisor', puntoFisico: 'Cali', celular: '3201230987' },
-      ];
-      setTimeout(() => {
-        setData(users);
-        setLoading(false);
-      }, 1000);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      setLoading(false);
-    }
-  };
-
-  // Llamar la consulta al montar el componente
-  useEffect(() => {
-    fetchUsers();
-  }, []);*/
-
-  // Función para manejar la búsqueda
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  // Filtrar datos según el término de búsqueda
-  const filteredData = data.filter(
-    (user) =>
-      user.identificacion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.rol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.puntoFisico.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.celular.includes(searchTerm)
-  );
-
-  const handleUpdate = (id) => {
-    alert(`Actualizar usuario con ID: ${id}`);
-  };
-
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm(`¿Estás seguro de eliminar al usuario con ID: ${id}?`);
-    if (confirmDelete) {
-      setData((prevData) => prevData.filter((user) => user.id !== id));
-    }
-  };
-
-  return (
-    <div>
-      <h1>Consulta de Usuarios</h1>
-      <input
-        type="text"
-        placeholder="Buscar usuarios..."
-        value={searchTerm}
-        onChange={handleSearch}
-        style={{ marginBottom: '10px', width: '100%', padding: '8px', fontSize: '16px' }}
-      />
-      {loading ? (
-        <p>Cargando datos...</p>
-      ) : (
-        <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr>
-              <th>Identificación</th>
-              <th>Nombre</th>
-              <th>Rol</th>
-              <th>Punto Físico</th>
-              <th>Celular</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.length > 0 ? (
-              filteredData.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.identificacion}</td>
-                  <td>{user.nombre}</td>
-                  <td>{user.rol}</td>
-                  <td>{user.puntoFisico}</td>
-                  <td>{user.celular}</td>
-                  <td>
-                    <button onClick={() => handleUpdate(user.id)}>Actualizar</button>
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      style={{ marginLeft: '5px', color: 'red' }}
-                    >
-                      Eliminar
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td style={{ textAlign: 'center' }}>
-                  No se encontraron usuarios.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      )}
-    </div>
-  );
+type Employee = {
+  id: number;
+  identificacion: string;
+  nombre: string;
+  rol: string;
+  puntoFisico: string;
+  celular: string;
 };
 
-export default UserTable;
+function ConsultaEmpleado({ employees_table }: { employees_table: Employee[] }) {
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-row self-end">
+        <input type="text" placeholder="Buscar empleado" />
+        <Image src={SearchIcon} alt="search" width={30} height={30} />
+      </div>
+      <table className="border-slate-950 border-2">
+        <thead>
+          <tr>
+            <th scope="col">Identificación</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Punto Físico</th>
+            <th scope="col">Celular</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {employees_table.length !== 0 ? (
+            employees_table.map((employee) => (
+              <tr key={employee.id} className="text-center">
+                <td>{employee.identificacion}</td>
+                <td>{employee.nombre}</td>
+                <td>{employee.rol}</td>
+                <td>{employee.puntoFisico}</td>
+                <td>{employee.celular}</td>
+                <td>
+                  <button>
+                    <Image
+                      src={SearchIcon}
+                      alt="update"
+                      width={30}
+                      height={30}
+                    />
+                  </button>
+                  <button>
+                    <Image
+                      src={SearchIcon}
+                      alt="delete"
+                      width={30}
+                      height={30}
+                    />
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr className="text-center">
+              <td colSpan={6}>No se encontraron empleados</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default ConsultaEmpleado;
