@@ -13,7 +13,4 @@ export async function listCategories() {
             throw err;
         }
     }
-
-
-
 }

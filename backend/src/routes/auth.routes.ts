@@ -7,6 +7,6 @@ const router = Router();
 router.post("/singin", singIn);
 router.post("/singup", verifyAuth, identifyRole, singUp);
 router.get("/get-role", verifyAuth, identifyRole, getRole);
-router.put("/put/:id", updateUser);
+router.put("/:id", updateUser);
 
 export default router;

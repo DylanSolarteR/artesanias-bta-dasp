@@ -2,6 +2,7 @@
 
 import { AxiosInstance } from '@/api/axios'
 import { isAxiosError } from 'axios'
+import { PRODUCT } from '@/types/product.types'
 
 type productFilters = {
     orderBy: [name: 'name' | 'price', type: string],
@@ -50,26 +51,13 @@ export async function listProducts({
 
 }
 
-export interface PRODUCT {
-    stock: number
-    name: string
-    description: string
-    categoryName: string
-    categoryId: number
-    price: number
-    img: string
-    isActive: boolean
-    _id: number
-}
-
-
 export async function getProductById(id: number) {
     let query = new URLSearchParams();
     query.append('id', id.toString())
     try {
         let response = await AxiosInstance.get('/product/list?' + query.toString())
         let product: PRODUCT = response.data[0]
-        console.log(product)
+        // console.log(product)
         return product
     } catch (err) {
         if (isAxiosError(err)) {

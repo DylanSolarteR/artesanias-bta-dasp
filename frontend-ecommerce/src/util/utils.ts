@@ -12,3 +12,7 @@ export const decodeBadEncodeStrings = (str: string) => {
     );
     return decoder.decode(bytes);
 }
+
+export const decodeToken = (token: string) => {
+    return JSON.parse(window.atob(token.split(".")[1]))
+}
