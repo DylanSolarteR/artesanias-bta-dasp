@@ -98,3 +98,20 @@ Content-Type: application/json
         }
     ]
 }
+
+### Completar compra
+POST http://localhost:3200/api/purchase/complete-purchase
+Content-Type: application/json
+
+{
+    "purchaseId": 1
+}
+
+### Eliminar una compra
+
+POST http://localhost:3200/api/purchase/reject-purchase
+Content-Type: application/json
+
+{
+    "purchaseId": 2
+}
