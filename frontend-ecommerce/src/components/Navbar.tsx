@@ -8,6 +8,7 @@ import "@/app/css/Navbar.css";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { decodeBadEncodeStrings } from "@/util/utils";
+import { decodeToken } from "@/util/utils";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,9 +23,9 @@ function Navbar() {
         return;
       }
 
-      const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
+      const jwtPayload = decodeToken(token);
       let correctedName = decodeBadEncodeStrings(
-        jwtPayload.name + " " + jwtPayload.lastname
+        jwtPayload.name + " " + jwtPayload.lastName
       );
       setEmployeeName(correctedName);
     }

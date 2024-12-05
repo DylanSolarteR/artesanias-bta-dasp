@@ -25,10 +25,18 @@ export const useCart = () => {
 };
 
 export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-
-  localStorage.clear();
   
-  const [sessionId] = useState(localStorage.getItem('sessionId') || generateSessionId());
+  const [sessionId, setSessionId] = useState(() => {
+    const existingSessionId = localStorage.getItem('sessionId');
+    if (existingSessionId) {
+      return existingSessionId;
+    } else {
+      const newSessionId = generateSessionId();
+      localStorage.setItem('sessionId', newSessionId);
+      return newSessionId;
+    }
+  });
+
   const [cart, setCart] = useState<CartItem[]>(() => {
     const storedCart = localStorage.getItem(`cart-${sessionId}`);
     return storedCart ? JSON.parse(storedCart) : [];
@@ -54,17 +62,12 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
     setCart(updatedCart);
   };
 
-  const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem(`cart-${sessionId}`);
-  };
-
   useEffect(() => {
     localStorage.setItem(`cart-${sessionId}`, JSON.stringify(cart));
   }, [cart, sessionId]);
 
   return (
-    <CartContext.Provider value={{ cart, sessionId, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, sessionId, addToCart, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );

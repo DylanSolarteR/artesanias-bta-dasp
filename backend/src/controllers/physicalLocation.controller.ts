@@ -10,7 +10,7 @@ export async function listPhysicalLocations(req: Request, res: Response) {
     let query: Object = req.query;
 
     let filters = []
-    if (req.params['id']!=null) {
+    if (req.params['id'] != null) {
         filters.push(new Filter('pk_id',
             <string>req.params['id'], matchType.strictEqual));
     }
@@ -35,8 +35,8 @@ export async function listPhysicalLocations(req: Request, res: Response) {
 
 
 export async function createPhysicalLocation(req: Request, res: Response) {
-    let dao= new PhysicalLocationDAOPostgres();
-    let result = await dao.create(new PhysicalLocation(req.body.direction, req.body.telephone))
+    let dao = new PhysicalLocationDAOPostgres();
+    let result = await dao.create(new PhysicalLocation(req.body.address, req.body.telephone))
 
     if (result.hasResponse()) {
         res.status(200).send(result.value)
@@ -48,8 +48,8 @@ export async function createPhysicalLocation(req: Request, res: Response) {
 
 
 export async function deletePhysicalLocation(req: Request, res: Response) {
-    let dao= new PhysicalLocationDAOPostgres();
-    let result = await dao.delete(new PhysicalLocation(null,null,parseInt(req.params.id)))
+    let dao = new PhysicalLocationDAOPostgres();
+    let result = await dao.delete(new PhysicalLocation(null, null, parseInt(req.params.id)))
 
     if (result) {
         res.status(200).send(result)
@@ -60,8 +60,8 @@ export async function deletePhysicalLocation(req: Request, res: Response) {
 }
 
 export async function updatePhysicalLocation(req: Request, res: Response) {
-    let dao= new PhysicalLocationDAOPostgres();
-    let result = await dao.update(new PhysicalLocation(req.body.direction,req.body.telephone,parseInt(req.params.id)))
+    let dao = new PhysicalLocationDAOPostgres();
+    let result = await dao.update(new PhysicalLocation(req.body.address, req.body.telephone, parseInt(req.params.id)))
 
     if (result) {
         res.status(200).send(result)
