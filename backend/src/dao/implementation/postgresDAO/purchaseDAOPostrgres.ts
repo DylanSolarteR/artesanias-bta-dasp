@@ -7,6 +7,7 @@ import { IDAO, ObjectResponse } from "../../dao";
 import { PostgresConnection } from "../postgresConnection";
 import { InventoryDAOPostgres } from "./inventoryDAOPostgres";
 import { ProductDAOPostgres } from "./productDAOPostgres";
+import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class PurchaseDAOPostgres implements IDAO<Purchase> {
 
@@ -180,7 +181,69 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
     }
 
     async query(criteria: Criteria): Promise<ObjectResponse<Purchase[]>> {
-        throw Error('Unimplemented')
+        let [filters, params] = CriteriaPostgresConverter.convert(criteria)
+        const query =
+            `SELECT * FROM purchase \n` +
+            filters + ';'
+        const pool = await PostgresConnection.getInstance().getPool();
+        try {
+            let res = await pool.query({
+                text: query,
+                values: params
+            })
+
+            let purchases: Purchase[] = []
+            const queryPhysicalPurchase = `SELECT * FROM physical_purchase WHERE pk_fk_purchase = $1;`
+            const queryEcommercePurchase = `SELECT * FROM ecommerce_purchase WHERE pk_fk_purchase = $1;`
+            for (let purchaseRow of res.rows) {
+                if (purchaseRow.is_physical_purchase) {
+                    let physicalPurchaseRes = await pool.query(queryPhysicalPurchase, [purchaseRow.pk_id])
+                    if (physicalPurchaseRes.rowCount !== 1) {
+                        return new ObjectResponse(false, null, 'Error al consultar las compras')
+                    }
+                    let physicalPurchaseRow = physicalPurchaseRes.rows[0]
+                    purchases.push(new PhysicalPurchase(
+                        purchaseRow.date,
+                        purchaseRow.email,
+                        purchaseRow.name,
+                        purchaseRow.doc_type,
+                        purchaseRow.identification,
+                        purchaseRow.telephone,
+                        purchaseRow.total_price,
+                        physicalPurchaseRow.fk_employee,
+                        null,
+                        purchaseRow.pk_id
+                    ))
+                }
+                else {
+                    let ecommercePurchaseRes = await pool.query(queryEcommercePurchase, [purchaseRow.pk_id])
+                    if (ecommercePurchaseRes.rowCount !== 1) {
+                        return new ObjectResponse(false, null, 'Error al consultar las compras')
+                    }
+                    let ecommercePurchaseRow = ecommercePurchaseRes.rows[0]
+                    purchases.push(new EcommercePurchase(
+                        purchaseRow.date,
+                        purchaseRow.email,
+                        purchaseRow.name,
+                        purchaseRow.doc_type,
+                        purchaseRow.identification,
+                        purchaseRow.telephone,
+                        purchaseRow.total_price,
+                        ecommercePurchaseRow.fk_department,
+                        null,
+                        ecommercePurchaseRow.delivery_address,
+                        ecommercePurchaseRow.zip_code,
+                        ecommercePurchaseRow.is_complete,
+                        [],
+                        purchaseRow.pk_id
+                    ))
+                }
+            }
+            return new ObjectResponse(true, purchases, null)
+        }
+        catch (e) {
+            return new ObjectResponse(false, null, 'Error al consultar las compras')
+        }
     }
 
     async delete(object: Purchase): Promise<boolean> {
@@ -329,6 +392,102 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
         }
     }
 
+    async completePurchase(purchase: EcommercePurchase): Promise<ObjectResponse<boolean>> {
+        const updatePurchaseState = `update ecommerce_purchase SET is_complete = TRUE WHERE pk_fk_purchase = $1;`
+
+        let pool = await PostgresConnection.getInstance().getPool()
+        try {
+            let res = await pool.query(updatePurchaseState, [purchase.id])
+
+            if (res.rowCount === 0) {
+                return new ObjectResponse(false, null, 'Error al completar la compra')
+            }
+            return new ObjectResponse(true, true, null)
+        }
+        catch (e) {
+            return new ObjectResponse(false, null,
+                'Fallo al completar la compra.\n' +
+                (!e.constraint ? e.message ?? '' : '')
+            )
+        }
+    }
+
+    async rejectPurchase(purchase: EcommercePurchase): Promise<ObjectResponse<boolean>> {
+        const queryPoductRequests = `SELECT * FROM product_request WHERE pk_fk_purchase = $1;`
+
+        let client = await PostgresConnection.getInstance().getClient()
+        try {
+            await client.query('BEGIN')
+            await client.query('LOCK TABLE inventory IN SHARE ROW EXCLUSIVE MODE')
+            let res = await client.query(queryPoductRequests, [purchase.id])
+            for (let row of res.rows) {
+                const updateInventory = `UPDATE inventory
+                    SET ecommerce_available_quantity = ecommerce_available_quantity+$1
+                    WHERE pk_fk_product = $2 AND pk_fk_physical_location = $3;`
+                let inventoryUpdateRes = await client.query({
+                    text: updateInventory,
+                    values: [
+                        row.quantity,
+                        row.pk_fk_product,
+                        row.pk_fk_physical_location,
+                    ]
+                })
+                if (inventoryUpdateRes.rowCount !== 1) {
+                    await client.query('ROLLBACK')
+                    return new ObjectResponse(false, null,
+                        `Fallo al actualizar el inventario`
+                    )
+                }
+                const delteProduct
+                    = `DELETE FROM product_request ` +
+                    `WHERE pk_fk_product = $1 AND pk_fk_purchase = $2 AND ` +
+                    `pk_fk_physical_location = $3;`
+                let deleteProductRes = await client.query({
+                    text: delteProduct,
+                    values: [
+                        row.pk_fk_product,
+                        purchase.id,
+                        row.pk_fk_physical_location,
+                    ]
+                })
+
+                if (deleteProductRes.rowCount !== 1) {
+                    await client.query('ROLLBACK')
+                    return new ObjectResponse(false, null,
+                        `Fallo al eliminar la solicitud de producto`
+                    )
+                }
+
+            }
+            const deltePurchase = `DELETE FROM purchase WHERE pk_id = $1;`
+            let deletePurchaseRes = await client.query({
+                text: deltePurchase,
+                values: [
+                    purchase.id
+                ]
+            })
+
+            if (deletePurchaseRes.rowCount !== 1) {
+                await client.query('ROLLBACK')
+                return new ObjectResponse(false, null,
+                    `Fallo al eliminar la compra`
+                )
+            }
+            await client.query('COMMIT')
+            return new ObjectResponse(true, true, null)
+        }
+        catch (e) {
+            await client.query('ROLLBACK')
+            return new ObjectResponse(false, null,
+                'Fallo al eliminar la compra.\n' +
+                (!e.constraint ? e.message ?? '' : '')
+            )
+        }
+        finally {
+            client.release()
+        }
+    }
+
     private async findInventoryCandidates(products: ProductInPurchase[], client: PoolClient): Promise<ProductInPurchase[]> {
         let inventoryDao = new InventoryDAOPostgres();
         let productDao = new ProductDAOPostgres();
@@ -391,62 +550,4 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
         }
         return result;
     }
-}
-
-export async function test() {
-    let compra1 = new EcommercePurchase(
-        new Date(),
-        'pepe@gmail.com',
-        'Comprador1',
-        docTypes.cc,
-        '111',
-        '313',
-        null,
-        1,
-        null,
-        'Carrera compra1',
-        '123',
-        [new ProductInPurchase(1, 3, 4000, [new ProductRequest(1, 2), new ProductRequest(2, 1)])]
-    )
-    let com1prod2 = new ProductInPurchase(2, 4, 1111);
-    com1prod2.addProductRequest(new ProductRequest(1, 2));
-    com1prod2.addProductRequest(new ProductRequest(2, 2));
-    compra1.addProduct(com1prod2)
-
-    let dao = new PurchaseDAOPostgres()
-    let rcomp1 = await dao.create(compra1)
-
-    let compra2 = new PhysicalPurchase(
-        new Date(),
-        'james@si.com',
-        'yeims',
-        docTypes.ce,
-        '888',
-        '317',
-        null,
-        3,
-        [new ProductInPurchase(3, 5, 1000, [new ProductRequest(2, 5, true)]),
-        new ProductInPurchase(4, 6, 10000, [new ProductRequest(2, 6, true)]),
-        ]
-    )
-
-    let rcomp2 = await dao.create(compra2)
-    console.log()
-}
-
-
-export async function test2() {
-    let query = `UPDATE inventory
-	SET quantity = quantity-$1, display_quantity = display_quantity-$1
-	WHERE pk_fk_product = 1;`
-
-    let pool = await PostgresConnection.getInstance().getPool();
-    let res = await pool.query({
-        text: query,
-        values: [
-            5
-        ]
-    });
-
-    console.log()
 }

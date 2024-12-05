@@ -50,7 +50,7 @@ export abstract class Purchase {
         public identification: string,
         public telephone: string,
         public readonly isPhysicalPurchase: boolean,
-        public readonly total_price: number | null,
+        public readonly totalPrice: number | null,
         public products: ProductInPurchase[],
         private _id?: number
     ) {
@@ -100,6 +100,7 @@ export class EcommercePurchase extends Purchase {
         public departmentName: string | null,
         public deliveryAddress: string,
         public zipCode: string,
+        public isComplete?: boolean,
         products?: ProductInPurchase[],
         _id?: number
     ) {
