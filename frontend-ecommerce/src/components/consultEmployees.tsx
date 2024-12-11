@@ -1,16 +1,8 @@
 import Image from "next/image";
 import SearchIcon from "@/app/icons/searchIcon.png";
+import { EMPLOYEE } from "@/types/employee.types";
 
-type Employee = {
-  id: number;
-  identificacion: string;
-  nombre: string;
-  rol: string;
-  puntoFisico: string;
-  celular: string;
-};
-
-function ConsultaEmpleado({ employees_table }: { employees_table: Employee[] }) {
+function ConsultaEmpleado({ employees_table }: { employees_table: EMPLOYEE[] }) {
   return (
     <div className="flex flex-col">
       <div className="flex flex-row self-end">
