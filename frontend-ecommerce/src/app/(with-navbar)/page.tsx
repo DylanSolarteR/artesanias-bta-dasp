@@ -21,7 +21,7 @@ export interface PRODUCT {
 }
 
 export default function Home() {
-  const { setGridClass } = useMainContext();
+  const {gridClass, setGridClass } = useMainContext();
 
   const [categories, setCategories] = useState([]);
 

@@ -1,4 +1,4 @@
-import SearchIcon from "@/app/icons/searchIcon.png";
+import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 
@@ -8,12 +8,14 @@ function ConsultaProducto({
   products_table: PRODUCT_FROM_INVENTARY[];
 }) {
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-row self-end">
-        <input type="text" placeholder="Buscar producto" />
-        <Image src={SearchIcon} alt="search" width={30} height={30} />
+    <div className="flex-column">
+      <div className="content-right">
+        <div className="search">
+          <input type="text" placeholder="Buscar producto" />
+          <Image src={SearchIcon} alt="search" width={20} height={20} />
+        </div>
       </div>
-      <table className="border-slate-950 border-2">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">Identificador</th>

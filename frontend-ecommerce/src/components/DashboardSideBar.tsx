@@ -89,6 +89,16 @@ function DashboardSideBar() {
                 </span>
                 }
               </h5>
+              {showEmployeeMenu && (
+                <ul className="submenu">
+                  <li>
+                    <Link href="/dashboard/empleados/registrar">Registrar empleado</Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/empleados">Ver empleados</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
           {/* Menú Productos */}
@@ -167,6 +177,16 @@ function DashboardSideBar() {
                   />
                 </span>}
               </h5>
+              {showPhysicalPointsMenu && (
+                <ul className="submenu">
+                  <li>
+                    <Link href="/dashboard/puntos-fisicos/registrar">Registrar punto físico</Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/puntos-fisicos">Consultar punto físico</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
           {/* Menú Reportes */}
