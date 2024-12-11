@@ -67,3 +67,69 @@ export async function initializePurchase(req: Request, res: Response) {
         res.status(500).send('Error interno')
     }
 }
+
+export async function completePurchase(req: Request, res: Response) {
+    if (!req.body.purchaseId) {
+        res.status(400).send('No se envió el id de la compra')
+        return
+    }
+    let purchaseId = req.body.purchaseId
+    let purchaseDao = new PurchaseDAOPostgres()
+    let purchaseRes = await purchaseDao.query(new Criteria({
+        filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
+    }))
+    if (!purchaseRes.hasResponse()) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    if (purchaseRes.value.length === 0) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    let purchase = purchaseRes.value[0]
+    if (!(purchase instanceof EcommercePurchase)) {
+        res.status(500).send('La compra no es de tipo ecommerce')
+        return
+    }
+    if (purchase.isComplete) {
+        res.status(500).send('La compra ya ha sido completada')
+        return
+    }
+    purchaseDao.completePurchase(purchase)
+
+    res.status(200).send('Compra completada')
+
+}
+
+export async function rejectPurchase(req: Request, res: Response) {
+    if (!req.body.purchaseId) {
+        res.status(400).send('No se envió el id de la compra')
+        return
+    }
+    let purchaseId = req.body.purchaseId
+    let purchaseDao = new PurchaseDAOPostgres()
+    let purchaseRes = await purchaseDao.query(new Criteria({
+        filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
+    }))
+    if (!purchaseRes.hasResponse()) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    if (purchaseRes.value.length === 0) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    let purchase = purchaseRes.value[0]
+    if (!(purchase instanceof EcommercePurchase)) {
+        res.status(500).send('La compra no es de tipo ecommerce')
+        return
+    }
+    let rejectRes = await purchaseDao.rejectPurchase(purchase)
+    if (!rejectRes.hasResponse()) {
+        res.status(500).send(rejectRes.error)
+        return
+    }
+
+    res.status(200).send('Compra cancelada')
+
+}

@@ -19,14 +19,17 @@ import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import "@/app/css/dashboard.css"
 
+import { useRouter } from "next/navigation";
 
 function dashboard() {
   const { role } = useMainContext();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (role) {
-      setMounted(true);
+      console.log(role === "cashier");
+      role === "cashier" ? router.push("/POS") : setMounted(true);
     }
   }, [role]);
 
@@ -43,35 +46,35 @@ function dashboard() {
                 <DashboardCard
                   title="Empleados"
                   image={EmployeeImage}
-                  href={[{ title: "Ver Empleados", href: "/empleados", icon: EmployeeIcon },]}
+                  href={[{ title: "Ver Empleados", href: "/dashboard/empleados", icon: EmployeeIcon },]}
                 />
               )}
               {hasPermission(role, "view:products") && (
                 <DashboardCard
                   title="Productos"
                   image={ProductImage}
-                  href={[{ title: "Ver productos", href: "/productos", icon: ProductIcon },]}
+                  href={[{ title: "Ver productos", href: "/dashboard/productos", icon: ProductIcon },]}
                 />
               )}
               {hasPermission(role, "view:inventory") && (
                 <DashboardCard
                   title="Inventario"
                   image={InventoryImage}
-                  href={[{ title: "Ver inventario", href: "/inventario", icon: InventoryIcon },]}
+                  href={[{ title: "Ver inventario", href: "/dashboard/inventario", icon: InventoryIcon },]}
                 />
               )}
               {hasPermission(role, "view:physical-stores") && (
                 <DashboardCard
                   title="Puntos Fisicos"
                   image={ShopImage}
-                  href={[{ title: "Ver puntos físicos", href: "/puntos-fisicos", icon: ShopIcon },]}
+                  href={[{ title: "Ver puntos físicos", href: "/dashboard/puntos-fisicos", icon: ShopIcon },]}
                 />
               )}
               {hasPermission(role, "view:reports") && (
                 <DashboardCard
                   title="Reportes"
                   image={ReportImage}
-                  href={[{ title: "Ver reportes", href: "/reportes", icon: ReportIcon },]}
+                  href={[{ title: "Ver reportes", href: "/dashboard/reportes", icon: ReportIcon },]}
                 />
               )}
             </div>

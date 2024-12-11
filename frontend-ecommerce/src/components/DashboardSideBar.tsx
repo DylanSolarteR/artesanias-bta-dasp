@@ -35,7 +35,6 @@ function DashboardSideBar() {
     getRole().then((response) => {
       if (response.status === 200) {
         setRole(response.role);
-        // console.log(response.role);
         setMounted(true);
       }
       if (response.status === 401) {
@@ -57,7 +56,11 @@ function DashboardSideBar() {
               className="toggle-button"
               onClick={() => setCollapsed(!collapsed)}
             >
-              {collapsed ? <Image src={MenuIcon} alt="Menú" /> : <Image className="close" src={CloseSquareIcon} alt="Cerrar" />}
+              {collapsed ? (
+                <Image src={MenuIcon} alt="Menú" />
+              ) : (
+                <Image className="close" src={CloseSquareIcon} alt="Cerrar" />
+              )}
             </button>
           </div>
 

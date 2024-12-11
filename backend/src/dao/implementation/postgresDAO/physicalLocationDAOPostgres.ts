@@ -10,11 +10,11 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
         let query = 'INSERT INTO physical_location VALUES (DEFAULT, $1, $2) RETURNING *'
         try {
             let pool = await PostgresConnection.getInstance().getPool()
-            console.log(physicalLocation.direction, physicalLocation.telephone)
+            console.log(physicalLocation.address, physicalLocation.telephone)
             let res = await pool.query({
                 text: query,
                 values: [
-                    physicalLocation.direction,
+                    physicalLocation.address,
                     physicalLocation.telephone
                 ]
             })
@@ -95,7 +95,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                 text: query,
                 values: [
                     physical_location.id,
-                    physical_location.direction,
+                    physical_location.address,
                     physical_location.telephone
                 ]
             })

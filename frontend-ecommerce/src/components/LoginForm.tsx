@@ -21,6 +21,9 @@ function LoginForm() {
     if (message.status === 400 || message.status === 401) {
       toast.error(message.message);
     }
+    if (message.status === 500) {
+      toast.error("Error en el servidor, intente más tarde.");
+    }
     if (message.status === 200) {
       contextValue.setAuthToken(message.authToken);
       toast.success(message.message);
@@ -39,7 +42,8 @@ function LoginForm() {
         name="userId"
         onChange={(e) => setUserId(e.target.value)}
         onKeyDown={onlyNumberInput}
-      /> <br />
+      />{" "}
+      <br />
       <label htmlFor="password">Contraseña: </label>
       <input
         type="password"

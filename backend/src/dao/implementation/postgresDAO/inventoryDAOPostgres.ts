@@ -80,9 +80,15 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
                 inventory.quantity AS total_quantity,
                 inventory.display_quantity AS display_quantity,
                 inventory.ecommerce_available_quantity AS ecommerce_quantity,
-                product.name AS product_name
+                product.name AS product_name,
+                product.image as product_image,
+                category.pk_id AS category_id,
+                category.name AS category_name,
+                physical_location.direction as location_direction 
             FROM inventory
             INNER JOIN product ON inventory.pk_fk_product = product.pk_id
+            INNER JOIN category ON product.fk_category = category.pk_id
+            INNER JOIN physical_location ON inventory.pk_fk_physical_location = physical_location.pk_id
             ${filter}
             ${order} ${limit} ${offset};
         `;
@@ -101,9 +107,13 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
                     productId: row.product_id,
                     locationId: row.location_id,
                     productName: row.product_name,
+                    productImage: row.product_image,
                     totalQuantity: row.total_quantity,
                     displayQuantity: row.display_quantity,
                     ecommerceQuantity: row.ecommerce_quantity,
+                    categoryId: row.category_id,
+                    categoryName: row.category_name,
+                    locationDirection: row.location_direction,
                 }));
             }
 
@@ -112,6 +122,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             return new ObjectResponse(false, null, "Fuera imposible obtener el inventario");
         }
     }
+
 
 
     async decreaseQuantity(inventory: Inventory): Promise<boolean> {
