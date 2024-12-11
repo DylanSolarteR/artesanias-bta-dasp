@@ -74,7 +74,7 @@ export class Employee {
         public role: employeeRoles,
         public hashedPassword: string,
         public locationId: number | null,
-        public docType: string,
+        public docType: docTypes,
         public docNumber: string,
         private _id?: number
     ) {
@@ -121,7 +121,7 @@ export class Employee {
 
 export class PhysicalLocation {
     constructor(
-        public direction: string,
+        public address: string,
         public telephone: string,
         private _id?: number
     ) { }
