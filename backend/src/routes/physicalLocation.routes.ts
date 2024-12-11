@@ -5,6 +5,4 @@ const router = Router();
 
 router.get("/list", listPhysicalLocations);
 router.post("/", createPhysicalLocation);
-router.delete("/:id", deletePhysicalLocation);
-router.put("/:id", updatePhysicalLocation);
 export default router;
