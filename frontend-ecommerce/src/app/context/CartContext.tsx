@@ -11,7 +11,6 @@ interface CartContextType {
   sessionId: string;
   addToCart: (item: CartItem) => void;
   removeFromCart: (productId: number) => void;
-  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);

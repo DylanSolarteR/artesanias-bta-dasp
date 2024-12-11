@@ -5,9 +5,8 @@ import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { onlyNumberInput } from "@/util/utils";
-import PlusIcon from "@/app/icons/PlusIcon.svg?url";
-import MinusIcon from "@/app/icons/MinusIcon.svg?url";
-import "@/app/css/Detail-product.css";
+import PlusIcon from "@/app/icons/PlusIcon.png";
+import MinusIcon from "@/app/icons/MinusIcon.png";
 import Loading from "@/components/Loading";
 import { getProductById, PRODUCT } from "@/api/product.api";
 import { useCart } from "@/app/context/CartContext";
@@ -59,7 +58,7 @@ function product() {
     <Loading />
   ) : (
     <div className="container">
-      <main className="main-detail">
+      <main className="main-center">
         <div className="return">
           <Link href={"/"}>
             <Image
@@ -71,7 +70,7 @@ function product() {
           </Link>
           <Link href={"/"}>Seguir mirando productos</Link>
         </div>
-        <section className="details-product">
+        <section className="flex-simple">
           <div className="image-product">
             <Image
               src={
@@ -81,68 +80,69 @@ function product() {
               height={500}
               width={500}
             />
+            <div className="cantProduct">
+              {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
+              {/*Boton menos*/}
+              <button onClick={() => disminuirCantidad()}>
+                <Image
+                  src={MinusIcon}
+                  alt="Disminuir cantidad del producto"
+                  width={30}
+                  height={30}
+                />
+              </button>
+              {/*Input quantity*/}
+              <input
+                className="input-standard"
+                type="input"
+                onKeyDown={onlyNumberInput}
+                disabled={product?.stock === 0}
+                value={quantity}
+                onBlur={() => {
+                  if (quantity === "") {
+                    setQuantity(1);
+                  }
+                }}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setQuantity("");
+                    return;
+                  }
+                  if (parseInt(e.target.value) <= 0) {
+                    // cuando el input es 0, cambia a 1
+                    setQuantity(1);
+                    return;
+                  }
+
+                  if (parseInt(e.target.value) > product?.stock) {
+                    setQuantity(product?.stock);
+                    return;
+                  }
+                  setQuantity(parseInt(e.target.value));
+                }}
+              />{/*Boton más*/}
+              <button onClick={() => aumentarCantidad()}>
+                <Image
+                  src={PlusIcon}
+                  alt="Aumentar cantidad del producto"
+                  width={30}
+                  height={30}
+                />
+              </button>
+            </div>
+            <button id="button-standard" onClick={() => handleAddToCart(product._id)}>
+              Añadir al carrito
+            </button>
           </div>
-          <div className="detail-product">
-            <h1>{product?.name ?? "Por asignar "}</h1>
-            <h2>{"Precio: $" + product?.price ?? "Por asignar"}</h2>
+          <div className="flex-column">
+            <h4>{product?.name ?? "Por asignar "}</h4>
+            <h4>{"Precio: $" + product?.price ?? "Por asignar"}</h4>
             <h3>Descripción del producto</h3>
             <p>{product?.description ?? "Por asignar"}</p>
             <p>{"Categoría: " + product?.categoryName ?? "Por asignar"}</p>
             <p>{"Cantidad disponible: " + product?.stock ?? "Por asignar"}</p>
           </div>
         </section>
-        <div className="cantProduct">
-          {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
-          {/*Boton menos*/}
-          <button onClick={() => disminuirCantidad()}>
-            <Image
-              src={MinusIcon}
-              alt="Disminuir cantidad del producto"
-              width={20}
-              height={20}
-            />
-          </button>
-          {/*Input quantity*/}
-          <input
-            type="input"
-            onKeyDown={onlyNumberInput}
-            disabled={product?.stock === 0}
-            value={quantity}
-            onBlur={() => {
-              if (quantity === "") {
-                setQuantity(1);
-              }
-            }}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setQuantity("");
-                return;
-              }
-              if (parseInt(e.target.value) <= 0) {
-                // cuando el input es 0, cambia a 1
-                setQuantity(1);
-                return;
-              }
-
-              if (parseInt(e.target.value) > product?.stock) {
-                setQuantity(product?.stock);
-                return;
-              }
-              setQuantity(parseInt(e.target.value));
-            }}
-          />{/*Boton más*/}
-          <button onClick={() => aumentarCantidad()}>
-            <Image
-              src={PlusIcon}
-              alt="Aumentar cantidad del producto"
-              width={20}
-              height={20}
-            />
-          </button>
-        </div>
-        <button className="buttonCart" onClick={() => handleAddToCart(product._id)}>
-          Añadir al carrito
-        </button>
       </main>
     </div>
   );

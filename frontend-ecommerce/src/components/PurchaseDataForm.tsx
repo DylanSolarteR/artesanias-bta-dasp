@@ -3,10 +3,10 @@ import { loginAuth } from "@/api/auth.api";
 import Image from "next/image";
 import StripeLogo from "@/app/icons/StripeLogo.svg?url";
 import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
-import CardIcon from "@/app/icons/cardIcon.svg";
-import GroupIcon from "@/app/icons/groupIcon.svg";
+import CardIcon from "@/app/icons/CardIcon.svg";
+import GroupIcon from "@/app/icons/GroupIcon.svg";
 import UserIcon from "@/app/icons/UserIcon.svg";
-import CheckIcon from "@/app/icons/tickcircleIcon.svg";
+import CheckIcon from "@/app/icons/TickcircleIcon.svg";
 import toast from "react-hot-toast";
 import "@/app/css/Buy.css";
 
@@ -35,7 +35,7 @@ function PurchaseDataForm() {
   const progressPercentage = ((activeStep - 1) / (totalSteps - 1)) * 100;
 
   return (
-    <div className="main-container">
+    <div className="main-container-buy">
       <div className="step-container">
         {/* Barra de progreso */}
         <div className="progress-bar-background"></div>
@@ -71,6 +71,7 @@ function PurchaseDataForm() {
               <h2>Datos personales</h2>
               <label htmlFor="name">Nombre: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={name}
                 name="name"
@@ -78,6 +79,7 @@ function PurchaseDataForm() {
               />
               <label htmlFor="email">Correo electrónico: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={email}
                 name="email"
@@ -85,6 +87,7 @@ function PurchaseDataForm() {
               />
               <label htmlFor="documentType">Tipo de Documento: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={documentType}
                 name="documentType"
@@ -92,6 +95,7 @@ function PurchaseDataForm() {
               />
               <label htmlFor="documentNum">Número de Documento: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={documentNum}
                 name="documentNum"
@@ -99,6 +103,7 @@ function PurchaseDataForm() {
               />
               <label htmlFor="phone">Teléfono: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={phone}
                 name="phone"
@@ -113,6 +118,7 @@ function PurchaseDataForm() {
               <h2>Datos de envío</h2>
               <label htmlFor="address">Dirección: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={address}
                 name="address"
@@ -120,13 +126,15 @@ function PurchaseDataForm() {
               />
               <label htmlFor="department">Departamento: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={department}
                 name="department"
                 onChange={(e) => setDepartment(e.target.value)}
               />
               <label htmlFor="city">Ciudad: </label>
-              <input
+              <input 
+                className="input-standard"
                 type="text"
                 value={city}
                 name="city"
@@ -134,6 +142,7 @@ function PurchaseDataForm() {
               />
               <label htmlFor="zip">Codigo Postal: </label>
               <input
+                className="input-standard"
                 type="text"
                 value={zip}
                 name="zip"
@@ -184,9 +193,10 @@ function PurchaseDataForm() {
               </div>
             </>
           )}
-          <div className="buttons-container">
+          <div className="flex-space-between">
             {/* Mostrar "Anterior" solo si no estamos en el primer paso */}
             <button
+              id="button-standard"
               type="button"
               onClick={prevStep}
               disabled={activeStep === 1}
@@ -197,6 +207,7 @@ function PurchaseDataForm() {
             {/* Mostrar "Siguiente" en los pasos intermedios y "Proceder a la pasarela de pagos" en el último paso */}
             {activeStep !== 3 ? (
               <button
+                id="button-standard"
                 type="button"
                 onClick={nextStep}
                 disabled={activeStep === totalSteps}
@@ -204,7 +215,7 @@ function PurchaseDataForm() {
                 Siguiente
               </button>
             ) : (
-              <button type="submit">Proceder a la pasarela de pagos</button>
+              <button id="button-standard" type="submit">Proceder a la pasarela de pagos</button>
             )}
           </div>
         </form>

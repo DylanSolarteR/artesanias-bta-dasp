@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import { ChangeEvent, Suspense, useEffect, useRef, useState } from "react";
-import Grid3Icon from "@/app/icons/Grid3x3Icon.png";
-import Grid4Icon from "@/app/icons/Grid4x4Icon.png";
+import Grid3Icon from "@/app/icons/Grid3x3.png";
+import Grid4Icon from "@/app/icons/Grid4x4.png";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
-import SearchIcon from "@/app/icons/searchIcon.png";
+import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import BagsadIcon from "@/app/icons/BagsadIcon.png";
 import { onlyNumberInput } from "@/util/utils";
 import Link from "next/link";
@@ -95,12 +95,13 @@ export default function Home() {
   }, [showCategories]); // Se ejecuta cuando `showCategories` cambia
 
   return (
-    <div className="catalog">
-      <main className="main">
+    <div className="container">
+      <main className="flex-simple">
         <aside className="filter">
-          <h1>Filtros</h1>
+          <h2>Filtros</h2>
           <article className="category">
             <h2
+              className="flex-space-between"
               onClick={() => setShowCategories(!showCategories)}
               style={{ cursor: "pointer" }}
             >
@@ -108,7 +109,7 @@ export default function Home() {
               <span
                 className={`arrow-icon ${showCategories ? "open" : "close"}`}
               >
-                <Image src={ArrowDownIcon} alt="Arrow" width={10} height={10} />
+                <Image src={ArrowDownIcon} alt="Arrow" />
               </span>
             </h2>
 
@@ -145,6 +146,7 @@ export default function Home() {
           <article className="price">
             <h2>Precio</h2>
             <input
+              className="input-standard"
               type="input"
               placeholder="Min"
               ref={minPriceRef}
@@ -152,6 +154,7 @@ export default function Home() {
             />{" "}
             <p>a</p>
             <input
+              className="input-standard"
               type="input"
               placeholder="Max"
               ref={maxPriceRef}
@@ -194,37 +197,44 @@ export default function Home() {
             </select>
           </article>
 
-          <button onClick={filterhandle}>Filtrar</button>
+          <button id="button-standard" onClick={filterhandle}>Filtrar</button>
         </aside>
 
         <section className="content">
           <h1>PRODUCTOS</h1>
-          <div className="search">
+          <div className="search-product">
             <div className="view">
               <Image
                 src={Grid3Icon}
                 alt="Grid3"
-                width={35}
-                height={35}
+                width={48}
+                height={48}
                 onClick={() => setGridClass("grid-3")}
-                style={{ cursor: "pointer" }}
+                className={gridClass === "grid-3" ? "icon active" : "icon"}
+                style={{
+                  cursor: "pointer",
+                  maxWidth: "40px",
+                  maxHeight: "40px",
+                  objectFit: "contain"
+                }}
               />
               <Image
                 src={Grid4Icon}
                 alt="Grid4"
-                width={35}
-                height={35}
+                width={48}
+                height={48}
                 onClick={() => setGridClass("grid-4")}
-                style={{ cursor: "pointer" }}
+                className={gridClass === "grid-4" ? "icon active" : "icon"}
+                style={{cursor: "pointer"}}
               />
             </div>
-            <div className="search-product">
+            <div className="search">
               <input type="input" placeholder="Buscar" ref={nameProdRef} />
               <Image
                 src={SearchIcon}
                 alt="Search"
-                width={30}
-                height={25}
+                width={20}
+                height={20}
                 onClick={filterhandle}
                 style={{ cursor: "pointer" }}
               />
@@ -257,8 +267,8 @@ export default function Home() {
                       />
                     </div>
                     <div className="details">
-                      <h2>{product.nombre}</h2>
-                      <p>${product.precio}</p>
+                      <h6>{product.nombre}</h6>
+                      <h2>${product.precio}</h2>
                     </div>
                     <Link href={`/producto/${product.id}`} passHref>
                       <div className="overlay">- Ver detalles -</div>

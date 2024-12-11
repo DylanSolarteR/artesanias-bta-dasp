@@ -1,12 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CarritoIcon from "@/app/icons/c1.png";
+import CarritoIcon from "@/app/icons/ShoppingCartIcon.png";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import Link from "next/link";
 import Image from "next/image";
 import "@/app/css/Navbar.css";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
 import { useAuthContext } from "@/app/context/AuthContext";
+import { useCart } from "@/app/context/CartContext";
 import { decodeBadEncodeStrings } from "@/util/utils";
 
 function Navbar() {
@@ -14,6 +15,7 @@ function Navbar() {
   const [isOpenEmployee, setIsOpenEmployee] = useState(false);
   const { isLogged, clearToken } = useAuthContext();
   const [employeeName, setEmployeeName] = useState("");
+  const { cart } = useCart();
 
   useEffect(() => {
     if (isLogged()) {
@@ -50,16 +52,7 @@ function Navbar() {
           <li>
             <div className="products">
               <button className="buttom-products" onClick={toggleMenu}>
-                Productos
-                {/* Flecha que cambia de dirección según el estado */}
-                <span className={`arrow-icon ${isOpen ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="ArrowDownIcon"
-                    width={10}
-                    height={10}
-                  />
-                </span>
+                Catálogo
               </button>
             </div>
           </li>
@@ -74,6 +67,7 @@ function Navbar() {
                     width={25}
                     height={25}
                   />
+                  <span className="counter">{cart.length}</span>
                 </Link>
               </button>
             </div>

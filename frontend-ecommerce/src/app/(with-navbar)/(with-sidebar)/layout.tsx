@@ -15,13 +15,13 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="flex-simple">
       <Providers>
         <ProtectedRoute>
           <DashboardSideBar />
           {children}
         </ProtectedRoute>
       </Providers>
-    </>
+    </div>
   );
 }
