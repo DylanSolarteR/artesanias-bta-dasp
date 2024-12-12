@@ -96,7 +96,7 @@ function page() {
           <div>
             <Link href={"/"} className="flex gap-2">
               <Image
-                alt=""
+                alt="icono"
                 src={
                   "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
                 }
@@ -107,7 +107,7 @@ function page() {
             </Link>
             <Link href={"/"} className="flex gap-2">
               <Image
-                alt=""
+                alt="icono"
                 src={
                   "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
                 }

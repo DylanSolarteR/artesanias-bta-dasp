@@ -1,5 +1,5 @@
 export interface PHYSICAL_LOCATION {
-    direction: string
+    address: string
     telephone: string
     _id: number
 }

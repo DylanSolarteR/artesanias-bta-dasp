@@ -1,23 +1,26 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
+import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
+import { listProductsFromInventory } from "@/api/inventory.api";
 //For the inventory page
-function ProductCard({
-  product,
-  addToProductsTable,
-  deleteFromProductsTable,
+function PhysicalPointCard({
+  physicalPoint,
+  setProducts_table,
 }: {
-  product: PRODUCT_FROM_INVENTARY;
-  addToProductsTable: (product: PRODUCT_FROM_INVENTARY) => void;
-  deleteFromProductsTable: (product: PRODUCT_FROM_INVENTARY) => void;
+  physicalPoint: PHYSICAL_LOCATION;
+  setProducts_table: React.Dispatch<
+    React.SetStateAction<PRODUCT_FROM_INVENTARY[]>
+  >;
 }) {
   const [checked, setChecked] = useState(false);
+  const [productsPP, setProductsPP] = useState<PRODUCT_FROM_INVENTARY[]>([]);
   function handleCheckboxChange() {
     if (!checked) {
-      addToProductsTable(product);
+      setProducts_table([]);
     }
     if (checked) {
-      deleteFromProductsTable(product);
+      setProducts_table([]);
     }
     setChecked(!checked);
   }
@@ -31,19 +34,16 @@ function ProductCard({
       />
       <Image
         src={
-          product.product_image ??
           "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
         }
-        alt={product.productName}
+        alt={physicalPoint.address}
         width={180}
         height={150}
         className="w-full"
       />
-      <h3>{product.productName}</h3>
-      <h3>{product.locationDirection}</h3>
-      <p>Stock: {product.totalQuantity}</p>
+      <h3>{physicalPoint.address}</h3>
     </div>
   );
 }
 
-export default ProductCard;
+export default PhysicalPointCard;

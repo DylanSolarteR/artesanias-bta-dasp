@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import SearchIcon from "@/app/icons/searchIcon.png";
 import KPICard from "@/components/KPICard";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/PhysicalPointCard";
 import { listProductsFromAllInventories } from "@/api/inventory.api";
 import Loading from "@/components/Loading";
 import { listCategories } from "@/api/category.api";
+import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import ConsultaProducto from "@/components/ConsultaProducto";
+import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 function InventoryAdmin() {
   const [mounted, setMounted] = useState(false);
   const [searchDisabledPoint, setSearchDisabledPoint] = useState(true);
@@ -18,12 +20,13 @@ function InventoryAdmin() {
   const [productsAllInventories, setProductsAllInventories] = useState<
     PRODUCT_FROM_INVENTARY[]
   >([]);
-  const [physicalPoints, setPhysicalPoints] = useState([]);
+  const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
   const [categories, setCategories] = useState([]);
 
   // UseEffect to retrieve the initial data
   useEffect(() => {
     retrieveInitialData();
+    // setProducts_table(productsAllInventories);
     setMounted(true);
   }, []);
 
@@ -41,6 +44,12 @@ function InventoryAdmin() {
     });
   }
 
+  function getAllPhysicalPoints() {
+    listPhysicalLocations().then((data) => {
+      setPhysicalPoints(data);
+    });
+  }
+
   // Function to reset the products table
   function resetProductsTable() {
     setProducts_table([]);
@@ -49,6 +58,7 @@ function InventoryAdmin() {
   // Function to retrieve all the initial data
   function retrieveInitialData() {
     getAllCategories();
+    getAllPhysicalPoints();
     getAllProducts();
   }
   // Function to handle the checkbox change
@@ -63,13 +73,6 @@ function InventoryAdmin() {
       setProductsAllInventories([]);
       resetProductsTable();
     }
-  }
-
-  function addToProductsTable(product: PRODUCT_FROM_INVENTARY) {
-    setProducts_table([...products_table, product]);
-  }
-  function deleteFromProductsTable(product: PRODUCT_FROM_INVENTARY) {
-    setProducts_table(products_table.filter((item) => product !== item));
   }
   return mounted ? (
     <div className="m-auto px-36 flex flex-col gap-3">
@@ -100,11 +103,10 @@ function InventoryAdmin() {
           <label htmlFor="allPoints">Todos los puntos físicos</label>
         </div>
         <div className="flex flex-row justify-center flex-nowrap overflow-x-scroll gap-1">
-          {productsAllInventories.map((product, index) => (
+          {physicalPoints.map((physicalPoint, index) => (
             <ProductCard
-              product={product}
-              addToProductsTable={addToProductsTable}
-              deleteFromProductsTable={deleteFromProductsTable}
+              physicalPoint={physicalPoint}
+              setProducts_table={setProducts_table}
               key={index}
             />
           ))}
