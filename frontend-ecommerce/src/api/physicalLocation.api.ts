@@ -5,12 +5,14 @@ import { PHYSICAL_LOCATION } from '@/types/physicalLocation.types'
 export async function listPhysicalLocations() {
     try {
 
-        let response = await AxiosInstance.get('/inventory/list')
-        let inventories: PHYSICAL_LOCATION[] = response.data
-        return inventories;
+        let response = await AxiosInstance.get('/location/list')
+        let locations: PHYSICAL_LOCATION[] = response.data
+        console.log(locations)
+        return locations;
     }
     catch (err) {
         if (isAxiosError(err)) {
+            // console.log(err)
             throw err;
         }
     }

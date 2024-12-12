@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import KPICard from "@/components/KPICard";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
-import ProductCard from "@/components/ProductCard";
+import ProductCard from "@/components/PhysicalPointCard";
 import { listProductsFromAllInventories } from "@/api/inventory.api";
 import Loading from "@/components/Loading";
 import { listCategories } from "@/api/category.api";
+import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import ConsultaProducto from "@/components/ConsultaProducto";
+import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 function InventoryAdmin() {
   const [mounted, setMounted] = useState(false);
   const [searchDisabledPoint, setSearchDisabledPoint] = useState(true);
@@ -18,12 +20,13 @@ function InventoryAdmin() {
   const [productsAllInventories, setProductsAllInventories] = useState<
     PRODUCT_FROM_INVENTARY[]
   >([]);
-  const [physicalPoints, setPhysicalPoints] = useState([]);
+  const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
   const [categories, setCategories] = useState([]);
 
   // UseEffect to retrieve the initial data
   useEffect(() => {
     retrieveInitialData();
+    // setProducts_table(productsAllInventories);
     setMounted(true);
   }, []);
 
@@ -41,6 +44,12 @@ function InventoryAdmin() {
     });
   }
 
+  function getAllPhysicalPoints() {
+    listPhysicalLocations().then((data) => {
+      setPhysicalPoints(data);
+    });
+  }
+
   // Function to reset the products table
   function resetProductsTable() {
     setProducts_table([]);
@@ -49,6 +58,7 @@ function InventoryAdmin() {
   // Function to retrieve all the initial data
   function retrieveInitialData() {
     getAllCategories();
+    getAllPhysicalPoints();
     getAllProducts();
   }
   // Function to handle the checkbox change
@@ -64,49 +74,41 @@ function InventoryAdmin() {
       resetProductsTable();
     }
   }
-
-  function addToProductsTable(product: PRODUCT_FROM_INVENTARY) {
-    setProducts_table([...products_table, product]);
-  }
-  function deleteFromProductsTable(product: PRODUCT_FROM_INVENTARY) {
-    setProducts_table(products_table.filter((item) => product !== item));
-  }
   return mounted ? (
     <div className="container-dashboard">
       <h1 className="">INVENTARIO</h1>
       <section className="zone-count">
-          <KPICard title={"Puntos físicos"} value={physicalPoints.length} />
-          <KPICard title={"Categorías"} value={categories.length} />
-          <KPICard title={"Productos"} value={0} />
-          <KPICard title={"Alerta bajo stock"} value={0} />
+        <KPICard title={"Puntos físicos"} value={physicalPoints.length} />
+        <KPICard title={"Categorías"} value={categories.length} />
+        <KPICard title={"Productos"} value={0} />
+        <KPICard title={"Alerta bajo stock"} value={0} />
       </section>
       <section className="flex-column">
         <h2>Inventario de cada punto físico</h2>
         <div className="search-product">
-        <div className="search">
-          <input
-            type="text"
-            placeholder="Buscar punto físico"
-            disabled={searchDisabledPoint}
-          />
-          <Image src={SearchIcon} alt="search" width={20} height={20} />
-        </div>
-        <div className="flex-simple">
-          <input
-            type="checkbox"
-            name="allPoints"
-            defaultChecked={searchDisabledPoint}
-            onChange={() => handleCheckboxChange()}
-          />
-          <label htmlFor="allPoints">Todos los puntos físicos</label>
-        </div>
+          <div className="search">
+            <input
+              type="text"
+              placeholder="Buscar punto físico"
+              disabled={searchDisabledPoint}
+            />
+            <Image src={SearchIcon} alt="search" width={20} height={20} />
+          </div>
+          <div className="flex-simple">
+            <input
+              type="checkbox"
+              name="allPoints"
+              defaultChecked={searchDisabledPoint}
+              onChange={() => handleCheckboxChange()}
+            />
+            <label htmlFor="allPoints">Todos los puntos físicos</label>
+          </div>
         </div>
         <div className="zone-physical">
           {productsAllInventories.map((product, index) => (
             <ProductCard
-              product={product}
-              addToProductsTable={addToProductsTable}
-              deleteFromProductsTable={deleteFromProductsTable}
+              physicalPoint={physicalPoint}
+              setProducts_table={setProducts_table}
               key={index}
             />
           ))}

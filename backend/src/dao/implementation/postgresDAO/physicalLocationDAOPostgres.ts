@@ -21,7 +21,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
 
             if (res.rowCount === 1) {
                 const createdLocation = new PhysicalLocation(
-                    res.rows[0].direction,
+                    res.rows[0].address,
                     res.rows[0].telephone,
                     res.rows[0].pk_id
                 )
@@ -50,7 +50,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
             let locations = [];
             if (res.rowCount > 0) {
                 locations = res.rows.map(l => new PhysicalLocation(
-                    l.direction,
+                    l.address,
                     l.telephone,
                     l.pk_id
                 ))
@@ -88,7 +88,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     }
     //
     async update(physical_location: PhysicalLocation): Promise<boolean> {
-        let query = `UPDATE physical_location SET direction=$2, telephone=$3 WHERE pk_id=$1;`
+        let query = `UPDATE physical_location SET address=$2, telephone=$3 WHERE pk_id=$1;`
         try {
             let pool = await PostgresConnection.getInstance().getPool()
             let res = await pool.query({

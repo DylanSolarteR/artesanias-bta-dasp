@@ -28,7 +28,6 @@ function dashboard() {
 
   useEffect(() => {
     if (role) {
-      console.log(role === "cashier");
       role === "cashier" ? router.push("/POS") : setMounted(true);
     }
   }, [role]);
