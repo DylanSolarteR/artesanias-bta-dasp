@@ -21,11 +21,11 @@ export class PostgresConnection {
             database: process.env.BD_NAME,
         }
 
-        // if (process.env.NODE_ENV === 'production') {
-        //     config.ssl = {
-        //         rejectUnauthorized: false
-        //     }
-        // }
+        if (process.env.NODE_ENV === 'production') {
+            config.ssl = {
+                rejectUnauthorized: false
+            }
+        }
 
         this.singletonVerify = Math.random()
         this.pool = new Pool(config)

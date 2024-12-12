@@ -7,7 +7,6 @@ export async function listPhysicalLocations() {
 
         let response = await AxiosInstance.get('/location/list')
         let locations: PHYSICAL_LOCATION[] = response.data
-        console.log(locations)
         return locations;
     }
     catch (err) {

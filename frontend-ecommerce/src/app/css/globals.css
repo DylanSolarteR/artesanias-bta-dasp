@@ -20,12 +20,6 @@
   --radio-size: 20px; 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #ededed;
-  }
-}
 
 body {
   color: var(--foreground);

@@ -29,12 +29,12 @@ function ConsultaProducto({
 
         <tbody>
           {products_table.length !== 0
-            ? products_table.map((product) => (
-                <tr className="text-center">
+            ? products_table.map((product, index) => (
+                <tr className="text-center" key={index}>
                   <td>{product.productId}</td>
                   <td>{product.productName}</td>
                   <td>{product.categoryName}</td>
-                  <td>{product.locationDirection}</td>
+                  <td>{product.locationAddress}</td>
                   <td>{product.totalQuantity}</td>
                   <td>
                     <button>
