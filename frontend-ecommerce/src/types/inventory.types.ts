@@ -8,5 +8,5 @@ export interface PRODUCT_FROM_INVENTARY {
     ecommerceQuantity: number
     categoryId: number
     categoryName: string
-    locationDirection: string
+    locationAddress: string
 }
