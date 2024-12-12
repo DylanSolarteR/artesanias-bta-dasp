@@ -1,0 +1,8 @@
+### Ejemplo loguin 1
+POST http://localhost:3200/api/location/post
+Content-Type: application/json
+
+{
+    "address": "Calle 123",
+    "telephone": "123456789"
+}

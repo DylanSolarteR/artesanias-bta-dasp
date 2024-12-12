@@ -37,7 +37,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             }
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to add Products')
+            return new ObjectResponse(false, null, 'Fue imposible registrar el inventario')
         }
     }
 
@@ -67,7 +67,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             return new ObjectResponse(true, products, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get inventories')
+            return new ObjectResponse(false, null, 'Fuera imposible obtener el inventario')
         }
     }
 
@@ -80,39 +80,50 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
                 inventory.quantity AS total_quantity,
                 inventory.display_quantity AS display_quantity,
                 inventory.ecommerce_available_quantity AS ecommerce_quantity,
-                product.name AS product_name
+                product.name AS product_name,
+                product.image as product_image,
+                category.pk_id AS category_id,
+                category.name AS category_name,
+                physical_location.direction as location_direction 
             FROM inventory
             INNER JOIN product ON inventory.pk_fk_product = product.pk_id
+            INNER JOIN category ON product.fk_category = category.pk_id
+            INNER JOIN physical_location ON inventory.pk_fk_physical_location = physical_location.pk_id
             ${filter}
             ${order} ${limit} ${offset};
         `;
-    
+
         try {
             let pool = await PostgresConnection.getInstance().getPool();
-    
+
             let res = await pool.query({
                 text: query,
                 values: params,
             });
-    
+
             let inventories = [];
             if (res.rowCount > 0) {
                 inventories = res.rows.map(row => ({
                     productId: row.product_id,
                     locationId: row.location_id,
                     productName: row.product_name,
+                    productImage: row.product_image,
                     totalQuantity: row.total_quantity,
                     displayQuantity: row.display_quantity,
                     ecommerceQuantity: row.ecommerce_quantity,
+                    categoryId: row.category_id,
+                    categoryName: row.category_name,
+                    locationDirection: row.location_direction,
                 }));
             }
-    
+
             return new ObjectResponse(true, inventories, null);
         } catch (e) {
-            return new ObjectResponse(false, null, "Failed to query inventory");
+            return new ObjectResponse(false, null, "Fuera imposible obtener el inventario");
         }
     }
-    
+
+
 
     async decreaseQuantity(inventory: Inventory): Promise<boolean> {
         const query = `

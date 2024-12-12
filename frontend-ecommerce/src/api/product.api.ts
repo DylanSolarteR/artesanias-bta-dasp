@@ -2,6 +2,7 @@
 
 import { AxiosInstance } from '@/api/axios'
 import { isAxiosError } from 'axios'
+import { PRODUCT } from '@/types/product.types'
 
 type productFilters = {
     orderBy: [name: 'name' | 'price', type: string],
@@ -37,31 +38,18 @@ export async function listProducts({
         // TODO No hay imagenes de los productos
         // NOTE En las pages no se usa el id, lo dejo por si acaso
         return products.map(p => ({
-            imagen: "next.svg",
+            imagen: "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder",
             nombre: <string>p.name,
             precio: <number>p.price,
             id: <number>p._id
         }))
     } catch (err) {
         if (isAxiosError(err)) {
-            console.log("Error de extracción de datos")
+            throw err;
         }
     }
 
 }
-
-export interface PRODUCT {
-    stock: number
-    name: string
-    description: string
-    categoryName: string
-    categoryId: number
-    price: number
-    img: string
-    isActive: boolean
-    _id: number
-}
-
 
 export async function getProductById(id: number) {
     let query = new URLSearchParams();
@@ -69,7 +57,7 @@ export async function getProductById(id: number) {
     try {
         let response = await AxiosInstance.get('/product/list?' + query.toString())
         let product: PRODUCT = response.data[0]
-        console.log(product)
+        // console.log(product)
         return product
     } catch (err) {
         if (isAxiosError(err)) {

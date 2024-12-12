@@ -1,0 +1,16 @@
+### Ejemplo actualizar empleado
+PUT http://localhost:3200/api/employee/put
+Content-Type: application/json
+# body
+{
+	"id": "3",
+	"name": "Jose",
+	"last_name": "Velez",
+	"telephone": "31344532",
+	"locationId":"1" 
+}
+
+### Ejemplo consultar
+GET http://localhost:3200/api/employee/list
+Content-Type: application/json
+Authorization: barer untokenrandom

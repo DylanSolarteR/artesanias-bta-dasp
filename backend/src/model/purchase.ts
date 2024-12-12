@@ -1,3 +1,4 @@
+import { docTypes } from "./businessTypes";
 
 
 export class ProductRequest {
@@ -40,22 +41,16 @@ export class ProductInPurchase {
     }
 }
 
-export enum purchaseDocType {
-    cc = 'CC',
-    ce = 'CE',
-    ti = 'TI'
-}
-
 export abstract class Purchase {
     constructor(
         public date: Date,
         public email: string,
         public name: string,
-        public docType: purchaseDocType,
+        public docType: docTypes,
         public identification: string,
         public telephone: string,
         public readonly isPhysicalPurchase: boolean,
-        public readonly total_price: number | null,
+        public readonly totalPrice: number | null,
         public products: ProductInPurchase[],
         private _id?: number
     ) {
@@ -88,7 +83,7 @@ export abstract class Purchase {
     }
 
     public static validateDocType(docType: string) {
-        return Object.values(purchaseDocType).includes(docType as purchaseDocType)
+        return Object.values(docTypes).includes(docType as docTypes)
     }
 }
 
@@ -97,7 +92,7 @@ export class EcommercePurchase extends Purchase {
         date: Date,
         email: string,
         name: string,
-        docType: purchaseDocType,
+        docType: docTypes,
         identification: string,
         telephone: string,
         total_price: number | null,
@@ -105,6 +100,7 @@ export class EcommercePurchase extends Purchase {
         public departmentName: string | null,
         public deliveryAddress: string,
         public zipCode: string,
+        public isComplete?: boolean,
         products?: ProductInPurchase[],
         _id?: number
     ) {
@@ -128,7 +124,7 @@ export class PhysicalPurchase extends Purchase {
         date: Date,
         email: string,
         name: string,
-        docType: purchaseDocType,
+        docType: docTypes,
         identification: string,
         telephone: string,
         total_price: number | null,

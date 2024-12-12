@@ -60,6 +60,11 @@ export enum employeeRoles {
     manager = 'manager',
     cashier = 'cashier'
 }
+export enum docTypes {
+    cc = 'CC',
+    ce = 'CE',
+    ti = 'TI'
+}
 
 export class Employee {
     constructor(
@@ -69,6 +74,8 @@ export class Employee {
         public role: employeeRoles,
         public hashedPassword: string,
         public locationId: number | null,
+        public docType: docTypes,
+        public docNumber: string,
         private _id?: number
     ) {
         // Validate role in runtime
@@ -91,6 +98,10 @@ export class Employee {
         return false
     }
 
+    public static validateDocType(docType: string) {
+        return Object.values(docType).includes(docType as docTypes)
+    }
+
     set id(_id) {
         if (this._id != null) {
             throw Error('id is inmutable')
@@ -110,7 +121,7 @@ export class Employee {
 
 export class PhysicalLocation {
     constructor(
-        public direction: string,
+        public address: string,
         public telephone: string,
         private _id?: number
     ) { }

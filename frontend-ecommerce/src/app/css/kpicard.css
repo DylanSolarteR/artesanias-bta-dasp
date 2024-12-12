@@ -1,0 +1,10 @@
+.container-kpi {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  text-align: center;
+  padding: 10px;
+  aspect-ratio: 2 / 1;
+}

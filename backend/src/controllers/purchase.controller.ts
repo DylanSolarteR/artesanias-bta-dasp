@@ -8,16 +8,17 @@ import { PurchaseDAOPostgres } from "../dao/implementation/postgresDAO/purchaseD
 
 
 
-export async function completePurchase(req: Request, res: Response) {
+export async function initializePurchase(req: Request, res: Response) {
     try {
         let { basicUserData, addressData, productList } = req.body as {
             basicUserData: any; // Cambia `any` al tipo correspondiente
             addressData: any; // Cambia `any` al tipo correspondiente
             productList: Array<{ id: number; quantity: number }>;
-        };;
+        };
 
         if (!Purchase.validateDocType(basicUserData.docType)) {
             res.status(400).send('Tipo de documento invalido.')
+            return
         }
         let purchase = new EcommercePurchase(
             new Date(),
@@ -36,48 +37,6 @@ export async function completePurchase(req: Request, res: Response) {
         let inventoryDao = new InventoryDAOPostgres()
         let productDao = new ProductDAOPostgres()
         for (let product of productList) {
-            let criteria = new Criteria({
-                filters: [
-                    new Filter('pk_fk_product', product.id, matchType.strictEqual),
-                    new Filter('ecommerce_available_quantity', 0, matchType.greaterThan),
-                ],
-                sortBy: [
-                    new Sort('ecommerce_available_quantity', false),
-                    new Sort('quantity', false)
-                ]
-            })
-
-            const candidateInventoriesRes = await inventoryDao.query(criteria)
-            if (!candidateInventoriesRes.hasResponse()) {
-                res.status(500).send(candidateInventoriesRes.error)
-                return;
-            }
-            if (candidateInventoriesRes.value.length == 0) {
-                res.status(409).send('No hay stock de los productos solicitados')
-                return;
-            }
-
-            let demandSatisfied = 0;
-            let requiredInventories: Array<{ inv: Inventory, requestQuantity: number }> = []
-            for (let inventory of candidateInventoriesRes.value) {
-                let requestQuantity = inventory.ecommerceAvailable >= product.quantity - demandSatisfied ?
-                    product.quantity - demandSatisfied : inventory.ecommerceAvailable;
-                demandSatisfied += requestQuantity;
-                requiredInventories.push({ inv: inventory, requestQuantity })
-
-                if (demandSatisfied === product.quantity) {
-                    break;
-                }
-                else if (demandSatisfied > product.quantity) {
-                    res.status(409).send('El sistema fue incapaz de asignar los productos a su compra')
-                    return;
-                }
-            }
-            if (demandSatisfied < product.quantity) {
-                res.status(409).send('No hay stock de los productos solicitados')
-                return;
-            }
-
             let productDetailsRes = (await productDao.query(new Criteria(
                 {
                     filters: [new Filter('product.pk_id', product.id, matchType.strictEqual)]
@@ -92,13 +51,12 @@ export async function completePurchase(req: Request, res: Response) {
                 product.id,
                 product.quantity,
                 productDetails.price,
-                requiredInventories.map((i) => new ProductRequest(i.inv.locationId, i.requestQuantity))
             )
             purchase.addProduct(productPurchase)
         }
 
         let purchaseDao = new PurchaseDAOPostgres()
-        const purchaseRes = await purchaseDao.create(purchase)
+        const purchaseRes = await purchaseDao.initializePurchase(purchase)
         if (!purchaseRes.hasResponse()) {
             res.status(500).send(purchaseRes.error)
             return;
@@ -108,4 +66,70 @@ export async function completePurchase(req: Request, res: Response) {
     } catch (error) {
         res.status(500).send('Error interno')
     }
+}
+
+export async function completePurchase(req: Request, res: Response) {
+    if (!req.body.purchaseId) {
+        res.status(400).send('No se envió el id de la compra')
+        return
+    }
+    let purchaseId = req.body.purchaseId
+    let purchaseDao = new PurchaseDAOPostgres()
+    let purchaseRes = await purchaseDao.query(new Criteria({
+        filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
+    }))
+    if (!purchaseRes.hasResponse()) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    if (purchaseRes.value.length === 0) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    let purchase = purchaseRes.value[0]
+    if (!(purchase instanceof EcommercePurchase)) {
+        res.status(500).send('La compra no es de tipo ecommerce')
+        return
+    }
+    if (purchase.isComplete) {
+        res.status(500).send('La compra ya ha sido completada')
+        return
+    }
+    purchaseDao.completePurchase(purchase)
+
+    res.status(200).send('Compra completada')
+
+}
+
+export async function rejectPurchase(req: Request, res: Response) {
+    if (!req.body.purchaseId) {
+        res.status(400).send('No se envió el id de la compra')
+        return
+    }
+    let purchaseId = req.body.purchaseId
+    let purchaseDao = new PurchaseDAOPostgres()
+    let purchaseRes = await purchaseDao.query(new Criteria({
+        filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
+    }))
+    if (!purchaseRes.hasResponse()) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    if (purchaseRes.value.length === 0) {
+        res.status(500).send('No se encontró la compra')
+        return
+    }
+    let purchase = purchaseRes.value[0]
+    if (!(purchase instanceof EcommercePurchase)) {
+        res.status(500).send('La compra no es de tipo ecommerce')
+        return
+    }
+    let rejectRes = await purchaseDao.rejectPurchase(purchase)
+    if (!rejectRes.hasResponse()) {
+        res.status(500).send(rejectRes.error)
+        return
+    }
+
+    res.status(200).send('Compra cancelada')
+
 }

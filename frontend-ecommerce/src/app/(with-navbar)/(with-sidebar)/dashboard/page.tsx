@@ -1,23 +1,35 @@
 "use client";
 import DashboardCard from "@/components/DashboardCard";
-import UserIcon from "@/app/icons/UserIcon.svg?url";
-import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
-import ShopIcon from "@/app/icons/ShopIcon.svg?url";
-import ReportIcon from "@/app/icons/ReportIcon.svg?url";
+import EmployeeImage from "@/app/images/EmployeeImage.png";
+import ProductImage from "@/app/images/ProductImage.png";
+import InventoryImage from "@/app/images/InventoryImage.png";
+import ShopImage from "@/app/images/PhysicalPointImage.png";
+import ReportImage from "@/app/images/ReportImage.png";
+
+import EmployeeIcon from "@/app/images/EmployeeImage.webp";
+import ProductIcon from "@/app/images/VaseImage.png";
+import InventoryIcon from "@/app/images/BoxesImage.webp";
+import ShopIcon from "@/app/images/StoreImage.webp";
+import ReportIcon from "@/app/images/ReportImage.webp";
 
 import { useMainContext } from "@/app/context/MainContext";
 import { hasPermission } from "@/util/RolePermissions";
 
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
+import "@/app/css/Dashboard.css"
+
+import { useRouter } from "next/navigation";
 
 function dashboard() {
   const { role } = useMainContext();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (role) {
-      setMounted(true);
+      console.log(role === "cashier");
+      role === "cashier" ? router.push("/POS") : setMounted(true);
     }
   }, [role]);
 
@@ -26,47 +38,44 @@ function dashboard() {
   } else {
     return (
       <>
-        <main>
-          <section>
+        <main className="container-dashboard">
+          <section className="dashboard">
             <h1>DASHBOARD</h1>
-            <div>
+            <div className="flex-grid">
               {hasPermission(role, "view:employees") && (
                 <DashboardCard
-                  title="Empleado"
-                  icon={UserIcon}
-                  href="/empleados"
+                  title="Empleados"
+                  image={EmployeeImage}
+                  href={[{ title: "Ver Empleados", href: "/dashboard/empleados", icon: EmployeeIcon },]}
                 />
               )}
               {hasPermission(role, "view:products") && (
                 <DashboardCard
                   title="Productos"
-                  icon={InventoryIcon}
-                  href="/productos"
+                  image={ProductImage}
+                  href={[{ title: "Ver productos", href: "/dashboard/productos", icon: ProductIcon },]}
                 />
               )}
               {hasPermission(role, "view:inventory") && (
                 <DashboardCard
                   title="Inventario"
-                  icon={InventoryIcon}
-                  href="/inventario"
+                  image={InventoryImage}
+                  href={[{ title: "Ver inventario", href: "/dashboard/inventario", icon: InventoryIcon },]}
                 />
               )}
               {hasPermission(role, "view:physical-stores") && (
                 <DashboardCard
                   title="Puntos Fisicos"
-                  icon={ShopIcon}
-                  href="/puntos-fisicos"
+                  image={ShopImage}
+                  href={[{ title: "Ver puntos físicos", href: "/dashboard/puntos-fisicos", icon: ShopIcon },]}
                 />
               )}
               {hasPermission(role, "view:reports") && (
                 <DashboardCard
                   title="Reportes"
-                  icon={ReportIcon}
-                  href="/reportes"
+                  image={ReportImage}
+                  href={[{ title: "Ver reportes", href: "/dashboard/reportes", icon: ReportIcon },]}
                 />
-              )}
-              {hasPermission(role, "view:POS") && (
-                <DashboardCard title="POS" icon={ReportIcon} href="/POS" />
               )}
             </div>
           </section>

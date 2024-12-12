@@ -5,6 +5,8 @@ import categoryRoutes from "./src/routes/category.routes";
 import authRoutes from "./src/routes/auth.routes";
 import physicalLocationRoutes from "./src/routes/physicalLocation.routes"
 import purchaseRoutes from "./src/routes/purchase.routes";
+import employeeRoutes from "./src/routes/employee.routes";
+import inventoryRoutes from "./src/routes/inventory.routes";
 import cors from 'cors'
 
 //For env File 
@@ -22,6 +24,8 @@ app.use('/api/category', categoryRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/location', physicalLocationRoutes)
 app.use('/api/purchase', purchaseRoutes)
+app.use('/api/employee', employeeRoutes)
+app.use('/api/inventory', inventoryRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Panthousand api :)');

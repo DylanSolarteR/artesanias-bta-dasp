@@ -40,7 +40,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
             }
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to create Product')
+            return new ObjectResponse(false, null, 'Error al crear el producto')
         }
     }
 
@@ -86,7 +86,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
             return new ObjectResponse(true, products, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Failed to get products')
+            return new ObjectResponse(false, null, 'Fue impossible obtener el/los productos')
         }
 
     }

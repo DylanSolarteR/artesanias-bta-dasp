@@ -1,0 +1,87 @@
+.container-inf-step {
+    width: 100%;
+    max-width: 800px;
+}
+
+.form-inf-buy {
+    min-height: 500px;
+}
+
+.form-inf-buy h2 {
+    margin-bottom: 20px;
+    border-bottom-width: 1px;
+    border-color: var(--color-main-opaque);
+}
+
+/* Parte de los pasos */
+
+.main-container-buy {
+    width: 100%;
+    padding-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.step-container {
+    justify-content: right;
+    position: relative;
+    height: 100%;
+    row-gap: 6em;
+    width: 10%;
+}
+
+.progress-bar-background {
+    position: absolute;
+    background: var(--color-main-soft);
+    width: 4px;
+    height: 100%;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+.progress-bar-foreground {
+    position: absolute;
+    background-color: var(--color-main);
+    width: 4px;
+    height: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    transition: height 0.4s ease-in-out;
+}
+
+.step-wrapper {
+    position: relative;
+    z-index: 1;
+    align-items: center;
+}
+
+.step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--background);
+    border: 3px solid var(--color-main-soft);
+    transition: 0.4s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.step-circle.completed {
+    border-color: var(--color-main);
+}
+
+.step-circle.incomplete {
+    border-color: var(--color-main-soft);
+}
+
+/* Estilo de los botones */
+
+.flex-space-between #button-standard {
+    width: inherit;
+}
