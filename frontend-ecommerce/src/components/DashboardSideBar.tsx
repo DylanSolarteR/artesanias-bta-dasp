@@ -1,13 +1,14 @@
 "use client";
-import "@/app/css/dashboard-sidebar.css";
+
 import { useState, useEffect } from "react";
 import { getRole } from "@/api/auth.api";
 
 import Image from "next/image";
 import MenuIcon from "@/app/icons/MenuIcon.svg?url";
-import CloseSquareIcon from "@/app/icons/closeSquareIcon.svg?url";
+import CloseSquareIcon from "@/app/icons/CloseSquareIcon.svg?url"
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
+import BagIcon from "@/app/icons/BagIcon.svg?url"
 import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
 import ShopIcon from "@/app/icons/ShopIcon.svg?url";
 import ReportIcon from "@/app/icons/ReportIcon.svg?url";
@@ -18,7 +19,7 @@ import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
 import Link from "next/link";
 
-import "@/app/css/dashboard-sidebar.css";
+import '@/app/css/dashboard.css'
 
 function DashboardSideBar() {
   const router = useRouter();
@@ -49,9 +50,8 @@ function DashboardSideBar() {
   } else {
     return (
       <>
-        <aside className={`main-container ${collapsed ? "collapsed" : ""}`}>
-          <div className="contents">
-            {!collapsed && <span className="menu-content-text">Contenido</span>}
+        <aside className={`container-sidebar ${collapsed ? "collapsed" : ""}`}>
+          <div className="contents">{!collapsed && <span className="menu-content-text">Contenido</span>}
             <button
               className="toggle-button"
               onClick={() => setCollapsed(!collapsed)}
@@ -67,7 +67,7 @@ function DashboardSideBar() {
           {/* Menú Empleado */}
           {hasPermission(role, "view:employees") && (
             <div className="option-dashboard">
-              <h2
+              <h5
                 onClick={() => setShowEmployeeMenu(!showEmployeeMenu)}
                 className="menu-title"
               >
@@ -78,48 +78,59 @@ function DashboardSideBar() {
                     width={24}
                     height={24}
                   />
-                  {!collapsed && " Empleado"}
+                  {!collapsed && " Empleados"}
                 </span>
-                {!collapsed && (
-                  <span
-                    className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
-                )}
-              </h2>
+                {!collapsed && <span className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
+                >
+                  <Image
+                    src={ArrowDownIcon}
+                    alt="Flecha despliegue"
+                  />
+                </span>
+                }
+              </h5>
+              {showEmployeeMenu && (
+                <ul className="submenu">
+                  <li>
+                    <Link href="/dashboard/empleados/registrar">Registrar empleado</Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/empleados">Ver empleados</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
           {/* Menú Productos */}
           {hasPermission(role, "view:products") && (
             <div className="option-dashboard">
-              <h2
+              <h5
                 onClick={() => setShowProductMenu(!showProductMenu)}
                 className="menu-title"
               >
                 <span className="icon-and-text">
                   <Image
-                    src={UserIcon}
+                    src={BagIcon}
                     alt="Icono de producto"
                     width={24}
                     height={24}
                   />
-                  {!collapsed && " Producto"}
+                  {!collapsed && " Productos"}
                 </span>
-                {!collapsed && (
-                  <span
-                    className={`arrow-icon ${showProductMenu ? "open" : ""}`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
-                )}
-              </h2>
+                {!collapsed && <span className={`arrow-icon ${showProductMenu ? "open" : ""}`}
+                >
+                  <Image
+                    src={ArrowDownIcon}
+                    alt="Flecha despliegue"
+                  />
+                </span>}
+              </h5>
             </div>
           )}
           {/* Menú Inventario */}
           {hasPermission(role, "view:inventory") && (
             <div className="option-dashboard">
-              <h2
+              <h5
                 onClick={() => setShowInventoryMenu(!showInventoryMenu)}
                 className="menu-title"
               >
@@ -132,20 +143,19 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Inventario"}
                 </span>
-                {!collapsed && (
-                  <span
-                    className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
-                )}
-              </h2>
+                {!collapsed && <span className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}>
+                  <Image
+                    src={ArrowDownIcon}
+                    alt="Flecha despliegue"
+                  />
+                </span>}
+              </h5>
             </div>
           )}
           {/* Menú Puntos Fisicos */}
           {hasPermission(role, "view:physical-stores") && (
             <div className="option-dashboard">
-              <h2
+              <h5
                 onClick={() =>
                   setShowPhysicalPointsMenu(!showPhysicalPointsMenu)
                 }
@@ -160,22 +170,29 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Puntos Físicos"}
                 </span>
-                {!collapsed && (
-                  <span
-                    className={`arrow-icon ${
-                      showPhysicalPointsMenu ? "open" : ""
-                    }`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
-                )}
-              </h2>
+                {!collapsed && <span className={`arrow-icon ${showPhysicalPointsMenu ? "open" : ""}`}>
+                  <Image
+                    src={ArrowDownIcon}
+                    alt="Flecha despliegue"
+                  />
+                </span>}
+              </h5>
+              {showPhysicalPointsMenu && (
+                <ul className="submenu">
+                  <li>
+                    <Link href="/dashboard/puntos-fisicos/registrar">Registrar punto físico</Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/puntos-fisicos">Consultar punto físico</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
           {/* Menú Reportes */}
           {hasPermission(role, "view:reports") && (
             <div className="option-dashboard">
-              <h2
+              <h5
                 onClick={() => setShowReportsMenu(!showReportsMenu)}
                 className="menu-title"
               >
@@ -188,35 +205,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Reportes"}
                 </span>
-                {!collapsed && (
-                  <span
-                    className={`arrow-icon ${showReportsMenu ? "open" : ""}`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
-                )}
-              </h2>
-            </div>
-          )}
-          {/* Menú POS */}
-          {hasPermission(role, "view:POS") && (
-            <div className="option-dashboard">
-              <Link href={"/POS"}>
-                <h2
-                  onClick={() => setShowReportsMenu(!showReportsMenu)}
-                  className="menu-title"
-                >
-                  <span className="icon-and-text">
-                    <Image
-                      src={ReportIcon}
-                      alt="Icono de reportes"
-                      width={24}
-                      height={24}
-                    />
-                    {!collapsed && " POS"}
-                  </span>
-                </h2>
-              </Link>
+                {!collapsed && <span className={`arrow-icon ${showReportsMenu ? "open" : ""}`}>
+                  <Image
+                    src={ArrowDownIcon}
+                    alt="Flecha despliegue"
+                  />
+                </span>}
+              </h5>
             </div>
           )}
         </aside>

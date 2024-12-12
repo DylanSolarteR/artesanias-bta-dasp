@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import SearchIcon from "@/app/icons/searchIcon.png";
+import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import KPICard from "@/components/KPICard";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import ProductCard from "@/components/PhysicalPointCard";
@@ -75,35 +75,37 @@ function InventoryAdmin() {
     }
   }
   return mounted ? (
-    <div className="m-auto px-36 flex flex-col gap-3">
-      <section className="flex flex-col gap-2">
-        <h1 className="">Inventario</h1>
-        <div className="flex flex-row justify-center">
-          <KPICard title={"Puntos físicos"} value={physicalPoints.length} />
-          <KPICard title={"Categorías"} value={categories.length} />
-          <KPICard title={"Productos"} value={0} />
-          <KPICard title={"Productos bajo stock"} value={0} />
-        </div>
+    <div className="container-dashboard">
+      <h1 className="">INVENTARIO</h1>
+      <section className="zone-count">
+        <KPICard title={"Puntos físicos"} value={physicalPoints.length} />
+        <KPICard title={"Categorías"} value={categories.length} />
+        <KPICard title={"Productos"} value={0} />
+        <KPICard title={"Alerta bajo stock"} value={0} />
       </section>
-      <section className="flex flex-col">
+      <section className="flex-column">
         <h2>Inventario de cada punto físico</h2>
-        <div className="flex flex-row self-end">
-          <input
-            type="text"
-            placeholder="Buscar punto físico"
-            disabled={searchDisabledPoint}
-          />
-          <Image src={SearchIcon} alt="search" width={30} height={30} />
-          <input
-            type="checkbox"
-            name="allPoints"
-            defaultChecked={searchDisabledPoint}
-            onChange={() => handleCheckboxChange()}
-          />
-          <label htmlFor="allPoints">Todos los puntos físicos</label>
+        <div className="search-product">
+          <div className="search">
+            <input
+              type="text"
+              placeholder="Buscar punto físico"
+              disabled={searchDisabledPoint}
+            />
+            <Image src={SearchIcon} alt="search" width={20} height={20} />
+          </div>
+          <div className="flex-simple">
+            <input
+              type="checkbox"
+              name="allPoints"
+              defaultChecked={searchDisabledPoint}
+              onChange={() => handleCheckboxChange()}
+            />
+            <label htmlFor="allPoints">Todos los puntos físicos</label>
+          </div>
         </div>
-        <div className="flex flex-row justify-center flex-nowrap overflow-x-scroll gap-1">
-          {physicalPoints.map((physicalPoint, index) => (
+        <div className="zone-physical">
+          {productsAllInventories.map((product, index) => (
             <ProductCard
               physicalPoint={physicalPoint}
               setProducts_table={setProducts_table}
@@ -112,7 +114,7 @@ function InventoryAdmin() {
           ))}
         </div>
       </section>
-      <section className="">
+      <section className="zone-inventary">
         <ConsultaProducto products_table={products_table} />
       </section>
     </div>

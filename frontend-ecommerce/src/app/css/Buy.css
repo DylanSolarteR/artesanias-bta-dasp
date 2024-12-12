@@ -1,174 +1,28 @@
-.container {
-    background-color: #ffffff;
-    padding: 10px;
-    padding-top: 90px;
-    max-width: none;
-    justify-content: center;
-    align-content: center;
-}
-
-.main-buy h1 {
-    font-weight: 1000;
-    font-size: 42px;
-    text-align: center;
-}
-
 .container-inf-step {
     width: 100%;
     max-width: 800px;
-    margin: 0 0;
 }
 
 .form-inf-buy {
-    min-height: 400px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    min-height: 500px;
 }
 
 .form-inf-buy h2 {
     margin-bottom: 20px;
-    font-weight: 600;
     border-bottom-width: 1px;
-    border-color: #eba278;
-}
-
-label {
-    margin-bottom: 5px;
-}
-
-input[type="text"] {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    transition: border-color 0.3s;
-}
-
-input[type="text"]:focus {
-    border-color: #eba278;
-    outline: none;
-}
-
-/* Parte de los métodos de pago */
-
-:root {
-    --card-padding: 1rem;
-    --card-radius: 10px;
-    --radio-size: 20px;
-    --radio-border-width: 2px;
-    --color-gray: #ccc;
-    --color-dark-gray: #999;
-}
-
-.grid {
-    display: grid;
-    grid-gap: var(--card-padding);
-    margin: 0 auto;
-    max-width: 60em;
-    padding: 0;
-    justify-items: center;
-    align-items: center;
-    justify-content: center;
-    align-content: center;  
-}
-
-@media (min-width: 42em) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.card {
-    background-color: #ffffff;
-    border-radius: var(--card-radius);
-    position: relative;
-    overflow: hidden;
-    transition: box-shadow 0.3s ease-in-out;
-    cursor: pointer;
-    border-width: 1px;
-    width: 300px;
-}
-
-.card:hover {
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.15);
-}
-
-.radio {
-    position: absolute;
-    top: calc(var(--card-padding) + var(--radio-border-width));
-    right: calc(var(--card-padding) + var(--radio-border-width));
-    font-size: inherit;
-    margin: 0;
-    height: var(--radio-size);
-    width: var(--radio-size);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: #fff;
-    border: var(--radio-border-width) solid var(--color-gray);
-    border-radius: 50%;
-    cursor: pointer;
-    outline: none;
-    transition: background 0.2s ease-out, border-color 0.2s ease-out;
-}
-
-.radio::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 0.3rem;
-    height: 0.7rem;
-    background: transparent;
-    border: var(--radio-border-width) solid #fff;
-    border-left: 0;
-    border-top: 0;
-    transform: translate(-50%, -50%) rotate(45deg);
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-}
-
-.radio:checked {
-    background: #eba278;
-    border-color: #eba278;
-}
-
-.radio:checked::after {
-    opacity: 1;
-}
-
-.radio:checked~.plan-details {
-    border-color: #eba278;
-}
-
-.plan-details {
-    border: var(--radio-border-width) solid var(--color-gray);
-    border-radius: var(--card-radius);
-    text-align: center;
-    transition: border-color 0.2s ease-out;
-}
-
-.plan-details img {
-    width: fit-content;
-    height: 150px;
-    display: block;
-    margin: 0 auto;
+    border-color: var(--color-main-opaque);
 }
 
 /* Parte de los pasos */
 
-.main-container {
+.main-container-buy {
     width: 100%;
     padding-top: 20px;
     display: flex;
-    position: relative;
     justify-content: center;
 }
 
 .step-container {
-    display: flex;
-    flex-direction: column;
     justify-content: right;
     position: relative;
     height: 100%;
@@ -178,7 +32,7 @@ input[type="text"]:focus {
 
 .progress-bar-background {
     position: absolute;
-    background: #f0c0a4;
+    background: var(--color-main-soft);
     width: 4px;
     height: 100%;
     top: 0;
@@ -189,7 +43,7 @@ input[type="text"]:focus {
 
 .progress-bar-foreground {
     position: absolute;
-    background-color: #DC8148;
+    background-color: var(--color-main);
     width: 4px;
     height: 0;
     top: 0;
@@ -202,8 +56,6 @@ input[type="text"]:focus {
 .step-wrapper {
     position: relative;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
     align-items: center;
 }
 
@@ -211,8 +63,8 @@ input[type="text"]:focus {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #ffffff;
-    border: 3px solid #f0c0a4;
+    background-color: var(--background);
+    border: 3px solid var(--color-main-soft);
     transition: 0.4s ease;
     display: flex;
     justify-content: center;
@@ -221,45 +73,15 @@ input[type="text"]:focus {
 }
 
 .step-circle.completed {
-    border-color: #DC8148;
+    border-color: var(--color-main);
 }
 
 .step-circle.incomplete {
-    border-color: #f0c0a4;
-}
-
-.step-label {
-    font-size: 16px;
-    color: #DC8148;
-    margin-top: 10px;
+    border-color: var(--color-main-soft);
 }
 
 /* Estilo de los botones */
 
-.buttons-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 30px;
-}
-
-.buttons-container button {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    background-color: #DC8148;
-    color: #fff;
-    padding: 5px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 20px;
-    transition: background-color 0.3s ease;
-}
-
-.buttons-container button:active {
-    transform: scale(0.98);
-}
-
-.buttons-container button:disabled {
-    background: #f0c0a4;
-    cursor: not-allowed;
+.flex-space-between #button-standard {
+    width: inherit;
 }

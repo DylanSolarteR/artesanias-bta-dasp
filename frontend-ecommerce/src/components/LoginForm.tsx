@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { onlyNumberInput } from "@/util/utils";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/app/context/AuthContext";
+
 function LoginForm() {
   const router = useRouter();
   const { contextValue } = useAuthContext();
@@ -49,9 +50,9 @@ function LoginForm() {
         value={password}
         name="password"
         onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-      <button type="submit">{isPending ? "Validando..." : "Ingresar"}</button>
+      /><br />
+      <p>¿Olvidaste tu contraseña?</p>
+      <button id="button-standard" type="submit">{isPending ? "Validando..." : "Ingresar"}</button>
     </form>
   );
 }

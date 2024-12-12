@@ -2,8 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import PlusIcon from "@/app/icons/PlusIcon.svg?url";
-import MinusIcon from "@/app/icons/MinusIcon.svg?url";
+import PlusIcon from "@/app/icons/PlusIcon.png";
+import MinusIcon from "@/app/icons/MinusIcon.png";
 import DeleteIcon from "@/app/icons/closeSquareIcon.svg?url";
 import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
@@ -98,11 +98,11 @@ function Carrito() {
         <Link href={"/"}>Seguir mirando productos</Link>
       </div>
       <main className="main-shoppingcart">
-        <section className="content-shoppingcart">
+        <section className="flex-column">
           {/* Aquí va el contenido del carrito*/}
           {/* Verifica si hay productos en el carrito */}
           {cart.length === 0 ? (
-            <div className="no-products">
+            <div className="empty-message">
               <p>No hay productos en tu carrito</p>
             </div>
           ) : (
@@ -132,24 +132,25 @@ function Carrito() {
                       src={
                         "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
                       }
-                      alt={product.name ?? ""}
+                      alt={product.name}
                       width={150}
                       height={150}
                     />
                     <div className="product-info">
-                      <h2>{product.name}</h2>
-                      <p>$ {product.price}</p>
-                      <div className="cantProductCart">
+                      <h6>{product.name}</h6>
+                      <h6>$ {product.price}</h6>
+                      <div className="cantProduct">
                         <button onClick={() => decreaseQuantity(product._id)}>
                           <Image
                             src={MinusIcon}
                             alt="Disminuir cantidad"
-                            width={20}
-                            height={20}
+                            width={30}
+                            height={30}
                           />
                         </button>
                         {/*Input cantidad*/}
                         <input
+                          className="input-standard"
                           type="input"
                           onKeyDown={onlyNumberInput}
                           value={quantity}
@@ -173,8 +174,8 @@ function Carrito() {
                           <Image
                             src={PlusIcon}
                             alt="Aumentar cantidad"
-                            width={20}
-                            height={20}
+                            width={30}
+                            height={30}
                           />
                         </button>
                       </div>
@@ -189,7 +190,7 @@ function Carrito() {
           {/* Aquí va los detalles de la compra*/}
           <div className="details-buys">
             <h2>Detalles de la compra</h2>
-            <span>Número total de artículos: {cart.length}</span>
+            <h5>Número total de artículos: {cart.length}</h5>
             <h3>Detalles</h3>
             <table>
               <thead>
@@ -215,12 +216,12 @@ function Carrito() {
                 })}
               </tbody>
             </table>
-            <h4>Total: $ {total}</h4>
+            <h5>Total: $ {total}</h5>
+            {/*Boton para proceder al pago*/}
+            <Link href={"/comprar"}>
+              <button id="button-standard">Proceder al pago</button>
+            </Link>
           </div>
-          {/*Boton para proceder al pago*/}
-          <Link href={"/comprar"}>
-            <span className="buttom-buys">Proceder al pago</span>
-          </Link>
         </section>
       </main>
     </div>

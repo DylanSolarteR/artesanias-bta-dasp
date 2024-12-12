@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Josefin+Slab:ital,wght@0,400;1,400&display=swap');
 
 .Navbar {
-    background-color:#eba278;
+    background-color: var(--color-main-opaque);
     width: 100%;
     display: flex;
     position: fixed;
@@ -15,7 +15,6 @@
 
 .Navbar ul {
     display: flex;
-    gap: 1rem;
 }
 
 .title {
@@ -25,34 +24,64 @@
     font-size: 25px;
 }
 
-.count, .buttom-products, .Navbar h1 {
+.count,
+.buttom-products,
+.Navbar h1 {
     display: flex;
     align-items: center;
 }
 
-.products{
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
-    padding: 10px;
-}
-
-.arrow-icon {
-    margin-left: 8px;
-    transition: transform 0.3s;
-}
-
-.arrow-icon.open {
-    transform: rotate(180deg);
-}
 
 .shopping-cart {
-    padding-top: 10px;
+    position: relative;
+    width: 30px;
 }
 
 .Navbar li {
-   display: flex;
+    border-left: 1px solid;
+    display: flex;
+    padding: 10px;
+    text-align: center;
+}
+
+.products, .employeeNameButton {
+    justify-content: space-between;
+}
+
+.employeeNameButton {
+    display: flex;
 }
 
 .Navbar h1 {
     margin-right: 5px;
+}
+
+.counter {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0%;
+    background-color: var(--foreground);
+    color: var(--background);
+    border-radius: 50%;
+    font-size: 12px;
+    width: 15px;
+    height: 15px;
+}
+
+.employeeMenu ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: inherit;
+    display: none;
+    z-index: 10;
+}
+
+.employeeMenu ul.invisible {
+    display: none;
+}
+
+.employeeMenu ul:not(.invisible) {
+    display: block;
 }
