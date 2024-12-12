@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 
 function RegisterUserDataForm() {
@@ -10,15 +11,17 @@ function RegisterUserDataForm() {
   const [docNumber, setDocNumber] = useState<string>("");
 
   return (
-    <div className="main-container">
-      <div className="container-inf-step">
-        <form className="form-reg-user" onSubmit={(e) => e.preventDefault()}>
-          {/* Sección de Datos Personales */}
-          <div className="personal-data-section">
+    <div className="container-dashboard">
+      <div className="main-center">
+        <div className="container-inf-step">
+          <form className="form-inf-buy" onSubmit={(e) => e.preventDefault()}>
+            <h1>Registrar Empleado</h1>
+            {/* Sección de Datos Personales */}
             <h2>Datos personales</h2>
 
             <label htmlFor="docType">Tipo de documento: </label>
             <select
+              className="input-standard"
               value={docType}
               name="docType"
               onChange={(e) => setDocType(e.target.value)}
@@ -30,6 +33,7 @@ function RegisterUserDataForm() {
 
             <label htmlFor="docNumber">Número de documento: </label>
             <input
+              className="input-standard"
               type="text"
               value={docNumber}
               name="docNumber"
@@ -38,6 +42,7 @@ function RegisterUserDataForm() {
 
             <label htmlFor="name">Nombres: </label>
             <input
+              className="input-standard"
               type="text"
               value={name}
               name="name"
@@ -46,6 +51,7 @@ function RegisterUserDataForm() {
 
             <label htmlFor="lastName">Apellidos: </label>
             <input
+              className="input-standard"
               type="text"
               value={lastname}
               name="lastname"
@@ -54,21 +60,19 @@ function RegisterUserDataForm() {
 
             <label htmlFor="telephone">Teléfono: </label>
             <input
+              className="input-standard"
               type="text"
               value={telephone}
               name="telephone"
               onChange={(e) => setTelephone(e.target.value)}
             />
-          </div>
 
-          {/*Datos Empresariales */}
-          <div className="divider">
+            {/*Datos Empresariales */}
             <h2>Datos empresariales</h2>
-          </div>
 
-          <div className="business-data-section">
             <label htmlFor="role">Rol: </label>
             <select
+              className="input-standard"
               value={role}
               name="role"
               onChange={(e) => setRole(e.target.value)}
@@ -80,17 +84,17 @@ function RegisterUserDataForm() {
 
             <label htmlFor="locationId">Número de tienda: </label>
             <input
+              className="input-standard"
               type="text"
               value={locationId}
               name="locationId"
               onChange={(e) => setLocationId(e.target.value)}
             />
-          </div>
 
-          <div className="buttons-container">
-            <button type="submit">Registrar Usuario</button>
-          </div>
-        </form>
+            <button id="button-standard" type="submit">Registrar Usuario</button>
+
+          </form>
+        </div>
       </div>
     </div>
   );

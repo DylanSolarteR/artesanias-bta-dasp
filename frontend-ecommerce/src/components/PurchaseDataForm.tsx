@@ -154,7 +154,7 @@ function PurchaseDataForm() {
             <>
               {/* Paso 3: Datos de pago */}
               <h2>Método de pago</h2>
-              <div className="grid">
+              <div className="flex-grid">
                 <label className="card">
                   <input
                     className="radio"

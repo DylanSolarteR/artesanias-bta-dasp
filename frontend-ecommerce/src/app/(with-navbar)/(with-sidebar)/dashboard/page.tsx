@@ -17,7 +17,7 @@ import { hasPermission } from "@/util/RolePermissions";
 
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-import "@/app/css/dashboard.css"
+import "@/app/css/Dashboard.css"
 
 import { useRouter } from "next/navigation";
 

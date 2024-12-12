@@ -64,6 +64,8 @@ body {
 
 .container-dashboard {
   padding-top: 90px;
+  padding-left: 5px;
+  padding-right: 10px;
   width: 100%;
 }
 
@@ -365,7 +367,6 @@ table th {
   overflow: hidden;
   transition: box-shadow 0.3s ease-in-out;
   cursor: pointer;
-  width: 300px;
   border: var(--radio-border-width) solid var(--color-gray);
   text-align: center;
 }
@@ -425,8 +426,27 @@ table th {
 }
 
 .plan-details img {
-  width: fit-content;
-  height: 150px;
-  display: block;
-  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* formulario */
+
+.container-inf-step {
+  width: 800px;
+  display: flex;
+  justify-content: center;
+}
+
+.form-inf-buy {
+  min-height: 500px;
+  width: 100%;
+}
+
+.form-inf-buy h2 {
+  margin-bottom: 20px;
+  border-bottom-width: 1px;
+  border-color: var(--color-main-opaque);
 }
