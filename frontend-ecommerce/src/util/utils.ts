@@ -7,7 +7,7 @@ export const onlyNumberInput = (e: KeyboardEvent) => {
 
 export const decodeBadEncodeStrings = (str: string) => {
     const decoder = new TextDecoder("utf-8");
-    let bytes = new Uint8Array(
+    const bytes = new Uint8Array(
         str.split("").map((char) => char.charCodeAt(0))
     );
     return decoder.decode(bytes);

@@ -1,7 +1,7 @@
 "use client";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
-const ProtectedRoute = async ({
+const ProtectedRoute = ({
   children,
 }: Readonly<{
   children: React.ReactNode;

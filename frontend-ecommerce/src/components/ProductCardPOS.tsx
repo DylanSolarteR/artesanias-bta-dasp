@@ -1,7 +1,7 @@
 "use client";
 import { POS_ADDED_PRODUCT } from "@/types/product.types";
 import Image from "next/image";
-import DeleteIcon from "@/app/icons/closeSquareIcon.svg?url";
+import DeleteIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { useEffect, useState } from "react";
 

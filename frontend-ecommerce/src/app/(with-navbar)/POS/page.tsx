@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PRODUCT, POS_ADDED_PRODUCT } from "@/types/product.types";
 import ProductCardPOS from "@/components/ProductCardPOS";
-import product from "../producto/[id]/page";
 
 const products_mock: PRODUCT[] = [
   {
@@ -42,7 +41,7 @@ const products_mock: PRODUCT[] = [
   },
 ];
 
-function page() {
+function Page() {
   const [mounted, setMounted] = useState(false);
   const [product_list, setProduct_list] = useState<PRODUCT[]>([]);
   const [products_added, setProducts_added] = useState<POS_ADDED_PRODUCT[]>([]);
@@ -211,4 +210,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

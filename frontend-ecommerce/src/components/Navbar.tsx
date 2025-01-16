@@ -19,14 +19,14 @@ function Navbar() {
   const { cart } = useCart();
 
   useEffect(() => {
-    if (isLogged()) {
+    if (isLogged() && typeof window !== "undefined") {
       const token = localStorage.getItem("authToken");
       if (!token) {
         return;
       }
 
       const jwtPayload = decodeToken(token);
-      let correctedName = decodeBadEncodeStrings(
+      const correctedName = decodeBadEncodeStrings(
         jwtPayload.name + " " + jwtPayload.lastName
       );
       setEmployeeName(correctedName);

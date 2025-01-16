@@ -8,7 +8,7 @@ import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
-import "@/app/css/catalog-product.css";
+import "@/app/css/Catalog-product.css";
 import Loading from "@/components/Loading";
 import { useMainContext } from "@/app/context/MainContext";
 import Catalog from "@/components/Catalog";
@@ -21,7 +21,7 @@ export interface PRODUCT {
 }
 
 export default function Home() {
-  const {gridClass, setGridClass } = useMainContext();
+  const { gridClass, setGridClass } = useMainContext();
 
   const [categories, setCategories] = useState([]);
 
@@ -197,7 +197,9 @@ export default function Home() {
             </select>
           </article>
 
-          <button id="button-standard" onClick={filterhandle}>Filtrar</button>
+          <button id="button-standard" onClick={filterhandle}>
+            Filtrar
+          </button>
         </aside>
 
         <section className="content">
@@ -215,7 +217,7 @@ export default function Home() {
                   cursor: "pointer",
                   maxWidth: "40px",
                   maxHeight: "40px",
-                  objectFit: "contain"
+                  objectFit: "contain",
                 }}
               />
               <Image
@@ -225,7 +227,7 @@ export default function Home() {
                 height={48}
                 onClick={() => setGridClass("grid-4")}
                 className={gridClass === "grid-4" ? "icon active" : "icon"}
-                style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
               />
             </div>
             <div className="search">

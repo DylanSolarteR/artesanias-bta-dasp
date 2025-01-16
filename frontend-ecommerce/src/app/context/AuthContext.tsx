@@ -18,9 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [authToken, setAuthToken_] = useState<string>(
-    localStorage.getItem("authToken") || ""
-  );
+  const [authToken, setAuthToken_] = useState<string>("");
   // Agregar aquí las funciones
   const setAuthToken = (newToken: string) => {
     setAuthToken_(newToken);
@@ -32,21 +30,25 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (authToken) {
-      localStorage.setItem("authToken", authToken);
+      window.localStorage.setItem("authToken", authToken);
     } else {
-      localStorage.removeItem("authToken");
+      window.localStorage.removeItem("authToken");
     }
   }, [authToken]);
 
   const isTokenExpired = () => {
-    const token = localStorage.getItem("authToken");
-    const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
-    return Date.now() >= jwtPayload.exp * 1000;
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("authToken");
+      const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
+      return Date.now() >= jwtPayload.exp * 1000;
+    }
   };
 
   const clearToken = () => {
-    setAuthToken("");
-    localStorage.removeItem("authToken");
+    if (typeof window !== "undefined") {
+      setAuthToken("");
+      localStorage.removeItem("authToken");
+    }
   };
 
   const contextValue = useMemo(

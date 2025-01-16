@@ -3,7 +3,7 @@ import BagsadIcon from "@/app/icons/BagsadIcon.png";
 import Image from "next/image";
 import Link from "next/link";
 import { useMainContext } from "@/app/context/MainContext";
-import "@/app/css/catalog-product.css";
+import "@/app/css/Catalog-product.css";
 
 function Catalog({ products }) {
   const { gridClass } = useMainContext();
