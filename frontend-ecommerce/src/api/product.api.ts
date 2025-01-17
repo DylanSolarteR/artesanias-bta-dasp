@@ -18,7 +18,7 @@ export async function listProducts({
     maxPrice = null,
     nameProd = null,
 }: productFilters) {
-    let query = new URLSearchParams();
+    const query = new URLSearchParams();
     query.append('orderBy', `${orderBy[0]},${orderBy[1]}`)
     if (nameProd) {
         query.append('name', nameProd.toString())
@@ -33,8 +33,8 @@ export async function listProducts({
         query.append('maxPrice', maxPrice.toString())
     }
     try {
-        let response = await AxiosInstance.get('/product/list?' + query.toString())
-        let products: Array<any> = response.data
+        const response = await AxiosInstance.get('/product/list?' + query.toString())
+        const products: Array<any> = response.data
         // TODO No hay imagenes de los productos
         // NOTE En las pages no se usa el id, lo dejo por si acaso
         return products.map(p => ({
@@ -52,12 +52,11 @@ export async function listProducts({
 }
 
 export async function getProductById(id: number) {
-    let query = new URLSearchParams();
+    const query = new URLSearchParams();
     query.append('id', id.toString())
     try {
-        let response = await AxiosInstance.get('/product/list?' + query.toString())
-        let product: PRODUCT = response.data[0]
-        // console.log(product)
+        const response = await AxiosInstance.get('/product/list?' + query.toString())
+        const product: PRODUCT = response.data[0]
         return product
     } catch (err) {
         if (isAxiosError(err)) {

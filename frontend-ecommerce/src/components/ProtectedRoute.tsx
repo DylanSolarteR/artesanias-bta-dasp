@@ -1,13 +1,12 @@
 "use client";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
-const ProtectedRoute = async ({
+const ProtectedRoute = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const { contextValue, isTokenExpired, clearToken } = useAuthContext();
-  const authToken = contextValue.authToken;
+  const { authToken, isTokenExpired, clearToken } = useAuthContext();
   const router = useRouter();
   // Check if the user is authenticated
   if (!authToken || isTokenExpired()) {

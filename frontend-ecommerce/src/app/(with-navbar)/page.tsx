@@ -5,8 +5,10 @@ import CeramicsImage from "@/app/Images/Ceramics.png";
 import DefaultImage from "@/app/Images/Default.jpg";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
+
 import "@/app/css/Landing-page.css";
 import CategCard from "@/components/CategCard";
+
 import Loading from "@/components/Loading";
 import Catalog from "@/components/Catalog";
 import Map from "@/components/Map";
@@ -168,4 +170,3 @@ export default function Home() {
             </section>
         </div>
     );
-}

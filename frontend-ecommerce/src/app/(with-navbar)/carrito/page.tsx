@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import PlusIcon from "@/app/icons/PlusIcon.png";
 import MinusIcon from "@/app/icons/MinusIcon.png";
-import DeleteIcon from "@/app/icons/closeSquareIcon.svg?url";
+import DeleteIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import BackwardArrowIcon from "@/app/icons/BackwardArrowIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import "@/app/css/Detail-shoppingCart.css";

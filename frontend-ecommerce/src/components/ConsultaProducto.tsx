@@ -1,4 +1,6 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
+import EditIcon from "@/app/icons/EditIcon.svg?url";
+import TrashIcon from "@/app/icons/TrashIcon.svg?url";
 import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 
@@ -39,7 +41,7 @@ function ConsultaProducto({
                   <td>
                     <button>
                       <Image
-                        src={SearchIcon}
+                        src={EditIcon}
                         alt="search"
                         width={30}
                         height={30}
@@ -47,7 +49,7 @@ function ConsultaProducto({
                     </button>
                     <button>
                       <Image
-                        src={SearchIcon}
+                        src={TrashIcon}
                         alt="search"
                         width={30}
                         height={30}

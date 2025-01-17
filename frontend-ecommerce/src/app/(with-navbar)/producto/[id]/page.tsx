@@ -8,14 +8,25 @@ import { onlyNumberInput } from "@/util/utils";
 import PlusIcon from "@/app/icons/PlusIcon.png";
 import MinusIcon from "@/app/icons/MinusIcon.png";
 import Loading from "@/components/Loading";
-import { getProductById, PRODUCT } from "@/api/product.api";
+import { getProductById } from "@/api/product.api";
 import { useCart } from "@/app/context/CartContext";
+import { PRODUCT } from "@/types/product.types";
 
-function product() {
+function Product() {
   const { addToCart } = useCart();
   const [ready, setReady] = useState(false);
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<PRODUCT>();
+  const [product, setProduct] = useState<PRODUCT>({
+    _id: 0,
+    name: "Por asignar",
+    description: "Por asignar",
+    categoryName: "Por asignar",
+    price: 0,
+    stock: 0,
+    img: "",
+    isActive: false,
+    categoryId: 0,
+  });
   const [quantity, setQuantity] = useState<any>(0);
   const aumentarCantidad = () => {
     if (product.stock === 0) return;
@@ -120,7 +131,8 @@ function product() {
                   }
                   setQuantity(parseInt(e.target.value));
                 }}
-              />{/*Boton más*/}
+              />
+              {/*Boton más*/}
               <button onClick={() => aumentarCantidad()}>
                 <Image
                   src={PlusIcon}
@@ -130,17 +142,20 @@ function product() {
                 />
               </button>
             </div>
-            <button id="button-standard" onClick={() => handleAddToCart(product._id)}>
+            <button
+              id="button-standard"
+              onClick={() => handleAddToCart(product._id)}
+            >
               Añadir al carrito
             </button>
           </div>
           <div className="flex-column">
-            <h4>{product?.name ?? "Por asignar "}</h4>
-            <h4>{"Precio: $" + product?.price ?? "Por asignar"}</h4>
+            <h4>{product?.name}</h4>
+            <h4>{"Precio: $" + product?.price || "Por asignar"}</h4>
             <h3>Descripción del producto</h3>
-            <p>{product?.description ?? "Por asignar"}</p>
-            <p>{"Categoría: " + product?.categoryName ?? "Por asignar"}</p>
-            <p>{"Cantidad disponible: " + product?.stock ?? "Por asignar"}</p>
+            <p>{product?.description}</p>
+            <p>{"Categoría: " + product?.categoryName}</p>
+            <p>{"Cantidad disponible: " + product?.stock}</p>
           </div>
         </section>
       </main>
@@ -148,4 +163,4 @@ function product() {
   );
 }
 
-export default product;
+export default Product;
