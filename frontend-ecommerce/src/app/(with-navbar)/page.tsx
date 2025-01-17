@@ -67,7 +67,6 @@ export default function Home() {
   const nameProdRef = useRef(null);
 
   const filterhandle = () => {
-    // console.log("filtrando");
     apiProduct
       .listProducts({
         orderBy: [

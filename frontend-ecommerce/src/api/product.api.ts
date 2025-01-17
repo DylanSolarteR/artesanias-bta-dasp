@@ -57,7 +57,6 @@ export async function getProductById(id: number) {
     try {
         const response = await AxiosInstance.get('/product/list?' + query.toString())
         const product: PRODUCT = response.data[0]
-        // console.log(product)
         return product
     } catch (err) {
         if (isAxiosError(err)) {

@@ -11,7 +11,6 @@ export async function listPhysicalLocations() {
     }
     catch (err) {
         if (isAxiosError(err)) {
-            // console.log(err)
             throw err;
         }
     }
