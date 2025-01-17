@@ -2,13 +2,11 @@
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
 // Definir el tipo de dato para el contexto
 type AuthContextType = {
-  contextValue: {
-    authToken: string;
-    setAuthToken: (newToken: string) => void;
-  };
   isTokenExpired: () => boolean;
   clearToken: () => void;
   isLogged: () => boolean;
+  authToken: string;
+  setAuthToken: (newToken: string) => void;
 };
 
 // Crear el contexto
@@ -18,7 +16,13 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [authToken, setAuthToken_] = useState<string>("");
+  const [authToken, setAuthToken_] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("authToken") || "";
+    }
+    return "";
+  });
+
   // Agregar aquí las funciones
   const setAuthToken = (newToken: string) => {
     setAuthToken_(newToken);
@@ -30,17 +34,19 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     if (authToken) {
-      window.localStorage.setItem("authToken", authToken);
+      localStorage.setItem("authToken", authToken);
     } else {
-      window.localStorage.removeItem("authToken");
+      localStorage.removeItem("authToken");
     }
   }, [authToken]);
 
   const isTokenExpired = () => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("authToken");
-      const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
-      return Date.now() >= jwtPayload.exp * 1000;
+      if (token) {
+        const jwtPayload = JSON.parse(window.atob(token.split(".")[1]));
+        return Date.now() >= jwtPayload.exp * 1000;
+      }
     }
   };
 
@@ -51,22 +57,15 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const contextValue = useMemo(
-    () => ({
-      authToken,
-      setAuthToken,
-    }),
-    [authToken]
-  );
-
   // Retornar el proveedor del contexto con los valores que se desean compartir
   return (
     <AuthContext.Provider
       value={{
-        contextValue,
         isTokenExpired,
         clearToken,
         isLogged,
+        authToken,
+        setAuthToken,
       }}
     >
       {children}

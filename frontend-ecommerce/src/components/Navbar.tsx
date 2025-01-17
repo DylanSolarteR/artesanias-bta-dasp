@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CarritoIcon from "@/app/icons/ShoppingCartIcon.png";
-import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import Link from "next/link";
 import Image from "next/image";
 import "@/app/css/Navbar.css";
