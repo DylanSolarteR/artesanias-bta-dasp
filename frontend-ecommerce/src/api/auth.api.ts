@@ -15,7 +15,6 @@ export async function loginAuth(prevState: null, queryData: FormData) {
         return { success: true, message: 'Inicio de sesión satisfactorio.', status: response.status, authToken: response.data.authToken }
     } catch (err) {
         if (err instanceof ZodError) {
-            console.log(err.issues[0].message)
             return { success: false, message: err.issues[0].message, status: 400 }
         }
         if (isAxiosError(err)) {

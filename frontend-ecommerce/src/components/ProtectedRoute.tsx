@@ -6,8 +6,7 @@ const ProtectedRoute = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const { contextValue, isTokenExpired, clearToken } = useAuthContext();
-  const authToken = contextValue.authToken;
+  const { authToken, isTokenExpired, clearToken } = useAuthContext();
   const router = useRouter();
   // Check if the user is authenticated
   if (!authToken || isTokenExpired()) {

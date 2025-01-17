@@ -43,8 +43,6 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const [cart, setCart] = useState<CartItem[]>(() => {
     if (typeof window !== "undefined") {
-      {
-      }
       const storedCart = localStorage.getItem(`cart-${sessionId}`);
       return storedCart ? JSON.parse(storedCart) : [];
     } else {
