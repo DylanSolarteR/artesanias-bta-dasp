@@ -1,30 +1,57 @@
-import { AxiosInstance } from '@/api/axios'
-import { isAxiosError } from 'axios'
-import { PHYSICAL_LOCATION } from '@/types/physicalLocation.types'
+import { AxiosInstance } from '@/api/axios';
+import { isAxiosError } from 'axios';
+import { PHYSICAL_LOCATION } from '@/types/physicalLocation.types';
 
-export async function listPhysicalLocations() {
+// Obtener todas las ubicaciones físicas
+export async function listPhysicalLocations(): Promise<PHYSICAL_LOCATION[]> {
     try {
-
-        const response = await AxiosInstance.get('/location/list')
-        const locations: PHYSICAL_LOCATION[] = response.data
+        const response = await AxiosInstance.get('/location/list');
+        const locations: PHYSICAL_LOCATION[] = response.data;
         return locations;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            console.error('Error al obtener las ubicaciones físicas:', err.response?.data || err.message);
+            throw new Error('No se pudo obtener la lista de ubicaciones físicas.');
+        }
+        throw err; // Para errores no relacionados con Axios
     }
-    catch (err) {
+}
+
+// Obtener una ubicación física por ID
+export async function getPhysicalLocationById(id: string): Promise<PHYSICAL_LOCATION> {
+    const query = new URLSearchParams();
+    query.append('id', id);
+    try {
+        const response = await AxiosInstance.get(`/location/list?${query.toString()}`);
+        const location: PHYSICAL_LOCATION = response.data; // Verifica si el backend devuelve un único objeto o una lista
+        return location;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            console.error(`Error al obtener la ubicación física con ID ${id}:`, err.response?.data || err.message);
+            throw new Error(`No se pudo obtener la ubicación física con ID ${id}.`);
+        }
+        throw err; // Para errores no relacionados con Axios
+    }
+}
+
+
+export async function createPhysicalLocation(location: PHYSICAL_LOCATION) {
+    try {
+        const response = await AxiosInstance.post('/physical-locations', location);
+        return response.data; // Devuelve el nuevo punto físico creado
+    } catch (err) {
         if (isAxiosError(err)) {
             throw err;
         }
     }
 }
 
-export async function getPhysicalLocation(id: string) {
-    const query = new URLSearchParams();
-    query.append('id', id.toString())
+// Actualizar un punto físico existente
+export async function updatePhysicalLocation(location: PHYSICAL_LOCATION) {
     try {
-        const response = await AxiosInstance.get(`/location/list?` + query.toString())
-        const locations: PHYSICAL_LOCATION = response.data
-        return locations;
-    }
-    catch (err) {
+        const response = await AxiosInstance.put('/physical-locations', location);
+        return response.data; // Devuelve un mensaje de éxito
+    } catch (err) {
         if (isAxiosError(err)) {
             throw err;
         }
