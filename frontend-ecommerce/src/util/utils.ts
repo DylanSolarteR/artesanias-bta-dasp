@@ -16,3 +16,4 @@ export const decodeBadEncodeStrings = (str: string) => {
 export const decodeToken = (token: string) => {
     return JSON.parse(window.atob(token.split(".")[1]))
 }
+export const LOW_STOCK_THRESHOLD = 30;

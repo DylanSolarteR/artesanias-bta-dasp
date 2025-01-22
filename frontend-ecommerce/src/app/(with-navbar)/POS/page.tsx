@@ -16,6 +16,7 @@ const products_mock: PRODUCT[] = [
     img: "jarron_ceramico_azul.png",
     isActive: true,
     _id: 2,
+    baseProductId: 0,
   },
   {
     stock: 20,
@@ -27,6 +28,7 @@ const products_mock: PRODUCT[] = [
     img: "jarron_ceramico_verde.png",
     isActive: true,
     _id: 3,
+    baseProductId: 0,
   },
   {
     stock: 70,
@@ -38,6 +40,7 @@ const products_mock: PRODUCT[] = [
     img: "jarron_ceramico_rojo.png",
     isActive: true,
     _id: 1,
+    baseProductId: 0,
   },
 ];
 
