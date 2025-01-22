@@ -86,6 +86,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
             return new ObjectResponse(true, products, null)
         }
         catch (e) {
+            console.log(e)
             return new ObjectResponse(false, null, 'Fue impossible obtener el/los productos')
         }
 

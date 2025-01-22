@@ -65,6 +65,10 @@ export async function listProducts(req: Request, res: Response) {
         filters.push(new Filter('product.pk_id',
             <string>req.query['id'], matchType.strictEqual));
     }
+    if (query.hasOwnProperty('baseid')) {
+        filters.push(new Filter('product.fk_id_base_product',
+            <string>req.query['baseid'], matchType.strictEqual));
+    }
 
     let sorts = []
     if (query.hasOwnProperty('orderBy')) {
@@ -99,7 +103,7 @@ export async function listProducts(req: Request, res: Response) {
 
     if (result.hasResponse()) {
         // TODO Imaginay stock provisional
-        res.status(200).send(result.value.map(x => ({ stock: 10, ...x })))
+        res.status(200).send(result.value)
     }
     else {
         res.status(500).send(result.error)
