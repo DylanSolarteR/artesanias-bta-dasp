@@ -64,3 +64,17 @@ export async function getProductById(id: number) {
         }
     }
 }
+
+export async function getProductsByBaseId(baseid: number) {
+    const query = new URLSearchParams();
+    query.append('baseid', baseid.toString())
+    try {
+        const response = await AxiosInstance.get('/product/list?' + query.toString())
+        const products: PRODUCT[] = response.data
+        return products
+    } catch (err) {
+        if (isAxiosError(err)) {
+            console.log("Error de extracción de datos")
+        }
+    }
+}
