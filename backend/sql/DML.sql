@@ -116,8 +116,8 @@ INSERT INTO department VALUES (DEFAULT, 'Amazonas'),
 	(DEFAULT, 'Vichada');
 	
 --- Punto fisico
-INSERT INTO physical_location VALUES (DEFAULT, 'Av. La Esmeralda #44-100', '2123213');
-INSERT INTO physical_location VALUES (DEFAULT, 'Aut SUR No. 50-11, C.P 11001', '312231');
+INSERT INTO physical_location VALUES (DEFAULT, 'Av. La Esmeralda #44-100', '2123213', true, 4.6511008, -74.0971553);
+INSERT INTO physical_location VALUES (DEFAULT, 'Aut SUR No. 50-11, C.P 11001', '312231', true, 4.5939012, -74.1347491);
 -- Default employees
 INSERT INTO employee values (DEFAULT, null, 'Gas', 'Noble', '1123', 'administrator', '$2a$12$17yT0ne3NTuCqZo7Ifgzqu5k8U1rppaWU2UEP6sbv5iNiGpsp3iJC', 'CC', '1001');
 INSERT INTO employee values (DEFAULT, 1, 'James', 'Soliban', '313444', 'manager', '$2a$12$RYBjQk5rNfwy1bLNLLfgYuaKaW82fookwo7wVj1MZ9co0x3JEc5fa', 'CC', '1002');

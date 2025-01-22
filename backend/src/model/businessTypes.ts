@@ -123,6 +123,9 @@ export class PhysicalLocation {
     constructor(
         public address: string,
         public telephone: string,
+        public active: boolean,
+        public latitude: number,
+        public longitude: number,
         private _id?: number
     ) { }
 
