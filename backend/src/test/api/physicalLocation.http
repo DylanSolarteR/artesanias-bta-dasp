@@ -1,8 +1,37 @@
-### Ejemplo loguin 1
-POST http://localhost:3200/api/location/post
+@token = token$abroso
+
+### Consulta
+GET http://localhost:3200/api/location/
 Content-Type: application/json
 
+### Creacion
+POST http://localhost:3200/api/location/
+Content-Type: application/json
+Authorization: barer {{token}}
+
 {
-    "address": "Calle 123",
-    "telephone": "123456789"
+    "address": "Address 1",
+    "telephone": "12345678944",
+    "latitude": 1.13,
+    "longitude": 1.14
 }
+
+### Actualizacion
+PUT http://localhost:3200/api/location/1
+Content-Type: application/json
+Authorization:  barer {{token}}
+
+{
+    "address": "Otra dirección",
+    "telephone": "12345678944",
+    "active": true,
+    "latitude": 1.13,
+    "longitude": 1.14,
+    "id": 4
+}
+
+### Eliminacion
+DELETE http://localhost:3200/api/location/7
+Content-Type: application/json
+Authorization : barer {{token}}
+

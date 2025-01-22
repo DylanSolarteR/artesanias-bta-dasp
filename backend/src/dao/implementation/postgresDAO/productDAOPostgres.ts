@@ -80,7 +80,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     p.image,
                     p.active,
                     p.pk_id,
-                    p.stock | 0
+                    parseInt(p.stock) | 0
                 ))
             }
             return new ObjectResponse(true, products, null)
