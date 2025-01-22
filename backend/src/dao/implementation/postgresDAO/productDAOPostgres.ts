@@ -70,22 +70,25 @@ export class ProductDAOPostgres implements IDAO<Product> {
 
             let products = [];
             if (res.rowCount > 0) {
-                products = res.rows.map(p => new Product(
-                    p.name,
-                    p.description,
-                    p.cat_name,
-                    p.cat_id,
-                    p.fk_id_prod_base,
-                    p.price,
-                    p.image,
-                    p.active,
-                    p.pk_id,
-                    p.stock | 0
-                ))
+                products = res.rows.map(p =>
+                    new Product(
+                        p.name,
+                        p.description,
+                        p.cat_name,
+                        p.cat_id,
+                        p.fk_id_base_product,
+                        p.price,
+                        p.image,
+                        p.active,
+                        p.pk_id,
+                        p.stock | 0
+                    )
+                )
             }
             return new ObjectResponse(true, products, null)
         }
         catch (e) {
+            console.log(e)
             return new ObjectResponse(false, null, 'Fue impossible obtener el/los productos')
         }
 

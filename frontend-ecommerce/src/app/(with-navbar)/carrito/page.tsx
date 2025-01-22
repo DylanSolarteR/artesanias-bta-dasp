@@ -87,7 +87,7 @@ function Carrito() {
     <div className="container">
       <h1>CARRITO</h1>
       <div className="return">
-        <Link href={"/"}>
+        <Link href={"/catalogo"}>
           <Image
             src={BackwardArrowIcon}
             alt={"ArrowReturn"}
@@ -95,7 +95,7 @@ function Carrito() {
             width={30}
           />
         </Link>
-        <Link href={"/"}>Seguir mirando productos</Link>
+        <Link href={"/catalogo"}>Seguir mirando productos</Link>
       </div>
       <main className="main-shoppingcart">
         <section className="flex-column">
