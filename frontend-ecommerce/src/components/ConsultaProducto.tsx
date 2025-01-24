@@ -3,7 +3,7 @@ import EditIcon from "@/app/icons/EditIcon.svg?url";
 import TrashIcon from "@/app/icons/TrashIcon.svg?url";
 import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
-import { LOW_STOCK_THRESHOLD } from "@/util/utils";
+import { LOW_STOCK_THRESHOLD, noAccents } from "@/util/utils";
 import { useState, useEffect } from "react";
 function ConsultaProducto({
   products_table,
@@ -23,11 +23,9 @@ function ConsultaProducto({
   useEffect(() => {
     if (search.length > 0) {
       const filteredProducts = products_table.filter((product) =>
-        product.productName
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .includes(search.toLowerCase())
+        noAccents(product.productName.toLowerCase()).includes(
+          search.toLowerCase()
+        )
       );
       setProducts_table_display(filteredProducts);
     } else {

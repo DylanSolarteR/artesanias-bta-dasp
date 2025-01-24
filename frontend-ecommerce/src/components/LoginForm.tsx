@@ -27,7 +27,7 @@ function LoginForm() {
     if (message.status === 200) {
       setAuthToken(message.authToken);
       toast.success(message.message);
-      new Promise((r) => setTimeout(r, 1000)).then(() =>
+      new Promise((r) => setTimeout(r, 500)).then(() =>
         router.push("/dashboard")
       );
     }

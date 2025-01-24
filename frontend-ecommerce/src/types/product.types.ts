@@ -10,8 +10,3 @@ export interface PRODUCT {
     _id: number
     stock: number
 }
-
-export interface POS_ADDED_PRODUCT {
-    product: PRODUCT
-    subtotal: number
-}
