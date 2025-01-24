@@ -1,3 +1,5 @@
+export const LOW_STOCK_THRESHOLD = 30; //%
+
 import { KeyboardEvent } from "react";
 export const onlyNumberInput = (e: KeyboardEvent) => {
     if (!/[0-9]|Delete|Backspace|ArrowLeft|ArrowRight/i.test(e.key)) {
@@ -12,7 +14,13 @@ export const decodeBadEncodeStrings = (str: string) => {
     );
     return decoder.decode(bytes);
 }
-
 export const decodeToken = (token: string) => {
     return JSON.parse(window.atob(token.split(".")[1]))
+}
+
+
+export const noAccents = (str: string) => {
+    return str
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
 }

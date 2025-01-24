@@ -49,16 +49,22 @@ function Navbar() {
       </div>
       <div>
         <ul>
-        <li>
+          <li>
             <div className="products">
-              <button className="buttom-products" onClick={() => window.location.href = '/'}>
+              <button
+                className="buttom-products"
+                onClick={() => (window.location.href = "/")}
+              >
                 Inicio
               </button>
             </div>
           </li>
           <li>
             <div className="products">
-              <button className="buttom-products" onClick={() => window.location.href = '/catalogo'}>
+              <button
+                className="buttom-products"
+                onClick={() => (window.location.href = "/catalogo")}
+              >
                 Catálogo
               </button>
             </div>

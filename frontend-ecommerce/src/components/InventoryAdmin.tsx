@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import KPICard from "@/components/KPICard";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
@@ -11,6 +11,7 @@ import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import ConsultaProducto from "@/components/ConsultaProducto";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import PhysicalPointCard from "@/components/PhysicalPointCard";
+import { LOW_STOCK_THRESHOLD } from "@/util/utils";
 function InventoryAdmin() {
   const [mounted, setMounted] = useState(false);
   const [searchCheckedPoint, setSearchCheckedPoint] = useState(true);
@@ -22,12 +23,6 @@ function InventoryAdmin() {
   >([]);
   const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
   const [categories, setCategories] = useState([]);
-
-  // UseEffect to retrieve the initial data
-  useEffect(() => {
-    retrieveInitialData();
-    setMounted(true);
-  }, []);
 
   // Function to get all the products from all the inventories
   function getAllProducts() {
@@ -77,6 +72,13 @@ function InventoryAdmin() {
     getAllPhysicalPoints();
     getAllProducts();
   }
+
+  // UseEffect to retrieve the initial data
+  useEffect(() => {
+    retrieveInitialData();
+    setMounted(true);
+  }, []);
+
   // Function to handle the checkbox change
   function handleCheckboxChange() {
     if (searchCheckedPoint) {
@@ -87,6 +89,15 @@ function InventoryAdmin() {
     }
     setSearchCheckedPoint(!searchCheckedPoint);
   }
+
+  // UseMemo to know how many products are below the threshold
+  const productsBelowThreshold: number = useMemo(() => {
+    if (!products_table) return 0;
+    return products_table.filter(
+      (product) => product.ecommerceQuantity < LOW_STOCK_THRESHOLD
+    ).length;
+  }, [products_table]);
+
   return mounted ? (
     <div className="container-dashboard">
       <h1 className="">INVENTARIO</h1>
@@ -101,7 +112,7 @@ function InventoryAdmin() {
               : products_table.length
           }
         />
-        <KPICard title={"Alerta bajo stock"} value={0} />
+        <KPICard title={"Alerta bajo stock"} value={productsBelowThreshold} />
       </section>
       <section className="flex-column">
         <h2>Inventario de cada punto físico</h2>

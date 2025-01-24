@@ -31,3 +31,19 @@ export async function listProductsFromInventory(inventoryId: number) {
         }
     }
 }
+
+export async function listProductsFromInventoryByLocationId(locationId: number) {
+    const query = new URLSearchParams();
+    query.append('locationId', locationId.toString())
+    try {
+
+        const response = await AxiosInstance.get(`/inventory/list?` + query.toString())
+        const products: PRODUCT_FROM_INVENTARY[] = response.data
+        return products;
+    }
+    catch (err) {
+        if (isAxiosError(err)) {
+            throw err;
+        }
+    }
+}

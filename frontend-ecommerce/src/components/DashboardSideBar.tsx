@@ -13,7 +13,6 @@ import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
 import ShopIcon from "@/app/icons/ShopIcon.svg?url";
 import ReportIcon from "@/app/icons/ReportIcon.svg?url";
 import { useRouter } from "next/navigation";
-import Loading from "./Loading";
 
 import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
@@ -46,7 +45,7 @@ function DashboardSideBar() {
   const [collapsed, setCollapsed] = useState(false);
 
   if (!mounted) {
-    return <Loading />;
+    return null;
   } else {
     return (
       <>

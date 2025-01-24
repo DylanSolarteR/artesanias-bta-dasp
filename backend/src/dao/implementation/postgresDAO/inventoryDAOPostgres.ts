@@ -84,7 +84,8 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
                 product.image as product_image,
                 category.pk_id AS category_id,
                 category.name AS category_name,
-                physical_location.address as location_address 
+                physical_location.address as location_address,
+                product.price as price
             FROM inventory
             INNER JOIN product ON inventory.pk_fk_product = product.pk_id
             INNER JOIN category ON product.fk_category = category.pk_id
@@ -114,6 +115,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
                     categoryId: row.category_id,
                     categoryName: row.category_name,
                     locationAddress: row.location_address,
+                    price: row.price,
                 }));
             }
 
