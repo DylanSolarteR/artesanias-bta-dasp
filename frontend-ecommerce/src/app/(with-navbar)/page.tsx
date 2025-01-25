@@ -152,26 +152,26 @@ export default function Home() {
         <div className="container-f">
           <div className="row align-items-center">
             <div className="col-md-5 my-3">
-              <h6 className="mb-0">Phone</h6>
-              <p className="mb-4">+ 123-456-7890</p>
+              <h6 className="mb-0">Teléfono</h6>
+              <p className="mb-4">+56 3103454348</p>
 
-              <h6 className="mb-0">Address</h6>
-              <p className="mb-4">12345 Fake ST NoWhere AB Country</p>
+              <h6 className="mb-0">Dirección</h6>
+              <p className="mb-4">Cra 75N 39 B 34 Sur</p>
 
-              <h6 className="mb-0">Email</h6>
-              <p className="mb-0">info@website.com</p>
+              <h6 className="mb-0">Correo Electrónico</h6>
+              <p className="mb-0">artesanias@gmail.com</p>
               <p></p>
             </div>
             <div className="col-md-7">
               <form>
-                <h4 className="mb-4">Drop Us A Line</h4>
+                <h4 className="mb-4">Envíanos un mensaje</h4>
                 <div className="form-row">
                   <div className="form-group col-sm-4">
                     <input
                       type="text"
                       className="form-control text-white rounded-0 bg-transparent"
                       name="name"
-                      placeholder="Name"
+                      placeholder="Nombre"
                     ></input>
                   </div>
                   <div className="form-group col-sm-4">
@@ -179,7 +179,7 @@ export default function Home() {
                       type="email"
                       className="form-control text-white rounded-0 bg-transparent"
                       name="Email"
-                      placeholder="Email"
+                      placeholder="Correo"
                     ></input>
                   </div>
                   <div className="form-group col-sm-4">
@@ -187,12 +187,12 @@ export default function Home() {
                       type="text"
                       className="form-control text-white rounded-0 bg-transparent"
                       name="subject"
-                      placeholder="Subject"
+                      placeholder="Asunto"
                     ></input>
                   </div>
                   <div className="form-group col-12 mb-0">
                     <button type="submit" id="button-standard">
-                      Send
+                      Enviar
                     </button>
                   </div>
                 </div>

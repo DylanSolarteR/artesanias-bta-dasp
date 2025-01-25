@@ -20,6 +20,21 @@
   --radio-size: 20px; 
 }
 
+/* Barra de deslizamiento */
+::-webkit-scrollbar {
+  width: 7px;
+  background: #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #DC8148;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #EBA278;
+}
+
 
 body {
   color: var(--foreground);
@@ -444,3 +459,4 @@ table th {
   border-bottom-width: 1px;
   border-color: var(--color-main-opaque);
 }
+
