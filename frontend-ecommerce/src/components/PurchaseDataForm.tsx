@@ -6,7 +6,7 @@ import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
 import CardIcon from "@/app/icons/CardIcon.svg";
 import GroupIcon from "@/app/icons/GroupIcon.svg";
 import UserIcon from "@/app/icons/UserIcon.svg";
-import CheckIcon from "@/app/icons/TickcircleIcon.svg";
+import CheckIcon from "@/app/icons/TickCircleIcon.svg";
 import toast from "react-hot-toast";
 import "@/app/css/Buy.css";
 
@@ -133,7 +133,7 @@ function PurchaseDataForm() {
                 onChange={(e) => setDepartment(e.target.value)}
               />
               <label htmlFor="city">Ciudad: </label>
-              <input 
+              <input
                 className="input-standard"
                 type="text"
                 value={city}
@@ -215,7 +215,9 @@ function PurchaseDataForm() {
                 Siguiente
               </button>
             ) : (
-              <button id="button-standard" type="submit">Proceder a la pasarela de pagos</button>
+              <button id="button-standard" type="submit">
+                Proceder a la pasarela de pagos
+              </button>
             )}
           </div>
         </form>
