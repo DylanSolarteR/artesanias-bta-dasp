@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useEffect, Suspense, useState } from "react";
-import CeramicsImage from "@/app/Images/Ceramics.png";
-import DefaultImage from "@/app/Images/Default.jpg";
+import CeramicsImage from "@/app/images/Ceramics.png";
+import DefaultImage from "@/app/images/Default.jpg";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
 
