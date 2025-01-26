@@ -7,25 +7,29 @@ import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     async create(physicalLocation: PhysicalLocation): Promise<ObjectResponse<PhysicalLocation>> {
-        let query = 'INSERT INTO physical_location VALUES (DEFAULT, $1, $2) RETURNING *'
+        let query = 'INSERT INTO physical_location VALUES (DEFAULT, $1, $2, $3, $4, $5) RETURNING *'
         try {
             let pool = await PostgresConnection.getInstance().getPool()
-            console.log(physicalLocation.address, physicalLocation.telephone)
             let res = await pool.query({
                 text: query,
                 values: [
                     physicalLocation.address,
-                    physicalLocation.telephone
+                    physicalLocation.telephone,
+                    physicalLocation.active,
+                    physicalLocation.latitude,
+                    physicalLocation.longitude
                 ]
             })
 
             if (res.rowCount === 1) {
                 const createdLocation = new PhysicalLocation(
-                    res.rows[0].direction,
+                    res.rows[0].address,
                     res.rows[0].telephone,
+                    res.rows[0].active,
+                    res.rows[0].latitude,
+                    res.rows[0].longitude,
                     res.rows[0].pk_id
                 )
-                console.log(createdLocation)
                 return new ObjectResponse(true, createdLocation, null)
             }
         }
@@ -50,8 +54,11 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
             let locations = [];
             if (res.rowCount > 0) {
                 locations = res.rows.map(l => new PhysicalLocation(
-                    l.direction,
+                    l.address,
                     l.telephone,
+                    l.active,
+                    l.latitude,
+                    l.longitude,
                     l.pk_id
                 ))
             }
@@ -74,7 +81,6 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                     physicalLocation.id
                 ]
             })
-            console.log(res);
             if (res.rowCount === 1) {
                 return true;
             }
@@ -88,7 +94,9 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     }
     //
     async update(physical_location: PhysicalLocation): Promise<boolean> {
-        let query = `UPDATE physical_location SET direction=$2, telephone=$3 WHERE pk_id=$1;`
+        let query = `UPDATE physical_location 
+                    SET address=$2, telephone=$3, active=$4, latitude=$5, longitude=$6
+                    WHERE pk_id=$1;`
         try {
             let pool = await PostgresConnection.getInstance().getPool()
             let res = await pool.query({
@@ -96,18 +104,19 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                 values: [
                     physical_location.id,
                     physical_location.address,
-                    physical_location.telephone
+                    physical_location.telephone,
+                    physical_location.active,
+                    physical_location.latitude,
+                    physical_location.longitude
                 ]
             })
 
-            console.log(res);
             if (res.rowCount === 1) {
                 return true;
             }
         }
         catch (e) {
             console.log(e);
-            console.log("meu deus ha fallado")
             return false;
         }
 

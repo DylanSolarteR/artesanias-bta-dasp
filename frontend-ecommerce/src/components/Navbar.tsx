@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CarritoIcon from "@/app/icons/ShoppingCartIcon.png";
-import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import Link from "next/link";
 import Image from "next/image";
 import "@/app/css/Navbar.css";
@@ -19,14 +18,14 @@ function Navbar() {
   const { cart } = useCart();
 
   useEffect(() => {
-    if (isLogged()) {
+    if (isLogged() && typeof window !== "undefined") {
       const token = localStorage.getItem("authToken");
       if (!token) {
         return;
       }
 
       const jwtPayload = decodeToken(token);
-      let correctedName = decodeBadEncodeStrings(
+      const correctedName = decodeBadEncodeStrings(
         jwtPayload.name + " " + jwtPayload.lastName
       );
       setEmployeeName(correctedName);
@@ -52,7 +51,20 @@ function Navbar() {
         <ul>
           <li>
             <div className="products">
-              <button className="buttom-products" onClick={toggleMenu}>
+              <button
+                className="buttom-products"
+                onClick={() => (window.location.href = "/")}
+              >
+                Inicio
+              </button>
+            </div>
+          </li>
+          <li>
+            <div className="products">
+              <button
+                className="buttom-products"
+                onClick={() => (window.location.href = "/catalogo")}
+              >
                 Catálogo
               </button>
             </div>

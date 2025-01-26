@@ -1,7 +1,7 @@
 "use client";
-import { POS_ADDED_PRODUCT } from "@/types/product.types";
+import { POS_ADDED_PRODUCT } from "@/types/inventory.types";
 import Image from "next/image";
-import DeleteIcon from "@/app/icons/closeSquareIcon.svg?url";
+import DeleteIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { useEffect, useState } from "react";
 
@@ -21,7 +21,7 @@ function ProductCardPOS({
 
   function setSubtotal(subtotal: number) {
     setSubtotal_(subtotal);
-    changeSubtotalByProductId(productPos.product._id, subtotal);
+    changeSubtotalByProductId(productPos.product.productId, subtotal);
   }
 
   useEffect(() => {
@@ -39,8 +39,8 @@ function ProductCardPOS({
   }
 
   function handleQuantityChange(e: React.ChangeEvent<HTMLInputElement>) {
-    if (parseInt(e.target.value) > productPos.product.stock) {
-      setQuantity(String(productPos.product.stock));
+    if (parseInt(e.target.value) > productPos.product.ecommerceQuantity) {
+      setQuantity(String(productPos.product.ecommerceQuantity));
       return;
     }
     if (parseInt(e.target.value) < 1) {
@@ -64,7 +64,9 @@ function ProductCardPOS({
         />
       </button>
       <div className="flex flex-row justify-between">
-        <span id="title_badge">{productPos.product.name ?? "Artesanía"}</span>
+        <span id="title_badge">
+          {productPos.product.productName ?? "Artesanía"}
+        </span>
         <span>{"C/U: $ " + productPos.product.price}</span>
       </div>
       <div className="flex flex-col">

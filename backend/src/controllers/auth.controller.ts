@@ -122,13 +122,13 @@ export async function updateUser(req: Request, res: Response) {
 
     const newEmployee = new Employee(
         id,
-        idpl, 
-        name, 
-        lastname, 
-        telephone, 
-        role, 
-        password, 
-        doctype, 
+        idpl,
+        name,
+        lastname,
+        telephone,
+        role,
+        password,
+        doctype,
         identification
     )
 

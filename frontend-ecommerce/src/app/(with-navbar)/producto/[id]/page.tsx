@@ -8,14 +8,28 @@ import { onlyNumberInput } from "@/util/utils";
 import PlusIcon from "@/app/icons/PlusIcon.png";
 import MinusIcon from "@/app/icons/MinusIcon.png";
 import Loading from "@/components/Loading";
-import { getProductById, PRODUCT } from "@/api/product.api";
+import { getProductById, getProductsByBaseId } from "@/api/product.api";
 import { useCart } from "@/app/context/CartContext";
+import { PRODUCT } from "@/types/product.types";
+import ProductVariants from "@/components/ProductVariants";
 
-function product() {
+function Product() {
   const { addToCart } = useCart();
   const [ready, setReady] = useState(false);
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<PRODUCT>();
+  const [product, setProduct] = useState<PRODUCT>({
+    _id: 0,
+    name: "Por asignar",
+    description: "Por asignar",
+    categoryName: "Por asignar",
+    price: 0,
+    stock: 0,
+    img: "",
+    isActive: false,
+    categoryId: 0,
+    baseProductId: 0,
+  });
+  const [productVariants, setProductVariants] = useState<PRODUCT[]>([]);
   const [quantity, setQuantity] = useState<any>(0);
   const aumentarCantidad = () => {
     if (product.stock === 0) return;
@@ -40,13 +54,21 @@ function product() {
       addToCart(newItem);
     }
   };
-
+  //Product is fetched when the page is loaded
   useEffect(() => {
     getProductById(parseInt(id)).then((data) => {
       setProduct(data);
       setReady(true);
     });
   }, []);
+  //Product Variants are fetched when the product is loaded
+  useEffect(() => {
+    if (!productVariants.length && product.baseProductId) {
+      getProductsByBaseId(product.baseProductId).then((data) => {
+        setProductVariants(data);
+      });
+    }
+  }, [product]);
 
   useEffect(() => {
     if (ready) {
@@ -60,7 +82,7 @@ function product() {
     <div className="container">
       <main className="main-center">
         <div className="return">
-          <Link href={"/"}>
+          <Link href={"/catalogo"}>
             <Image
               src={BackwardArrowIcon}
               alt={"ArrowReturn"}
@@ -68,7 +90,7 @@ function product() {
               width={30}
             />
           </Link>
-          <Link href={"/"}>Seguir mirando productos</Link>
+          <Link href={"/catalogo"}>Seguir mirando productos</Link>
         </div>
         <section className="flex-simple">
           <div className="image-product">
@@ -80,6 +102,17 @@ function product() {
               height={500}
               width={500}
             />
+            {productVariants.length > 1 ? (
+              <ProductVariants
+                current_product={product}
+                variantsArray={productVariants}
+              />
+            ) : null}
+          </div>
+          <div className="flex-column">
+            <h4>{product?.name}</h4>
+            <h4>{"Precio: $" + product?.price || "Por asignar"} </h4>
+            <p>{"Cantidad disponible: " + product?.stock}</p>
             <div className="cantProduct">
               {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
               {/*Boton menos*/}
@@ -120,7 +153,8 @@ function product() {
                   }
                   setQuantity(parseInt(e.target.value));
                 }}
-              />{/*Boton más*/}
+              />
+              {/*Boton más*/}
               <button onClick={() => aumentarCantidad()}>
                 <Image
                   src={PlusIcon}
@@ -130,22 +164,20 @@ function product() {
                 />
               </button>
             </div>
-            <button id="button-standard" onClick={() => handleAddToCart(product._id)}>
+            <button
+              id="button-standard"
+              onClick={() => handleAddToCart(product._id)}
+            >
               Añadir al carrito
             </button>
           </div>
-          <div className="flex-column">
-            <h4>{product?.name ?? "Por asignar "}</h4>
-            <h4>{"Precio: $" + product?.price ?? "Por asignar"}</h4>
-            <h3>Descripción del producto</h3>
-            <p>{product?.description ?? "Por asignar"}</p>
-            <p>{"Categoría: " + product?.categoryName ?? "Por asignar"}</p>
-            <p>{"Cantidad disponible: " + product?.stock ?? "Por asignar"}</p>
-          </div>
         </section>
+        <h3>Descripción del producto</h3>
+        <p>{product?.description}</p>
+        <p>{"Categoría: " + product?.categoryName}</p>
       </main>
     </div>
   );
 }
 
-export default product;
+export default Product;

@@ -5,21 +5,20 @@ import { getRole } from "@/api/auth.api";
 
 import Image from "next/image";
 import MenuIcon from "@/app/icons/MenuIcon.svg?url";
-import CloseSquareIcon from "@/app/icons/CloseSquareIcon.svg?url"
+import CloseSquareIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
-import BagIcon from "@/app/icons/BagIcon.svg?url"
+import BagIcon from "@/app/icons/BagIcon.svg?url";
 import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
 import ShopIcon from "@/app/icons/ShopIcon.svg?url";
 import ReportIcon from "@/app/icons/ReportIcon.svg?url";
 import { useRouter } from "next/navigation";
-import Loading from "./Loading";
 
 import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
 import Link from "next/link";
 
-import '@/app/css/dashboard.css'
+import "@/app/css/dashboard.css";
 
 function DashboardSideBar() {
   const router = useRouter();
@@ -46,12 +45,13 @@ function DashboardSideBar() {
   const [collapsed, setCollapsed] = useState(false);
 
   if (!mounted) {
-    return <Loading />;
+    return null;
   } else {
     return (
       <>
         <aside className={`container-sidebar ${collapsed ? "collapsed" : ""}`}>
-          <div className="contents">{!collapsed && <span className="menu-content-text">Contenido</span>}
+          <div className="contents">
+            {!collapsed && <span className="menu-content-text">Contenido</span>}
             <button
               className="toggle-button"
               onClick={() => setCollapsed(!collapsed)}
@@ -80,19 +80,20 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Empleados"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
-                >
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>
-                }
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h5>
               {showEmployeeMenu && (
                 <ul className="submenu">
                   <li>
-                    <Link href="/dashboard/empleados/registrar">Registrar empleado</Link>
+                    <Link href="/dashboard/empleados/registrar">
+                      Registrar empleado
+                    </Link>
                   </li>
                   <li>
                     <Link href="/dashboard/empleados">Ver empleados</Link>
@@ -117,13 +118,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Productos"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showProductMenu ? "open" : ""}`}
-                >
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showProductMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h5>
             </div>
           )}
@@ -143,12 +144,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Inventario"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h5>
             </div>
           )}
@@ -170,20 +172,27 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Puntos Físicos"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showPhysicalPointsMenu ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${
+                      showPhysicalPointsMenu ? "open" : ""
+                    }`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h5>
               {showPhysicalPointsMenu && (
                 <ul className="submenu">
                   <li>
-                    <Link href="/dashboard/puntos-fisicos/registrar">Registrar punto físico</Link>
+                    <Link href="/dashboard/puntos-fisicos/registrar">
+                      Registrar punto físico
+                    </Link>
                   </li>
                   <li>
-                    <Link href="/dashboard/puntos-fisicos">Consultar punto físico</Link>
+                    <Link href="/dashboard/puntos-fisicos">
+                      Consultar punto físico
+                    </Link>
                   </li>
                 </ul>
               )}
@@ -205,12 +214,13 @@ function DashboardSideBar() {
                   />
                   {!collapsed && " Reportes"}
                 </span>
-                {!collapsed && <span className={`arrow-icon ${showReportsMenu ? "open" : ""}`}>
-                  <Image
-                    src={ArrowDownIcon}
-                    alt="Flecha despliegue"
-                  />
-                </span>}
+                {!collapsed && (
+                  <span
+                    className={`arrow-icon ${showReportsMenu ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+                )}
               </h5>
             </div>
           )}

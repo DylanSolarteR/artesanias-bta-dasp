@@ -6,7 +6,7 @@ import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { hasPermission } from "@/util/RolePermissions";
 
-function page({}: Props) {
+function Page({}: Props) {
   const { role } = useMainContext();
   const router = useRouter();
 
@@ -25,4 +25,4 @@ function page({}: Props) {
   );
 }
 
-export default page;
+export default Page;

@@ -10,12 +10,11 @@ export async function loginAuth(prevState: null, queryData: FormData) {
 
     try {
         loginSchema.parse(data)
-        let response = await AxiosInstance.post('/auth/singin', data)
+        const response = await AxiosInstance.post('/auth/singin', data)
         localStorage.setItem('authToken', response.data.authToken)
         return { success: true, message: 'Inicio de sesión satisfactorio.', status: response.status, authToken: response.data.authToken }
     } catch (err) {
         if (err instanceof ZodError) {
-            console.log(err.issues[0].message)
             return { success: false, message: err.issues[0].message, status: 400 }
         }
         if (isAxiosError(err)) {
@@ -28,7 +27,7 @@ export async function loginAuth(prevState: null, queryData: FormData) {
 
 export async function getRole() {
     try {
-        let response = await AxiosInstance.get('/auth/get-role', {
+        const response = await AxiosInstance.get('/auth/get-role', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }

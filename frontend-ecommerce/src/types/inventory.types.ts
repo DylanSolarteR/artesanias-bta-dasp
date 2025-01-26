@@ -8,5 +8,11 @@ export interface PRODUCT_FROM_INVENTARY {
     ecommerceQuantity: number
     categoryId: number
     categoryName: string
-    locationDirection: string
+    locationAddress: string
+    price: number
+}
+
+export interface POS_ADDED_PRODUCT {
+    product: PRODUCT_FROM_INVENTARY
+    subtotal: number
 }

@@ -7,7 +7,7 @@ import { useAuthContext } from "@/app/context/AuthContext";
 
 function LoginForm() {
   const router = useRouter();
-  const { contextValue } = useAuthContext();
+  const { setAuthToken } = useAuthContext();
   const [message, formAction, isPending] = useActionState(loginAuth, {
     success: false,
     message: "",
@@ -25,9 +25,9 @@ function LoginForm() {
       toast.error("Error en el servidor, intente más tarde.");
     }
     if (message.status === 200) {
-      contextValue.setAuthToken(message.authToken);
+      setAuthToken(message.authToken);
       toast.success(message.message);
-      new Promise((r) => setTimeout(r, 1000)).then(() =>
+      new Promise((r) => setTimeout(r, 500)).then(() =>
         router.push("/dashboard")
       );
     }
@@ -50,9 +50,12 @@ function LoginForm() {
         value={password}
         name="password"
         onChange={(e) => setPassword(e.target.value)}
-      /><br />
+      />
+      <br />
       <p>¿Olvidaste tu contraseña?</p>
-      <button id="button-standard" type="submit">{isPending ? "Validando..." : "Ingresar"}</button>
+      <button id="button-standard" type="submit">
+        {isPending ? "Validando..." : "Ingresar"}
+      </button>
     </form>
   );
 }

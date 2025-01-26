@@ -7,8 +7,8 @@
   --background: #FFFFFF;
   --foreground: #171717;
   --color-main: #DC8148;
-  --color-main-opaque: #EBA278;
-  --color-main-soft: #F0C0A4;
+  --color-main-opaque: #DC8148;
+  --color-main-soft: #EBA278;
   --color-gray: #CCC;
   --color-gray-soft: #F7F7F7;
   --color-gray-dark: #999;
@@ -20,12 +20,6 @@
   --radio-size: 20px; 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #ededed;
-  }
-}
 
 body {
   color: var(--foreground);
