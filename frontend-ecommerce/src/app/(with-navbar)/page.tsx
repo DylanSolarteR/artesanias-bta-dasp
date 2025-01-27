@@ -152,51 +152,15 @@ export default function Home() {
         <div className="container-f">
           <div className="row align-items-center">
             <div className="col-md-5 my-3">
-              <h6 className="mb-0">Phone</h6>
-              <p className="mb-4">+ 123-456-7890</p>
+              <h6 className="mb-0">Teléfono</h6>
+              <p className="mb-4">+57 123</p>
 
-              <h6 className="mb-0">Address</h6>
-              <p className="mb-4">12345 Fake ST NoWhere AB Country</p>
+              <h6 className="mb-0">Dirección</h6>
+              <p className="mb-4">Carrera 8 # 40 - 62</p>
 
-              <h6 className="mb-0">Email</h6>
-              <p className="mb-0">info@website.com</p>
+              <h6 className="mb-0">Correo Electrónico</h6>
+              <p className="mb-0">info@artesaniasbogota.shop</p>
               <p></p>
-            </div>
-            <div className="col-md-7">
-              <form>
-                <h4 className="mb-4">Drop Us A Line</h4>
-                <div className="form-row">
-                  <div className="form-group col-sm-4">
-                    <input
-                      type="text"
-                      className="form-control text-white rounded-0 bg-transparent"
-                      name="name"
-                      placeholder="Name"
-                    ></input>
-                  </div>
-                  <div className="form-group col-sm-4">
-                    <input
-                      type="email"
-                      className="form-control text-white rounded-0 bg-transparent"
-                      name="Email"
-                      placeholder="Email"
-                    ></input>
-                  </div>
-                  <div className="form-group col-sm-4">
-                    <input
-                      type="text"
-                      className="form-control text-white rounded-0 bg-transparent"
-                      name="subject"
-                      placeholder="Subject"
-                    ></input>
-                  </div>
-                  <div className="form-group col-12 mb-0">
-                    <button type="submit" id="button-standard">
-                      Send
-                    </button>
-                  </div>
-                </div>
-              </form>
             </div>
           </div>
         </div>
