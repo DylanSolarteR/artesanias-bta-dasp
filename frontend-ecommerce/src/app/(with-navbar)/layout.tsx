@@ -7,6 +7,7 @@ import Providers from "@/components/Providers";
 export const metadata: Metadata = {
   title: "Artesanías Bogotá LTDA",
   description: "Comercio Electrónico de Artesanías",
+  icons: [{ url: "/favicon.ico" }, { url: "/icon.png", type: "image/png" }],
 };
 
 export default function RootLayout({

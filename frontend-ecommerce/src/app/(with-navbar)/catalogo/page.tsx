@@ -21,7 +21,7 @@ export interface PRODUCT {
 }
 
 export default function Home() {
-  const {gridClass, setGridClass } = useMainContext();
+  const { gridClass, setGridClass } = useMainContext();
 
   const [categories, setCategories] = useState([]);
 
@@ -197,7 +197,9 @@ export default function Home() {
             </select>
           </article>
 
-          <button id="button-standard" onClick={filterhandle}>Filtrar</button>
+          <button id="button-standard" onClick={filterhandle}>
+            Filtrar
+          </button>
         </aside>
 
         <section className="content">
@@ -215,7 +217,7 @@ export default function Home() {
                   cursor: "pointer",
                   maxWidth: "40px",
                   maxHeight: "40px",
-                  objectFit: "contain"
+                  objectFit: "contain",
                 }}
               />
               <Image
@@ -225,7 +227,7 @@ export default function Home() {
                 height={48}
                 onClick={() => setGridClass("grid-4")}
                 className={gridClass === "grid-4" ? "icon active" : "icon"}
-                style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
               />
             </div>
             <div className="search">

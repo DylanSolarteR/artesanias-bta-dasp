@@ -153,50 +153,14 @@ export default function Home() {
           <div className="row align-items-center">
             <div className="col-md-5 my-3">
               <h6 className="mb-0">Teléfono</h6>
-              <p className="mb-4">+56 3103454348</p>
+              <p className="mb-4">+57 123</p>
 
               <h6 className="mb-0">Dirección</h6>
-              <p className="mb-4">Cra 75N 39 B 34 Sur</p>
+              <p className="mb-4">Carrera 8 # 40 - 62</p>
 
               <h6 className="mb-0">Correo Electrónico</h6>
-              <p className="mb-0">artesanias@gmail.com</p>
+              <p className="mb-0">info@artesaniasbogota.shop</p>
               <p></p>
-            </div>
-            <div className="col-md-7">
-              <form>
-                <h4 className="mb-4">Envíanos un mensaje</h4>
-                <div className="form-row">
-                  <div className="form-group col-sm-4">
-                    <input
-                      type="text"
-                      className="form-control text-white rounded-0 bg-transparent"
-                      name="name"
-                      placeholder="Nombre"
-                    ></input>
-                  </div>
-                  <div className="form-group col-sm-4">
-                    <input
-                      type="email"
-                      className="form-control text-white rounded-0 bg-transparent"
-                      name="Email"
-                      placeholder="Correo"
-                    ></input>
-                  </div>
-                  <div className="form-group col-sm-4">
-                    <input
-                      type="text"
-                      className="form-control text-white rounded-0 bg-transparent"
-                      name="subject"
-                      placeholder="Asunto"
-                    ></input>
-                  </div>
-                  <div className="form-group col-12 mb-0">
-                    <button type="submit" id="button-standard">
-                      Enviar
-                    </button>
-                  </div>
-                </div>
-              </form>
             </div>
           </div>
         </div>
