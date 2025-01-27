@@ -31,6 +31,23 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Panthousand api :)');
 });
 
-app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV === 'production') {
+  (async () => {
+    const https = await import('https');
+    const fs = await import('fs');
+
+    const sslOptions = {
+      key: fs.readFileSync(process.env.SSL_KEY),
+      cert: fs.readFileSync(process.env.SSL_CERT)
+    };
+
+    https.createServer(sslOptions, app).listen(port, () => {
+      console.log(`Server is Fire at https://localhost:${port}`);
+    });
+  })()
+}
+if (process.env.NODE_ENV === 'development') {
+  app.listen(port, () => {
+    console.log(`Server is Fire at http://localhost:${port}`);
+  });
+}
