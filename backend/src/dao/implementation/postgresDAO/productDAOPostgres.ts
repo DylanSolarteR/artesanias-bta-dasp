@@ -75,7 +75,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     p.description,
                     p.cat_name,
                     p.cat_id,
-                    p.fk_id_prod_base,
+                    p.fk_id_base_product,
                     p.price,
                     p.image,
                     p.active,
