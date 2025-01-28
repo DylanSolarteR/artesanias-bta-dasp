@@ -10,9 +10,9 @@ export async function listPhysicalLocations(req: Request, res: Response) {
     let query: Object = req.query;
 
     let filters = []
-    if (req.params['id'] != null) {
+    if (req.query['id'] != null) {
         filters.push(new Filter('pk_id',
-            <string>req.params['id'], matchType.strictEqual));
+            <string>req.query['id'], matchType.strictEqual));
     }
 
     let sorts = []

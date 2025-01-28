@@ -13,6 +13,7 @@ import Loading from "@/components/Loading";
 import Catalog from "@/components/Catalog";
 import Map from "@/components/Map";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import Navbar from "@/components/Navbar";
 
 export interface PRODUCT {
   id: number;
@@ -61,6 +62,7 @@ export default function Home() {
 
   return (
     <div className="flex-column">
+      <Navbar />
       <header className="header">
         <div className="overlay-f">
           <h1 className="title">ARTESANÍAS BOGOTÁ LDTA</h1>

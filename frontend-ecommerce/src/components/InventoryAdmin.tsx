@@ -118,12 +118,12 @@ function InventoryAdmin() {
         <h2>Inventario de cada punto físico</h2>
         <div className="search-product">
           <div className="search">
-            <input
+            {/* <input
               type="text"
               placeholder="Buscar punto físico"
               disabled={searchCheckedPoint}
             />
-            <Image src={SearchIcon} alt="search" width={20} height={20} />
+            <Image src={SearchIcon} alt="search" width={20} height={20} /> */}
           </div>
           <div className="flex-simple">
             <input

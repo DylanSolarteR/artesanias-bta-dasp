@@ -18,12 +18,13 @@ export async function listPhysicalLocations(): Promise<PHYSICAL_LOCATION[]> {
 }
 
 // Obtener una ubicación física por ID
-export async function getPhysicalLocationById(id: string): Promise<PHYSICAL_LOCATION> {
+export async function getPhysicalLocationById(id: string | number): Promise<PHYSICAL_LOCATION> {
     const query = new URLSearchParams();
+    if (typeof id === 'number') id = id.toString();
     query.append('id', id);
     try {
         const response = await AxiosInstance.get(`/location/?${query.toString()}`);
-        const location: PHYSICAL_LOCATION = response.data; // Verifica si el backend devuelve un único objeto o una lista
+        const location: PHYSICAL_LOCATION = response.data[0];
         return location;
     } catch (err) {
         if (isAxiosError(err)) {
