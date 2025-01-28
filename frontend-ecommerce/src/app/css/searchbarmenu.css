@@ -1,8 +1,8 @@
 .wrapper_search_bar{
-    width: 370px;
+    width: 400px;
   }
   .content_search_bar{
-    padding-top: 20px;
+    padding: 20px 0px;
   }
   .content_search_bar .searchmenu{
     position: relative;

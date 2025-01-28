@@ -18,7 +18,7 @@ export async function loginAuth(prevState: null, queryData: FormData) {
             return { success: false, message: err.issues[0].message, status: 400 }
         }
         if (isAxiosError(err)) {
-            return { success: false, message: err.response.data, status: err.status }
+            return { success: false, message: err.message, status: err.status }
         }
         return { success: false, message: 'Error inesperado, revise las credenciales o intentelo más tarde.', status: 400 }
     }

@@ -35,6 +35,7 @@ function Page() {
   const user_info = decodeToken(authToken);
 
   async function initData() {
+    if (!user_info.locationId) return;
     const products: PRODUCT_FROM_INVENTARY[] =
       await listProductsFromInventoryByLocationId(user_info.locationId);
     setProduct_list(products);
@@ -139,7 +140,9 @@ function Page() {
             />
           )}
           {sidebarPage === "search" && (
-            <ConsultaPOS product_list={product_list} />
+            <div className="h-[54rem]">
+              <ConsultaPOS product_list={product_list} />
+            </div>
           )}
         </main>
       </div>
