@@ -1,6 +1,6 @@
 import "@/app/css/globals.css";
+import Navbar from "@/components/Navbar";
 import Providers from "@/components/Providers";
-import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Layout({
   children,
@@ -10,7 +10,8 @@ export default function Layout({
   return (
     <div className="flex-simple">
       <Providers>
-        <ProtectedRoute>{children}</ProtectedRoute>
+        <Navbar />
+        {children}
       </Providers>
     </div>
   );

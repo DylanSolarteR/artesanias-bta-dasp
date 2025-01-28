@@ -1,9 +1,9 @@
 import "@/app/css/globals.css";
-import Providers from "@/components/Providers";
-import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import Providers from "@/components/Providers";
 
-export default function POSLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;

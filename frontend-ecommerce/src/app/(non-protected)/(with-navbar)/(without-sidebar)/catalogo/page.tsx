@@ -8,7 +8,7 @@ import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
-import "@/app/css/catalog-product.css";
+import "@/app/css/Catalog-product.css";
 import Loading from "@/components/Loading";
 import { useMainContext } from "@/app/context/MainContext";
 import Catalog from "@/components/Catalog";

@@ -102,6 +102,9 @@ function Navbar() {
                     <Link href="/dashboard">Dashboard</Link>
                   </li>
                   <li>
+                    <Link href="/cuenta">Cuenta</Link>
+                  </li>
+                  <li>
                     <button
                       onClick={() => {
                         clearToken();

@@ -1,4 +1,4 @@
-import { PRODUCT } from "@/app/(with-navbar)/catalogo/page";
+import { PRODUCT } from "@/app/(non-protected)/(with-navbar)/(without-sidebar)/catalogo/page";
 import BagsadIcon from "@/app/icons/BagsadIcon.png";
 import Image from "next/image";
 import Link from "next/link";
