@@ -11,6 +11,7 @@ type productFilters = {
     maxPrice?: number,
     nameProd?: string,
 }
+
 export async function listProducts({
     orderBy,
     category = null,
@@ -48,6 +49,31 @@ export async function listProducts({
             throw err;
         }
     }
+}
+
+export async function getlistProducts({
+    orderBy,
+    category = null,
+    nameProd = null,
+}: productFilters) {
+    const query = new URLSearchParams();
+    query.append('orderBy', `${orderBy[0]},${orderBy[1]}`)
+    if (nameProd) {
+        query.append('name', nameProd.toString())
+    }
+    if (category) {
+        query.append('category', category.toString())
+    }
+    try {
+        const response = await AxiosInstance.get('/product/list?' + query.toString())
+        const products: PRODUCT[] = response.data
+        return products
+    } catch (err) {
+        if (isAxiosError(err)) {
+            throw err;
+            console.log("Error de extracción de datos")
+        }
+    }
 
 }
 
@@ -78,3 +104,19 @@ export async function getProductsByBaseId(baseid: number) {
         }
     }
 }
+
+export async function deleteProduct(id: string) {
+    try {
+        const response = await AxiosInstance.delete(`/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        return response.data;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            throw err;
+        }
+    }
+}
+

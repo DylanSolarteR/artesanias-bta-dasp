@@ -57,8 +57,8 @@ function RegistroPOS({
               src={
                 "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
               }
-              width={300}
-              height={300}
+              width={340}
+              height={340}
             />
             <SearchBarMenu
               search_name="producto"
@@ -128,7 +128,7 @@ function RegistroPOS({
         </section>
         <section className="">
           {/* productos añadidos y total */}
-          <div className="">
+          <div className="list-shoppingcart">
             {products_added.map((productPos, index) => (
               <ProductCardPOS
                 key={productPos.product.productId}
@@ -142,7 +142,7 @@ function RegistroPOS({
             <span> TOTAL: {total}</span>
           </div>
 
-          <button>
+          <button id="button-standard">
             <Link href={"/"}>Continuar con la Compra</Link>
           </button>
         </section>

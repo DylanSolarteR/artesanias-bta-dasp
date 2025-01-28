@@ -1,6 +1,6 @@
 "use client";
 type Props = {};
-import RegisterUserData from "@/components/FormsRegister/RegisterUserDataForm";
+import RegisterProduct from "@/components/FormsRegister/RegisterProductForm";
 import { useMainContext } from "@/app/context/MainContext";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
@@ -14,11 +14,11 @@ function Page({}: Props) {
     <Loading />
   ) : (
     <>
-      {!hasPermission(role, "view:employees") ? (
+      {!hasPermission(role, "view:products") ? (
         router.push("/POS")
       ) : (
         <>
-          <RegisterUserData />
+          <RegisterProduct />
         </>
       )}
     </>

@@ -4,25 +4,16 @@
   .content_search_bar{
     padding: 20px 0px;
   }
-  .content_search_bar .searchmenu{
+  .content_search_bar .search{
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
   }
-  .searchmenu input{
-    height: 30px;
-    width: 100%;
-    outline: none;
-    font-size: 18px;
-    border-radius: 5px;
-    padding: 0 5px 0 5px;
-    border: 1px solid #B3B3B3;
+  .search input:focus{
+    border-bottom: 2px solid #DC8148;
   }
-  .searchmenu input:focus{
-    border: 2px solid #DC8148;
-  }
-  .searchmenu input::placeholder{
+  .search input::placeholder{
     color: #bfbfbf;
   }

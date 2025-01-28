@@ -1,6 +1,6 @@
 "use client";
 type Props = {};
-import RegisterPhysicalLocation from "@/components/RegisterPhysicalLocationForm";
+import RegisterPhysicalLocation from "@/components/FormsRegister/RegisterPhysicalLocationForm";
 import { useMainContext } from "@/app/context/MainContext";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";

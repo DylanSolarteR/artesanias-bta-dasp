@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import ConsultEmployees from "@/components/consultEmployees";
+import ConsultEmployees from "@/components/TableConsult/consultEmployees";
 import { useMainContext } from "@/app/context/MainContext";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";

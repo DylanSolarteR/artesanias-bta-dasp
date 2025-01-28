@@ -2,20 +2,6 @@
   display: block;
 }
 
-::-webkit-scrollbar {
-  width: 7px;
-  background: #fff;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #DC8148;
-  border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #EBA278;
-}
-
 .header {
   position: relative;
   height: 100vh;

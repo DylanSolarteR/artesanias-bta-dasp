@@ -126,6 +126,18 @@ function DashboardSideBar() {
                   </span>
                 )}
               </h5>
+              {showProductMenu && (
+                <ul className="submenu">
+                  <li>
+                    <Link href="/dashboard/productos/registrar">
+                      Registrar producto
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/dashboard/productos">Ver productos</Link>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
           {/* Menú Inventario */}
