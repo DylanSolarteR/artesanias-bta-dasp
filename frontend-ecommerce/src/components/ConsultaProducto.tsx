@@ -5,6 +5,7 @@ import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { LOW_STOCK_THRESHOLD, noAccents } from "@/util/utils";
 import { useState, useEffect } from "react";
+
 function ConsultaProducto({
   products_table,
 }: {
@@ -66,19 +67,19 @@ function ConsultaProducto({
         <tbody>
           {products_table.length !== 0
             ? products_table_display.map((product, index) => (
-                <tr
-                  className={
-                    (LOW_STOCK_THRESHOLD >= product.ecommerceQuantity &&
-                      `text-amber-700 font-bold`) + ` text center`
-                  }
-                  key={index}
-                >
-                  <td>{product.productId}</td>
-                  <td>{product.productName}</td>
-                  <td>{product.categoryName}</td>
-                  <td>{product.locationAddress}</td>
-                  <td>{product.totalQuantity}</td>
-                  {/* <td>
+              <tr
+                className={
+                  (LOW_STOCK_THRESHOLD >= product.ecommerceQuantity &&
+                    `text-amber-700 font-bold`) + ` text center`
+                }
+                key={index}
+              >
+                <td>{product.productId}</td>
+                <td>{product.productName}</td>
+                <td>{product.categoryName}</td>
+                <td>{product.locationAddress}</td>
+                <td>{product.totalQuantity}</td>
+                {/* <td>
                     <button>
                       <Image
                         src={EditIcon}
@@ -96,8 +97,8 @@ function ConsultaProducto({
                       />
                     </button>
                   </td> */}
-                </tr>
-              ))
+              </tr>
+            ))
             : null}
         </tbody>
         <tfoot>

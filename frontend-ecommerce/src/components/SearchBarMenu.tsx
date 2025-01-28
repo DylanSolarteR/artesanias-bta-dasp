@@ -44,8 +44,7 @@ function SearchBarMenu({
     <>
       <div className="wrapper_search_bar">
         <div className="content_search_bar">
-          <div className="searchmenu">
-            <Image src={SearchIcon} alt="Icono Buscar" width={20} height={20} />
+          <div className="search">
             <input
               spellCheck={false}
               type="text"
@@ -63,6 +62,7 @@ function SearchBarMenu({
                 }
               }}
             />
+            <Image src={SearchIcon} alt="Icono Buscar" width={20} height={20} />
           </div>
         </div>
       </div>

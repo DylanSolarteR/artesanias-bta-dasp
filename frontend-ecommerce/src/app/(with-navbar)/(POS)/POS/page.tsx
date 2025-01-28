@@ -103,7 +103,7 @@ function Page() {
   return mounted ? (
     <div className="container">
       <div className="container-pos">
-        <aside className="border-r border-black p-7 flex flex-col gap-20 basis-64 h-full max-w-[25rem]">
+        <aside className="filter">
           <h1 className="h-fit text-[2.875rem] px-0">MÓDULO DE FACTURACIÓN</h1>
           <div>
             <button

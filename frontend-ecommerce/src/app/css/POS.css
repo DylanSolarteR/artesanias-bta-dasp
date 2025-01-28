@@ -5,3 +5,14 @@
     text-align: center;
     align-items: center;
 }
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100vh;
+    width: 28%;
+    background-color: var(--background);
+    border-right-color: #e0dfdf;
+    border-right-width: 1px;
+}

@@ -57,8 +57,8 @@ function RegistroPOS({
               src={
                 "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
               }
-              width={300}
-              height={300}
+              width={340}
+              height={340}
             />
             <SearchBarMenu
               search_name="producto"
