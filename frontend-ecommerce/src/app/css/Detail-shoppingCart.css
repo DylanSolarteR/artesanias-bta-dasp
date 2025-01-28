@@ -5,18 +5,7 @@
     width: 100%;
 }
 
-.main-shoppingcart .flex-column  {
-    margin: 10px;
-    border-radius: var(--border-radius);
-    border-width: 1px;
-    overflow-y: scroll;
-}
 
-.list-shoppingcart {
-    display: grid;
-    margin: 5px;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-}
 
 .details-buys h2 {
     text-align: center;

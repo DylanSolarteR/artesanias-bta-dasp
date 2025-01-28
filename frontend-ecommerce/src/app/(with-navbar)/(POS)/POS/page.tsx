@@ -13,6 +13,7 @@ import BoxSearch from "@/app/icons/BoxSearch.svg?url";
 import toast from "react-hot-toast";
 import RegistroPOS from "@/components/POS/RegistroPOS";
 import ConsultaPOS from "@/components/POS/ConsultaPOS";
+import "@/app/css/POS.css";
 
 export type PAY_METHOD = "credit_card" | "debit_card" | "cash" | "";
 
@@ -100,8 +101,8 @@ function Page() {
   }, []);
 
   return mounted ? (
-    <div className="w-screen h-screen">
-      <div className="relative flex flex-row w-full h-[54rem] mt-[4.375rem] justify-between text-center items-center">
+    <div className="container">
+      <div className="container-pos">
         <aside className="border-r border-black p-7 flex flex-col gap-20 basis-64 h-full max-w-[25rem]">
           <h1 className="h-fit text-[2.875rem] px-0">MÓDULO DE FACTURACIÓN</h1>
           <div>
@@ -110,7 +111,7 @@ function Page() {
               onClick={() => setSidebarPage("register")}
             >
               <Image alt="icono" src={Bill} width={80} height={80} />
-              <span className="text-[2.875rem]">Registro productos</span>
+              <span className="text-[2.875rem]">Registrar productos</span>
             </button>
             <button
               className="flex items-center gap-2"

@@ -128,7 +128,7 @@ function RegistroPOS({
         </section>
         <section className="">
           {/* productos añadidos y total */}
-          <div className="">
+          <div className="list-shoppingcart">
             {products_added.map((productPos, index) => (
               <ProductCardPOS
                 key={productPos.product.productId}
@@ -142,7 +142,7 @@ function RegistroPOS({
             <span> TOTAL: {total}</span>
           </div>
 
-          <button>
+          <button id="button-standard">
             <Link href={"/"}>Continuar con la Compra</Link>
           </button>
         </section>

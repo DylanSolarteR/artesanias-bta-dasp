@@ -52,7 +52,7 @@ body {
 
 .container {
   padding: 10px;
-  padding-top: 90px;
+  padding-top: 87px;
   max-width: none;
   height: 100vh;
 }
@@ -430,10 +430,6 @@ table th {
   border-color: var(--color-main-opaque);
 }
 
-.plan-details {
-  
-}
-
 .plan-details img {
   width: 100%;
   height: 100%;
@@ -460,3 +456,25 @@ table th {
   border-color: var(--color-main-opaque);
 }
 
+/* lista de productos */
+
+.list-shoppingcart {
+  display: grid;
+  margin: 5px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.main-shoppingcart .flex-column  {
+  margin: 10px;
+  border-radius: var(--border-radius);
+  border-width: 1px;
+  overflow-y: scroll;
+}
+
+
+/* Ventana de los marcadores del mapa */
+
+.info-window {
+  border-radius: 8px;
+  
+}

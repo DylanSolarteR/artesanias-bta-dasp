@@ -12,13 +12,21 @@ import CategCard from "@/components/CategCard";
 import Loading from "@/components/Loading";
 import Catalog from "@/components/Catalog";
 import Map from "@/components/Map";
-import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import { listPhysicalLocations } from "@/api/physicalLocation.api";
 
 export interface PRODUCT {
   id: number;
   imagen: string;
   nombre: string;
   precio: number;
+}
+
+interface Marker {
+  position: {
+    lat: number;
+    lng: number;
+  };
+  title: string;
 }
 
 function scrollLeft() {
@@ -34,8 +42,24 @@ function scrollRight() {
 export default function Home() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState<PRODUCT[]>([]);
-  const [reveal, setReveal] = useState(false);
-  const render = (status: Status) => <h1>{status}</h1>;
+
+  const center = { lat: 4.60971, lng: -74.08175 };
+  const [markers, setMarkers] = useState<Marker[]>([ ]);
+  
+  useEffect(() => {
+    listPhysicalLocations().then((data) => {
+      const transformedMarkers: Marker[] = data.map((location) => ({
+        position: {
+          lat: Number(location.latitude),
+          lng: Number(location.longitude),
+        },
+        title: `${location.address}`,
+      }));
+  
+      setMarkers((prevMarkers) => [...prevMarkers, ...transformedMarkers]);
+    });
+  }, []);
+  
 
   useEffect(() => {
     apiProduct
@@ -49,15 +73,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    // Activa la animación después de montar el componente
-    setTimeout(() => setReveal(true), 1000);
-  }, []);
-
-  useEffect(() => {
     apiCategory.listCategories().then((categories) => {
       setCategories(categories);
     });
   }, []);
+
+  console.log(markers);
 
   return (
     <div className="flex-column">
@@ -137,15 +158,9 @@ export default function Home() {
           colombianos, destacando la riqueza cultural y las tradiciones de las
           diferentes regiones del país.
         </p>
-        <Suspense fallback={<Loading />}>
-          <section className="mapa">
-            <div id="gmap">
-              <Wrapper apiKey={"API_KEY"} render={render}>
-                <Map />
-              </Wrapper>
-            </div>
-          </section>
-        </Suspense>
+        <div>
+          <Map apiKey="AIzaSyB_PLx3pSl3r7czt8aoIjzb0hoUi65XcA8" center={center} zoom={12} markers={markers} />
+        </div>
       </section>
 
       <section id="contact" className="section has-img-bg pb-0">
