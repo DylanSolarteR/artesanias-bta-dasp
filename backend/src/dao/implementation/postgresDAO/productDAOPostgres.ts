@@ -23,16 +23,16 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     product.categoryId
                 ]
             })
-
             if (res.rowCount === 1) {
                 const createdProduct = new Product(
-                    res.rows[0].fk_id_base_product,
                     res.rows[0].name,
                     res.rows[0].description,
+                    null,
+                    res.rows[0].fk_category,
+                    res.rows[0].fk_id_base_product,
                     res.rows[0].price,
                     res.rows[0].image,
                     res.rows[0].isActive,
-                    res.rows[0].fk_category,
                     res.rows[0].pk_id
                 )
                 console.log(createdProduct)
@@ -95,7 +95,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
         const query = ` UPDATE product 
                         SET 
                             active = 'false'
-                        WHERE id = $1
+                        WHERE pk_id = $1
                         RETURNING *
                     `;
 
@@ -125,13 +125,13 @@ export class ProductDAOPostgres implements IDAO<Product> {
     async update(product: Product): Promise<boolean> {
         const query = ` UPDATE product 
                         SET 
-                            base_product_id = $1,
+                            fk_id_base_product = $1,
                             name = $2,
                             description = $3,
                             price = $4,
-                            img = $5,
-                            category_id = $6
-                        WHERE id = $7
+                            image = $5,
+                            fk_category = $6
+                        WHERE pk_id = $7
                         RETURNING *
                     `;
 
