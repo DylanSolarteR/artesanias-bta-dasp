@@ -121,7 +121,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
 
             return new ObjectResponse(true, inventories, null);
         } catch (e) {
-            return new ObjectResponse(false, null, "Fuera imposible obtener el inventario");
+            return new ObjectResponse(false, null, "Fue imposible obtener el inventario");
         }
     }
 
