@@ -13,8 +13,8 @@ POST http://localhost:3200/api/auth/singin
 Content-Type: application/json
 
 {
-    "userId": 6,
-    "password": "0 James Soliban" 
+    "userId": 2,
+    "password": "asdsd" 
 }
 
 ###
