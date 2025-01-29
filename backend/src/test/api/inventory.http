@@ -3,7 +3,9 @@ http://localhost:3200/api/inventory/list
 Authorization: barer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2FzIiwibGFzdE5hbWUiOiJOb2JsZSIsInRlbGVwaG9uZSI6IjExMjMiLCJyb2xlIjoiYWRtaW5pc3RyYXRvciIsImxvY2F0aW9uSWQiOm51bGwsImlkIjoxLCJpYXQiOjE3MzI3NzA4NDksImV4cCI6MTczMjc3ODA0OX0.z7r1x_-RLfJpcnr4t8OFQg1lXgI_D3Ynh3LdG2lFSsg
 
 ###Consultar el inventario 
-
 http://localhost:3200/api/inventory/list?id=1
 
+##Consultar el inventario 1
+GET http://localhost:3200/api/inventory/list?id=1
+Content-Type: application/json
 Authorization: barer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiR2FzIiwibGFzdE5hbWUiOiJOb2JsZSIsInRlbGVwaG9uZSI6IjExMjMiLCJyb2xlIjoiYWRtaW5pc3RyYXRvciIsImxvY2F0aW9uSWQiOm51bGwsImlkIjoxLCJpYXQiOjE3MzI3NzA4NDksImV4cCI6MTczMjc3ODA0OX0.z7r1x_-RLfJpcnr4t8OFQg1lXgI_D3Ynh3LdG2lFSsg
