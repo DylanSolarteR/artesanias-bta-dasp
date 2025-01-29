@@ -59,9 +59,9 @@ export async function singIn(req: Request, res: Response) {
 export async function singUp(req: Request, res: Response) {
 
     const userRole: employeeRoles = req['user_role']; //Require identifyRole middleware
-    let { name, lastName, telephone, role, locationId, docType, docNumber } = req.body;
+    let { name, lastName, email, telephone, role, locationId, docType, docNumber } = req.body;
 
-    if (!name || !lastName || !telephone || !role || !docType || !docNumber) {
+    if (!name || !lastName || !email || !telephone || !role || !docType || !docNumber) {
         res.status(400).send('Todos los campos son requeridos')
         return
     }
@@ -81,12 +81,14 @@ export async function singUp(req: Request, res: Response) {
     const newEmployee = new Employee(
         name,
         lastName,
+        email,
         telephone,
         role,
         await hashPassword(`${locationId ?? 0} ${name} ${lastName}`),
         locationId,
         docType,
-        docNumber
+        docNumber,
+        true
     )
 
     let insertResult = await dao.create(newEmployee)
@@ -96,7 +98,6 @@ export async function singUp(req: Request, res: Response) {
     }
 
     let employee = insertResult.value
-    console.log('final:', employee)
 
     res.status(200).send({ createdEmployee: employee.getSecureEmployee() })
 }
@@ -105,38 +106,4 @@ export async function getRole(req: Request, res: Response) {
 
     const userRole = req['user_role']; //Require identifyRole middleware
     res.status(200).send({ role: userRole });
-}
-
-export async function updateUser(req: Request, res: Response) {
-
-    let id, idpl, name, lastname, telephone, role, password, doctype, identification;
-
-    const dao = new EmployeeDAOPostgres();
-    try {
-        ({ id, idpl, name, lastname, telephone, role, password, doctype, identification } = req.body);
-    }
-    catch (e) {
-        res.status(400).send('Campos invalidos')
-        return
-    }
-
-    const newEmployee = new Employee(
-        id,
-        idpl,
-        name,
-        lastname,
-        telephone,
-        role,
-        password,
-        doctype,
-        identification
-    )
-
-    let insertResult = await dao.update(newEmployee)
-    if (insertResult == false) {
-        res.status(500).send("Error")
-        return
-    }
-
-    res.status(200).send("Usuario actualizado")
 }

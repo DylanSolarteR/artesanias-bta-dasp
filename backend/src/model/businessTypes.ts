@@ -70,12 +70,14 @@ export class Employee {
     constructor(
         public name: string,
         public lastName: string,
+        public email: string,
         public telephone: string,
         public role: employeeRoles,
         public hashedPassword: string,
         public locationId: number | null,
         public docType: docTypes,
         public docNumber: string,
+        public active: boolean,
         private _id?: number
     ) {
         // Validate role in runtime

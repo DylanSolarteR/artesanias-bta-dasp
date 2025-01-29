@@ -35,7 +35,6 @@ export async function createProduct(req: Request, res: Response) {
     }
 
     let product = insertResult.value
-    console.log('final:', product)
 
     res.status(200).send({ product })
 }

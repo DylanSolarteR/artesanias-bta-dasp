@@ -31,7 +31,6 @@ export async function createInventory(req: Request, res: Response) {
     }
 
     let inventory = insertResult.value
-    console.log('final:', inventory)
 
     res.status(200).send({ inventory })
 }
