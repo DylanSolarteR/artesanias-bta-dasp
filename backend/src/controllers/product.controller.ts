@@ -1,31 +1,39 @@
 import { Request, Response } from 'express';
 import { ProductDAOPostgres } from '../dao/implementation/postgresDAO/productDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
-import { Product } from '../model/businessTypes';
+import { employeeRoles, Product } from '../model/businessTypes';
 
 
 export async function createProduct(req: Request, res: Response) {
 
-    let baseProductId, name, description, price, img, isActive, category_id, categoryName;
+    const userRole = req['user_role'];
 
-    const dao = new ProductDAOPostgres();
-    try {
-        ({ baseProductId, name, description, price, img, isActive, category_id, categoryName } = req.body);
+    if (userRole !== employeeRoles.administrator) {
+        res.status(401).send('Es necesario ser administrador para crear un producto')
+        return
     }
-    catch (e) {
-        res.status(400).send('baseProductId, name, description, price, img, state and category_id are required')
+
+    let { name, description, price, img, categoryId, baseProductId, isOwnBase } = req.body;
+    const dao = new ProductDAOPostgres();
+    if (!name || !description || !price || !img || !categoryId) {
+        res.status(400).send('Los campos nombre, descripcion, precio, imagen y categoria son requeridos')
+        return
+    }
+
+    if (!isOwnBase && !baseProductId) {
+        res.status(400).send('El campo baseProductId es requerido')
         return
     }
 
     const newProduct = new Product(
-        baseProductId,
         name,
         description,
+        null,
+        categoryId,
+        baseProductId,
         price,
         img,
-        isActive,
-        category_id,
-        categoryName
+        true
     )
 
     let insertResult = await dao.create(newProduct)
@@ -35,7 +43,15 @@ export async function createProduct(req: Request, res: Response) {
     }
 
     let product = insertResult.value
-    console.log('final:', product)
+
+    if (isOwnBase) {
+        product.baseProductId = product.id
+        const updateResult = await dao.update(product)
+        if (!updateResult) {
+            res.status(500).send("Error al establecer la base del producto")
+            return
+        }
+    }
 
     res.status(200).send({ product })
 }
@@ -69,6 +85,8 @@ export async function listProducts(req: Request, res: Response) {
         filters.push(new Filter('product.fk_id_base_product',
             <string>req.query['baseid'], matchType.strictEqual));
     }
+
+    filters.push(new Filter('product.active', true, matchType.strictEqual))
 
     let sorts = []
     if (query.hasOwnProperty('orderBy')) {
@@ -112,32 +130,40 @@ export async function listProducts(req: Request, res: Response) {
 }
 
 export async function updateProduct(req: Request, res: Response) {
+    const userRole = req['user_role'];
 
-    let id, baseProductId, name, description, price, img, category_id, categoryName;
-
-    const dao = new ProductDAOPostgres();
-    try {
-        ({ id, baseProductId, name, description, price, img, category_id } = req.body);
-    }
-    catch (e) {
-        res.status(400).send('Campos invalidos')
+    if (userRole !== employeeRoles.administrator) {
+        res.status(401).send('Es necesario ser administrador para actualizar un producto')
         return
     }
 
-    const newProduct = new Product(
-        id,
-        baseProductId,
-        name,
-        description,
-        price,
-        img,
-        category_id,
-        categoryName
-    )
+    let { id, baseProductId, name, description, price, img, categoryId } = req.body;
 
-    let insertResult = await dao.update(newProduct)
-    if (insertResult == false) {
-        res.status(500).send("Error")
+    const dao = new ProductDAOPostgres();
+    if (!id) {
+        res.status(400).send('El campo id es requerido')
+        return
+    }
+
+    const productRes = await dao.query(new Criteria({
+        filters: [new Filter('product.pk_id', id, matchType.strictEqual)]
+    }))
+    if (!productRes.hasResponse()) {
+        res.status(500).send("Error interno al identificar el producto")
+        return
+    }
+    const product = productRes.value[0]
+
+    product.baseProductId = baseProductId ?? product.baseProductId
+    product.name = name ?? product.name
+    product.description = description ?? product.description
+    product.price = price ?? product.price
+    product.img = img ?? product.img
+    product.categoryId = categoryId ?? product.categoryId
+
+    let updateResult = await dao.update(product)
+    if (updateResult == false) {
+        res.status(500).send("Error interno al actualizar el producto")
         return
     }
 
@@ -146,25 +172,34 @@ export async function updateProduct(req: Request, res: Response) {
 
 export async function deleteProduct(req: Request, res: Response) {
 
-    let id, baseProductId, name, description, price, img, category_id, categoryName;
+    const userRole = req['user_role'];
 
+    if (userRole !== employeeRoles.administrator) {
+        res.status(401).send('Es necesario ser administrador para eliminar un producto')
+        return
+    }
 
     const dao = new ProductDAOPostgres();
 
-    const newProduct = new Product(
-        id,
-        baseProductId,
-        name,
-        description,
-        price,
-        img,
-        category_id,
-        categoryName
-    )
+    const productRes = await dao.query(new Criteria({
+        filters: [new Filter('product.pk_id', req.params.id, matchType.strictEqual)]
+    }))
 
-    let insertResult = await dao.delete(newProduct)
+    if (!productRes.hasResponse()) {
+        res.status(500).send("Error interno al identificar el producto")
+        return
+    }
+
+    if (productRes.value.length !== 1) {
+        res.status(500).send("Producto no encontrado")
+        return
+    }
+
+    const toDeleteProduct = productRes.value[0]
+
+    let insertResult = await dao.delete(toDeleteProduct)
     if (insertResult == false) {
-        res.status(500).send("Error")
+        res.status(500).send("No se pudo eliminar el producto")
         return
     }
 
