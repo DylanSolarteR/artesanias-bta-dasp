@@ -6,16 +6,17 @@ import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 import { PRODUCT } from "@/types/product.types";
 import * as apiProduct from "@/api/product.api";
+import Product from "@/app/(non-protected)/(with-navbar)/(without-sidebar)/producto/[id]/page";
 
 function ConsultProducts({ products_table }: { products_table: PRODUCT[] }) {
   const router = useRouter();
 
-  const handleDelete = (id: number) => {
-    apiProduct.deleteProduct(String(id));
+  const handleDelete = (id: number, product: PRODUCT) => {
+    apiProduct.deleteProduct(String(id), product);
   };
 
   const handleUpdate = (id: number) => {
-    router.push(`/productos/modificar/${id}`);
+    router.push(`productos/editar/${id}`);
   };
 
   return (
@@ -60,7 +61,7 @@ function ConsultProducts({ products_table }: { products_table: PRODUCT[] }) {
                         height={30}
                       />
                     </button>
-                    <button onClick={() => handleDelete(product._id)}>
+                    <button onClick={() => handleDelete(product._id, product)}>
                       <Image
                         src={DeleteIcon}
                         alt="delete"

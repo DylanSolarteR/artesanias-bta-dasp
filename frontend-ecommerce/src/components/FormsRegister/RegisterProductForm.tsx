@@ -3,15 +3,17 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import * as apiCategory from "@/api/category.api";
 import defaultImage from "@/app/icons/BagsadIcon.png";
+import { onlyNumberInput } from "@/util/utils";
 
-function RegisterProductForm() {
-  const [productBase, setProductBase] = useState<string>("A");
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [price, setPrice] = useState<number>();
+function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (data: any) => void }) {
+  const [productBase, setProductBase] = useState<number>(product?.baseProductId || "");
+  const [name, setName] = useState<string>(product?.name || "");
+  const [description, setDescription] = useState<string>(product?.description || "");
+  const [price, setPrice] = useState<number>(product?.price || "");
   const [image, setImage] = useState<string | null>(null);
-  const [active, setActive] = useState<Boolean>(true);
-  const [category, setCategory] = useState<string>();
+  const [active, setActive] = useState<Boolean>(product?.isActive || true);
+  const [categoryId, setCategoryId] = useState<string>(product?.categoryId || "");
+  const [category, setCategory] = useState<string>(product?.categoryName || "");
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -19,6 +21,13 @@ function RegisterProductForm() {
       setCategories(categories);
     });
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setImage("imagen de prueba.png")
+    console.log(productBase, name, description, price, image, active, categoryId, category);
+    onSubmit({ productBase, name, description, price, image, active, categoryId, category });
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -37,18 +46,8 @@ function RegisterProductForm() {
     <div className="container-dashboard">
       <div className="main-center">
         <div className="container-inf-step">
-          <form className="form-inf-buy" onSubmit={(e) => e.preventDefault()}>
+          <form className="form-inf-buy" onSubmit={handleSubmit}>
             <h1>Registrar Productos</h1>
-
-            <label htmlFor="productBase">Variable del producto: </label>
-            <select
-              className="input-standard"
-              value={productBase}
-              name="productBase"
-              onChange={(e) => setProductBase(e.target.value)}
-            >
-              <option value="A">Ni idea de como funciona esto</option>
-            </select>
 
             <label htmlFor="name">Nombre del producto: </label>
             <input
@@ -74,17 +73,22 @@ function RegisterProductForm() {
               type="number"
               value={price}
               name="price"
-              min="0"
-              step="1"
+              onKeyDown={onlyNumberInput}
               onChange={(e) => setPrice(Number(e.target.value))}
             />
 
             <label htmlFor="category">Categoría: </label>
             <select
               className="input-standard"
-              value={category}
+              value={categoryId}
               name="category"
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => {
+                const selectedCategory = categories.find(cat => cat.id == e.target.value);
+                if (selectedCategory) {
+                  setCategoryId(selectedCategory.id);
+                  setCategory(selectedCategory.name);
+                }
+              }}
             >
               <option value="">Selecciona una categoría</option>
               {categories.map((cat) => (
@@ -94,7 +98,17 @@ function RegisterProductForm() {
               ))}
             </select>
 
-            <label htmlFor="active">Estado: </label>
+            <label htmlFor="productBase">Variante del producto: </label>
+            <input
+              className="input-standard"
+              type="number"
+              value={productBase}
+              name="productBase"
+              onKeyDown={onlyNumberInput}
+              onChange={(e) => setProductBase(Number(e.target.value))}
+            />
+
+            {/* <label htmlFor="active">Estado: </label>
             <select
               className="input-standard"
               value={active ? "true" : "false"}
@@ -103,7 +117,7 @@ function RegisterProductForm() {
             >
               <option value="true">Activado</option>
               <option value="false">Desactivado</option>
-            </select>
+            </select>*/}
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-4">
               <div className="w-full md:w-1/2 flex justify-center">
@@ -143,7 +157,7 @@ function RegisterProductForm() {
               </div>
             </div>
 
-            <button id="button-standard" type="submit">Registrar Producto</button>
+            <button id="button-standard" type="submit">Guardar</button>
 
           </form>
         </div>

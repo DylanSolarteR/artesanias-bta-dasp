@@ -12,6 +12,21 @@ type productFilters = {
     nameProd?: string,
 }
 
+export async function createProduct(product: PRODUCT) {
+    try {
+        const response = await AxiosInstance.post('/product', product, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        return response.data;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            throw err;
+        }
+    }
+}
+
 export async function listProducts({
     orderBy,
     category = null,
@@ -105,9 +120,24 @@ export async function getProductsByBaseId(baseid: number) {
     }
 }
 
-export async function deleteProduct(id: string) {
+export async function updateProduct(product: PRODUCT, id: string) {
     try {
-        const response = await AxiosInstance.delete(`/${id}`, {
+        const response = await AxiosInstance.put(`product/${id}`, product, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        return response.data;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            throw err;
+        }
+    }
+}
+
+export async function deleteProduct(id: string, product: PRODUCT) {
+    try {
+        const response = await AxiosInstance.delete(`product/delete/${id}`, product, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
