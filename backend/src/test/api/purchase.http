@@ -9,13 +9,13 @@ Content-Type: application/json
         "email": "elpepe@gmail.com",
         "name": "Pedro Sanchez",
         "docType": "CC",
-        "identification": "10005",
-        "telephone": "312"
+        "identification": "0005",
+        "telephone": "0312"
     },
     "addressData": {
         "departmentId": 1,
         "deliveryAddress": "Carrera del pepe",
-        "zipCode": "12399"
+        "zipCode": "0102"
     }, 
     "productList": [
         {
@@ -24,10 +24,6 @@ Content-Type: application/json
         },
         {
             "id": 2,
-            "quantity": 3
-        },
-        {
-            "id": 3,
             "quantity": 3
         }
     ]
