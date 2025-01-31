@@ -61,7 +61,7 @@ Content-Type: application/json
         },
         {
             "id": 3,
-            "quantity": 3
+            "quantity": "3"
         }
     ]
 }
@@ -114,4 +114,34 @@ Content-Type: application/json
 
 {
     "purchaseId": 2
+}
+
+###
+# token del cajero
+@token = token
+
+### Compra en POS
+POST http://localhost:3200/api/purchase/pos-purchase
+Content-Type: application/json
+Authorization: Barer {{token}}
+
+{
+    "basicUserData": {
+        "email": "a@a.com",
+        "name": "james",
+        "docType": "CC",
+        "identification": "123456789012345",
+        "telephone": "11"
+    },
+    "productList": [
+        {
+            "id": 1,
+            "quantity": 3
+        },
+        {
+            "id": 2,
+            "quantity": 3
+        }
+    ],
+    "locationId": 1
 }
