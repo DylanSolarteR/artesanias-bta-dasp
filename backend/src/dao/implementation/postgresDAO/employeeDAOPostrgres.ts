@@ -110,7 +110,7 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
     async update(employee: Employee): Promise<boolean> {
         let query = `UPDATE employee ` +
             `SET fk_physical_location=$2, name=$3, last_name=$4, email=$5, ` +
-            `telephone=$6, role=$7, active=$8 ` +
+            `telephone=$6, role=$7, active=$8, password = $9 ` +
             `WHERE pk_id = $1`
         try {
             let pool = await PostgresConnection.getInstance().getPool()
@@ -124,7 +124,8 @@ export class EmployeeDAOPostgres implements IDAO<Employee> {
                     employee.email,
                     employee.telephone,
                     employee.role,
-                    employee.active
+                    employee.active,
+                    employee.hashedPassword
                 ]
             })
 
