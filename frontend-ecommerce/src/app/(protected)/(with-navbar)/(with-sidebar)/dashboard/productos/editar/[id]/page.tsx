@@ -16,32 +16,43 @@ function EditProductPage() {
 
   useEffect(() => {
     if (id) {
-      apiProduct.getProductById(Number(id)).then((data) => {
-        setProductData(data);
-        setLoading(false);
-      }).catch(() => {
-        router.push("/dashboard/productos"); 
-      });
+      apiProduct
+        .getProductById(Number(id))
+        .then((data) => {
+          setProductData(data);
+          setLoading(false);
+        })
+        .catch(() => {
+          router.push("/dashboard/productos");
+        });
     }
   }, [id]);
 
   const handleSubmit = async (data) => {
-    await apiProduct.updateProduct(Number(id), data.baseProductId, data.name, data.description, data.price, data.img, data.categoryId);
-    router.push("/dashboard/productos"); 
+    await apiProduct.updateProduct(
+      Number(id),
+      data.baseProductId,
+      data.name,
+      data.description,
+      data.price,
+      data.img,
+      data.categoryId
+    );
+    router.push("/dashboard/productos");
   };
+
+  useEffect(() => {
+    if (role && !hasPermission(role, "view:products")) {
+      router.push("/POS");
+    }
+  }, [role, router]);
 
   return !role ? (
     <Loading />
+  ) : loading ? (
+    <Loading />
   ) : (
-    <>
-      {!hasPermission(role, "view:products") ? (
-        router.push("/POS")
-      ) : loading ? (
-        <Loading />
-      ) : (
-        <RegisterProduct onSubmit={handleSubmit} product={productData} />
-      )}
-    </>
+    <RegisterProduct onSubmit={handleSubmit} product={productData} />
   );
 }
 

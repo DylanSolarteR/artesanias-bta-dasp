@@ -7,11 +7,19 @@ import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 import { PRODUCT } from "@/types/product.types";
 import * as apiProduct from "@/api/product.api";
 
-function ConsultProducts({ products_table }: { products_table: PRODUCT[] }) {
+interface ConsultProductsProps {
+  products_table: PRODUCT[];
+  deleteProduct: (id: number) => void;
+}
+
+function ConsultProducts({
+  products_table,
+  deleteProduct,
+}: ConsultProductsProps) {
   const router = useRouter();
 
-  const handleDelete = (id: number, product: PRODUCT) => {
-    apiProduct.deleteProduct(String(id), product);
+  const handleDelete = (id: number) => {
+    deleteProduct(id);
   };
 
   const handleUpdate = (id: number) => {
@@ -43,34 +51,36 @@ function ConsultProducts({ products_table }: { products_table: PRODUCT[] }) {
 
           <tbody>
             {products_table.length !== 0 ? (
-              products_table.map((product) => (
-                <tr key={product._id} className="text-center">
-                  <td>{product._id}</td>
-                  <td>{product.baseProductId}</td>
-                  <td>{product.name}</td>
-                  <td>{product.description}</td>
-                  <td>{product.price}</td>
-                  <td>{product.categoryName}</td>
-                  <td>
-                    <button onClick={() => handleUpdate(product._id)}>
-                      <Image
-                        src={UpdateIcom}
-                        alt="update"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                    <button onClick={() => handleDelete(product._id, product)}>
-                      <Image
-                        src={DeleteIcon}
-                        alt="delete"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                  </td>
-                </tr>
-              ))
+              products_table.map((product) =>
+                product.isActive ? (
+                  <tr key={product._id} className="text-center">
+                    <td>{product._id}</td>
+                    <td>{product.baseProductId}</td>
+                    <td>{product.name}</td>
+                    <td>{product.description}</td>
+                    <td>{product.price}</td>
+                    <td>{product.categoryName}</td>
+                    <td>
+                      <button onClick={() => handleUpdate(product._id)}>
+                        <Image
+                          src={UpdateIcom}
+                          alt="update"
+                          width={30}
+                          height={30}
+                        />
+                      </button>
+                      <button onClick={() => handleDelete(product._id)}>
+                        <Image
+                          src={DeleteIcon}
+                          alt="delete"
+                          width={30}
+                          height={30}
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                ) : null
+              )
             ) : (
               <tr className="text-center">
                 <td colSpan={7}>No se encontraron productos</td>

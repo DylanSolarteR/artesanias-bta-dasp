@@ -8,7 +8,7 @@ export function verifyAuth(req: Request, res: Response, next: NextFunction) {
 
     let token;
     try {
-        token = req.headers.authorization.split(' ')[1];
+        token = req.headers.authorization?.split(' ')[1];
     } catch (error) {
         res.status(401).send('Auth token is required for the query')
         return

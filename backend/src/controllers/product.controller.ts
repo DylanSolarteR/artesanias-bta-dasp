@@ -114,7 +114,7 @@ export async function listProducts(req: Request, res: Response) {
     let result = await dao.query(new Criteria({
         filters,
         sortBy: sorts,
-        limit: query['limit'] || 50,
+        limit: query['limit'] || null,
         offset: query['offset'] || null
 
     }));
@@ -134,7 +134,7 @@ export async function updateProduct(req: Request, res: Response) {
 
     if (userRole !== employeeRoles.administrator) {
         res.status(401).send('Es necesario ser administrador para actualizar un producto')
-        
+
         return
     }
 
@@ -209,6 +209,5 @@ export async function deleteProduct(req: Request, res: Response) {
         res.status(500).send("No se pudo eliminar el producto")
         return
     }
-
     res.status(200).send("Producto eliminado")
 }   

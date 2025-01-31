@@ -14,27 +14,38 @@ function Page() {
 
   const [product_table, setProducts_table] = useState<PRODUCT[]>([]);
 
+  function deleteProduct(id: number) {
+    apiProduct.deleteProduct(String(id));
+    const newProducts = product_table.filter((product) => product._id !== id);
+    setProducts_table(newProducts);
+  }
+
   useEffect(() => {
-      apiProduct
-        .getlistProducts({ orderBy: ["price", "desc"] })
-        .then((products) => {
-            setProducts_table(products);
-        })
-        .catch((error) => {
-          console.error("Error al obtener productos:", error);
-        });
-    }, []);
+    apiProduct
+      .getlistProducts({ orderBy: ["price", "desc"] })
+      .then((products) => {
+        setProducts_table(products);
+      })
+      .catch((error) => {
+        console.error("Error al obtener productos:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (role && !hasPermission(role, "view:products")) {
+      router.push("/POS");
+    }
+  }, [role, router]);
 
   return !role ? (
     <Loading />
   ) : (
     <>
-      {!hasPermission(role, "view:products") ? (
-        router.push("/POS")
-      ) : (
-        <>
-          <ConsultProducts products_table={product_table} />
-        </>
+      {hasPermission(role, "view:products") && (
+        <ConsultProducts
+          products_table={product_table}
+          deleteProduct={deleteProduct}
+        />
       )}
     </>
   );
