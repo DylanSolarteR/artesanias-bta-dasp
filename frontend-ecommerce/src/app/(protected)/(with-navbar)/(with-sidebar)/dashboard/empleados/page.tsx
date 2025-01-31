@@ -1,17 +1,19 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConsultEmployees from "@/components/TableConsult/consultEmployees";
 import { useMainContext } from "@/app/context/MainContext";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { hasPermission } from "@/util/RolePermissions";
 import { EMPLOYEE } from "@/types/employee.types";
+import * as apiProduct from "@/api/employees.api";
 
 function Page() {
   const { role } = useMainContext();
   const router = useRouter();
 
   const [employees_table, setEmployees_table] = useState<EMPLOYEE[]>([]);
+
 
   return !role ? (
     <Loading />
