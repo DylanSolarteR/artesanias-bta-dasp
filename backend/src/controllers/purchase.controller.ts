@@ -12,26 +12,36 @@ const docTypeValues = Object.values(docTypes) as [string, ...string[]]
 
 const basicUserDataSchema = z.object({
     email: z.string().email({ message: 'Email inválido' }),
-    name: z.string({ message: 'Nombre inválido' })
+    name: z.string({ message: 'Nombre inválido' }).trim()
         .nonempty({ message: 'Nombre vacio' })
         .min(3, 'Nombre inválido'),
     docType: z.enum(docTypeValues, {
         message: 'Tipo de documento inválido'
     }),
-    identification: z.coerce.string()
-        .regex(/^\d+$/, { message: 'La identificación inválida' })
-        .refine(value => parseInt(value) > 0, { message: 'La identificación debe ser mayor a 0' })
-        .and(z.string().min(1, { message: 'Identificación inválida' })
-            .max(15, { message: 'Identificación inválida' })),
-    telephone: z.coerce.string()
-        .regex(/^\d+$/, { message: 'Teléfono inválido' })
-        .refine(value => parseInt(value) > 0, { message: 'El teléfono debe ser mayor a 0' })
+    identification: z.preprocess(value => String(value).replace(/^0+/g, ''),
+        z.string()
+            .regex(/^\d+$/, { message: 'La identificación inválida' })
+            .refine(value => parseInt(value) > 0, { message: 'La identificación debe ser mayor a 0' })
+            .and(z.string().min(1, { message: 'Identificación inválida' })
+                .max(15, { message: 'Identificación inválida' }))
+    ),
+    telephone: z.preprocess(value => String(value).replace(/^0+/g, ''),
+        z.string()
+            .regex(/^\d+$/, { message: 'Teléfono inválido' })
+            .refine(value => parseInt(value) > 0, { message: 'El teléfono debe ser mayor a 0' })
+    )
 });
 
 const addressDataSchema = z.object({
-    departmentId: z.number(),
-    deliveryAddress: z.string(),
-    zipCode: z.string()
+    departmentId: z.number({ message: 'El id del departamento es requerido' }).min(1),
+    deliveryAddress:
+        z.string({ message: 'Dirección inválida' }).trim()
+            .min(5, { message: 'La dirección tiene un largo minimo de 5 carácteres' })
+            .max(55, { message: 'La dirección tiene un largo maximo de 55 carácteres' }),
+    zipCode: z.preprocess(value => String(value).replace(/^0+/g, ''),
+        z.string()
+            .regex(/^\d+$/, { message: 'Código postal inválido' })
+            .refine(value => parseInt(value) > 0, { message: 'El código postal debe ser mayor a 0' }))
 });
 
 const productSchema = z.object({
@@ -39,6 +49,11 @@ const productSchema = z.object({
     quantity: z.number({ message: 'La cantidad del producto es requerida' }).min(1)
 });
 
+const ecommercePurchaseSchema = z.object({
+    basicUserData: basicUserDataSchema,
+    addressData: addressDataSchema,
+    productList: z.array(productSchema)
+});
 
 const posPurchaseSchema = z.object({
     basicUserData: basicUserDataSchema,
@@ -48,21 +63,22 @@ const posPurchaseSchema = z.object({
 
 export async function initializePurchase(req: Request, res: Response) {
     try {
-        let { basicUserData, addressData, productList } = req.body as {
-            basicUserData: any; // Cambia `any` al tipo correspondiente
-            addressData: any; // Cambia `any` al tipo correspondiente
-            productList: Array<{ id: number; quantity: number }>;
-        };
+        const validateResult = ecommercePurchaseSchema.safeParse(req.body)
 
-        if (!Purchase.validateDocType(basicUserData.docType)) {
-            res.status(400).send('Tipo de documento invalido.')
+        if (!validateResult.success) {
+            console.log(validateResult.error.errors[0].path)
+            const errors = validateResult.error.errors.map((error) => `${error.message}`)
+            res.status(400).send('Los datos enviados no son correctos.\n' + errors.join('\n'))
             return
         }
+
+        let { basicUserData, addressData, productList } = validateResult.data
+
         let purchase = new EcommercePurchase(
             new Date(),
             basicUserData.email,
             basicUserData.name,
-            basicUserData.docType,
+            basicUserData.docType as docTypes,
             basicUserData.identification,
             basicUserData.telephone,
             null,
