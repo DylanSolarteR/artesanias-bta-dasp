@@ -1,5 +1,6 @@
-import { useActionState, useState, useEffect, ChangeEvent } from "react";
-import { loginAuth } from "@/api/auth.api";
+"use client";
+import "@/app/css/Buy.css";
+import { useState, ChangeEvent } from "react";
 import Image from "next/image";
 import StripeLogo from "@/app/icons/StripeLogo.svg?url";
 import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
@@ -8,7 +9,12 @@ import GroupIcon from "@/app/icons/GroupIcon.svg";
 import UserIcon from "@/app/icons/UserIcon.svg";
 import CheckIcon from "@/app/icons/TickcircleIcon.svg";
 import toast from "react-hot-toast";
-import "@/app/css/Buy.css";
+import { PurchaseDataScheme } from "@/util/validation";
+import { docTypes } from "@/types/purchase.types";
+import { noAccents, onlyNumberInput } from "@/util/utils";
+import { useCart } from "@/app/context/CartContext";
+import { completePurchase, initializePurchase } from "@/api/purchase.api";
+import { useRouter } from "next/navigation";
 
 const steps = [
   { Icon: <UserIcon />, step: 1 },
@@ -17,22 +23,90 @@ const steps = [
 ];
 
 function PurchaseDataForm() {
+  const { cart, flushCart } = useCart();
+  const router = useRouter();
+
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [documentType, setDocumentType] = useState<string>("");
+  const [documentType, setDocumentType] = useState<docTypes>(docTypes.cc);
   const [documentNum, setDocumentNum] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [department, setDepartment] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [zip, setZip] = useState<string>("");
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("mercadopago");
 
   const [activeStep, setActiveStep] = useState(1);
   const totalSteps = 3; // Número total de pasos
-  const nextStep = () => setActiveStep(activeStep + 1);
-  const prevStep = () => setActiveStep(activeStep - 1);
+  const nextStep = () => {
+    if (activeStep < totalSteps) {
+      setActiveStep((prev) => prev + 1);
+    }
+  };
+  const prevStep = () => {
+    if (activeStep > 1) {
+      setActiveStep((prev) => prev - 1);
+    }
+  };
   const progressPercentage = ((activeStep - 1) / (totalSteps - 1)) * 100;
+
+  async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (activeStep !== 3) return;
+
+    const basicUserData = {
+      email,
+      name: noAccents(name),
+      docType: documentType,
+      identification: documentNum,
+      telephone: phone,
+    };
+    const addressData = {
+      departmentId: 1,
+      deliveryAddress: address,
+      zipCode: zip,
+    };
+
+    const productList = cart.map((product) => {
+      return {
+        id: product.productId,
+        quantity: product.quantity,
+      };
+    });
+
+    const dataFields = {
+      name: noAccents(name),
+      email,
+      documentType,
+      documentNum,
+      address,
+      phone,
+      department,
+      city,
+      zip,
+      paymentMethod,
+    };
+
+    const data = { basicUserData, addressData, productList };
+
+    const result = PurchaseDataScheme.safeParse(dataFields);
+    if (paymentMethod === "") {
+      toast.error("Seleccione un método de pago");
+      return;
+    }
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
+      return;
+    }
+    const purchaseId = await initializePurchase(data);
+    await completePurchase(purchaseId);
+    toast.success("Compra realizada correctamente, redirigiendo...");
+    flushCart();
+    setTimeout(() => {
+      router.push("/catalogo");
+    }, 1500);
+  }
 
   return (
     <div className="main-container-buy">
@@ -64,7 +138,7 @@ function PurchaseDataForm() {
       </div>
 
       <div className="container-inf-step">
-        <form className="form-inf-buy" onSubmit={(e) => e.preventDefault()}>
+        <form className="form-inf-buy" onSubmit={handleSubmit}>
           {/* Paso 1: Datos personales */}
           {activeStep === 1 && (
             <>
@@ -86,13 +160,20 @@ function PurchaseDataForm() {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <label htmlFor="documentType">Tipo de Documento: </label>
-              <input
-                className="input-standard"
-                type="text"
-                value={documentType}
+              <select
                 name="documentType"
-                onChange={(e) => setDocumentType(e.target.value)}
-              />
+                id="input-standard"
+                defaultValue={documentType}
+                onChange={(e) => {
+                  setDocumentType(e.target.value as docTypes);
+                }}
+              >
+                {Object.values(docTypes).map((docType) => (
+                  <option key={docType} value={docType}>
+                    {docType}
+                  </option>
+                ))}
+              </select>
               <label htmlFor="documentNum">Número de Documento: </label>
               <input
                 className="input-standard"
@@ -100,6 +181,7 @@ function PurchaseDataForm() {
                 value={documentNum}
                 name="documentNum"
                 onChange={(e) => setDocumentNum(e.target.value)}
+                onKeyDown={onlyNumberInput}
               />
               <label htmlFor="phone">Teléfono: </label>
               <input
@@ -108,6 +190,7 @@ function PurchaseDataForm() {
                 value={phone}
                 name="phone"
                 onChange={(e) => setPhone(e.target.value)}
+                onKeyDown={onlyNumberInput}
               />
             </>
           )}
@@ -133,7 +216,7 @@ function PurchaseDataForm() {
                 onChange={(e) => setDepartment(e.target.value)}
               />
               <label htmlFor="city">Ciudad: </label>
-              <input 
+              <input
                 className="input-standard"
                 type="text"
                 value={city}
@@ -147,6 +230,7 @@ function PurchaseDataForm() {
                 value={zip}
                 name="zip"
                 onChange={(e) => setZip(e.target.value)}
+                onKeyDown={onlyNumberInput}
               />
             </>
           )}
@@ -155,7 +239,7 @@ function PurchaseDataForm() {
               {/* Paso 3: Datos de pago */}
               <h2>Método de pago</h2>
               <div className="flex-grid">
-                <label className="card">
+                {/* <label className="card">
                   <input
                     className="radio"
                     type="radio"
@@ -169,7 +253,7 @@ function PurchaseDataForm() {
                   <div className="plan-details">
                     <Image alt="Logo Stripe" src={StripeLogo} />
                   </div>
-                </label>
+                </label> */}
 
                 <label className="card">
                   <input
@@ -214,8 +298,11 @@ function PurchaseDataForm() {
               >
                 Siguiente
               </button>
-            ) : (
-              <button id="button-standard" type="submit">Proceder a la pasarela de pagos</button>
+            ) : null}
+            {activeStep === 3 && (
+              <button id="button-standard" type="submit">
+                Proceder a la pasarela de pagos
+              </button>
             )}
           </div>
         </form>
