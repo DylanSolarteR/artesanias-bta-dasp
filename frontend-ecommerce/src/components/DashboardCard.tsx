@@ -11,7 +11,7 @@ function DashboardCard({
   href: { title: string; href: string; icon: any }[];
 }) {
   return (
-    <div className="dashboard-card">
+    <div className="dashboard-card flex justify-center">
       {href.map((link, index) => (
         <Link key={index} href={link.href}>
           <div className="card-motion">
