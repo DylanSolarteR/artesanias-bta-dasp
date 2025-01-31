@@ -20,14 +20,15 @@ function EditProductPage() {
         setProductData(data);
         setLoading(false);
       }).catch(() => {
-        router.push("/productos"); 
+        router.push("/dashboard/productos"); 
       });
     }
   }, [id]);
 
   const handleSubmit = async (data) => {
-    await apiProduct.updateProduct(data, id);
-    router.push("/productos"); 
+    console.log(id)
+    await apiProduct.updateProduct(id, data.baseProductId, data.name, data.description, data.price, data.img, data.categoryId);
+    router.push("/dashboard/productos"); 
   };
 
   return !role ? (

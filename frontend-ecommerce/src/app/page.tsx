@@ -79,8 +79,6 @@ export default function Home() {
     });
   }, []);
 
-  console.log(markers);
-
   return (
     <div className="flex-column">
       <Navbar />

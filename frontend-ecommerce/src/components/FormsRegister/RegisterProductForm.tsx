@@ -6,32 +6,45 @@ import defaultImage from "@/app/icons/BagsadIcon.png";
 import { onlyNumberInput } from "@/util/utils";
 
 function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (data: any) => void }) {
-  const [productBase, setProductBase] = useState<number>(product?.baseProductId || "");
+  const [baseProductId, setProductBase] = useState<string>(product?.baseProductId || "");
   const [name, setName] = useState<string>(product?.name || "");
   const [description, setDescription] = useState<string>(product?.description || "");
   const [price, setPrice] = useState<number>(product?.price || "");
-  const [image, setImage] = useState<string | null>(null);
-  const [active, setActive] = useState<Boolean>(product?.isActive || true);
+  const [img, setImage] = useState<string>(product?.img || "");
+  const [isOwnBase, setOwnBase] = useState<Boolean>();
   const [categoryId, setCategoryId] = useState<string>(product?.categoryId || "");
   const [category, setCategory] = useState<string>(product?.categoryName || "");
   const [categories, setCategories] = useState([]);
 
+  // Para listar las categorías
   useEffect(() => {
     apiCategory.listCategories().then((categories) => {
       setCategories(categories);
     });
   }, []);
 
+  // Para enviar el formulario
   const handleSubmit = (e) => {
     e.preventDefault();
-    setImage("imagen de prueba.png")
-    console.log(productBase, name, description, price, image, active, categoryId, category);
-    onSubmit({ productBase, name, description, price, image, active, categoryId, category });
+
+    const newOwnBase = baseProductId === "" ? true : false;
+    const newBaseProductId = newOwnBase ? null : baseProductId;
+
+    setOwnBase(newOwnBase);
+
+    onSubmit({ name, description, price, img, categoryId, baseProductId: newBaseProductId, isOwnBase: newOwnBase });
   };
+
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      const maxSize = 75 * 1024; // Lo máximo que acepta es 75 KB en bytes (primer intento en la base de datos)
+      if (file.size > maxSize) {
+        alert("El tamaño de la imagen no puede ser mayor a 75 KB.");
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (event) => {
         if (typeof event.target?.result === "string") {
@@ -102,31 +115,21 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
             <input
               className="input-standard"
               type="number"
-              value={productBase}
+              value={baseProductId}
               name="productBase"
               onKeyDown={onlyNumberInput}
-              onChange={(e) => setProductBase(Number(e.target.value))}
+              onChange={(e) => setProductBase(e.target.value)}
             />
-
-            {/* <label htmlFor="active">Estado: </label>
-            <select
-              className="input-standard"
-              value={active ? "true" : "false"}
-              name="active"
-              onChange={(e) => setActive(e.target.value === "true")}
-            >
-              <option value="true">Activado</option>
-              <option value="false">Desactivado</option>
-            </select>*/}
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-4">
               <div className="w-full md:w-1/2 flex justify-center">
                 <div className="relative w-[300px] h-[300px]">
                   <Image
-                    src={image || defaultImage}
+                    src={img || defaultImage}
                     alt="Seleccionada"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    style={{ objectFit: "cover" }}
                     className="rounded-lg border-2 border-gray-300 shadow-md"
                   />
                 </div>
@@ -149,7 +152,7 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
                 >
                   Subir imagen
                 </label>
-                {image && (
+                {img && (
                   <p className="mt-4 text-gray-600">
                     Has subido una imagen con éxito. Puedes cambiarla seleccionando otra.
                   </p>

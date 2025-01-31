@@ -14,7 +14,7 @@ function Page() {
     try {
       await apiProduct.createProduct(data);
       console.log("Producto creado:", data);
-      router.push("/productos");
+      router.push("/dashboard/productos");
     } catch (error) {
       console.error("Error al crear producto:", error);
     }
