@@ -26,8 +26,7 @@ function EditProductPage() {
   }, [id]);
 
   const handleSubmit = async (data) => {
-    console.log(id)
-    await apiProduct.updateProduct(id, data.baseProductId, data.name, data.description, data.price, data.img, data.categoryId);
+    await apiProduct.updateProduct(Number(id), data.baseProductId, data.name, data.description, data.price, data.img, data.categoryId);
     router.push("/dashboard/productos"); 
   };
 

@@ -130,9 +130,11 @@ export async function listProducts(req: Request, res: Response) {
 
 export async function updateProduct(req: Request, res: Response) {
     const userRole = req['user_role'];
+    console.log(userRole)
 
     if (userRole !== employeeRoles.administrator) {
         res.status(401).send('Es necesario ser administrador para actualizar un producto')
+        
         return
     }
 

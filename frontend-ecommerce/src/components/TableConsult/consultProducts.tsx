@@ -6,7 +6,6 @@ import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 import { PRODUCT } from "@/types/product.types";
 import * as apiProduct from "@/api/product.api";
-import Product from "@/app/(non-protected)/(with-navbar)/(without-sidebar)/producto/[id]/page";
 
 function ConsultProducts({ products_table }: { products_table: PRODUCT[] }) {
   const router = useRouter();

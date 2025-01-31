@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import ConsultProducts from "@/components/TableConsult/consultProducts";
 import { useMainContext } from "@/app/context/MainContext";
-import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { hasPermission } from "@/util/RolePermissions";
 import { PRODUCT } from "@/types/product.types";
+import ConsultProducts from "@/components/TableConsult/consultProducts";
+import Loading from "@/components/Loading";
 import * as apiProduct from "@/api/product.api";
 
 function Page() {
