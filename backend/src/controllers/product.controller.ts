@@ -120,7 +120,6 @@ export async function listProducts(req: Request, res: Response) {
     }));
 
     if (result.hasResponse()) {
-        // TODO Imaginay stock provisional
         res.status(200).send(result.value)
     }
     else {
@@ -137,11 +136,12 @@ export async function updateProduct(req: Request, res: Response) {
         return
     }
 
-    let { id, baseProductId, name, description, price, img, categoryId } = req.body;
+    let id = req.params.id;
+    let { baseProductId, name, description, price, img, categoryId } = req.body;
 
     const dao = new ProductDAOPostgres();
     if (!id) {
-        res.status(400).send('El campo id es requerido')
+        res.status(400).send('La id del producto es requerida')
         return
     }
 
@@ -150,6 +150,11 @@ export async function updateProduct(req: Request, res: Response) {
     }))
     if (!productRes.hasResponse()) {
         res.status(500).send("Error interno al identificar el producto")
+        return
+    }
+
+    if (productRes.value.length !== 1) {
+        res.status(500).send("Producto no encontrado")
         return
     }
     const product = productRes.value[0]

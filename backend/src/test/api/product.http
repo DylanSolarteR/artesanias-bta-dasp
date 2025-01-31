@@ -50,7 +50,6 @@ Content-Type: application/json
 Authorization: Barer {{token}}
 
 {
-    "id": 53,
     "name": "Sanitario invisible artesanal",
     "description": "Espectacular sanitario invisible artesanal",
     "price": 20,
