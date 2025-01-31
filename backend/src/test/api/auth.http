@@ -40,3 +40,24 @@ Authorization: barer {{token}}
 GET http://localhost:3200/api/auth/get-role
 Content-Type: application/json
 Authorization: barer {{token}}
+
+### Olvido de contraseña
+POST http://localhost:3200/api/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "joseveles285@gmail.com",
+    "id": 3
+}
+
+###
+@reset_pass_token = otrotoken
+
+### Cambio de contraseña
+POST http://localhost:3200/api/auth/reset-password
+Content-Type: application/json
+
+{
+    "password": "123456789",
+    "token": "{{reset_pass_token}}"
+}
