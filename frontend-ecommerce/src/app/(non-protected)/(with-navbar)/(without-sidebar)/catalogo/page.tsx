@@ -27,11 +27,14 @@ export default function Home() {
 
   const [products, setProducts] = useState<PRODUCT[]>([]);
 
+  const [showLoader, setShowLoader] = useState(true);
+
   useEffect(() => {
     apiProduct
       .listProducts({ orderBy: ["price", "desc"] })
       .then((products) => {
         setProducts(products);
+        setShowLoader(false);
       })
       .catch((error) => {
         console.error("Error al obtener productos:", error);
@@ -242,10 +245,15 @@ export default function Home() {
               />
             </div>
           </div>
-
-          <Suspense fallback={<Loading />}>
-            {<Catalog products={products} />}
-          </Suspense>
+          <div className="flex h-full w-full justify-center items-center">
+            {showLoader ? (
+              <div className="min-h-full min-w-full h-[40rem] scale-100 w-full flex justify-center items-center">
+                <Loading />
+              </div>
+            ) : (
+              <Catalog products={products} />
+            )}
+          </div>
         </section>
       </main>
     </div>

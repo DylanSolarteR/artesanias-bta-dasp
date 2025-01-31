@@ -1,8 +1,10 @@
 "use client";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
+import UserCashierIcon from "@/app/images/UserCashierIcon.png";
+import UserAdminIcon from "@/app/images/UserAdminIcon.png";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
-import { decodeBadEncodeStrings, decodeToken, noAccents } from "@/util/utils";
+import { decodeBadEncodeStrings, decodeToken } from "@/util/utils";
 import { USER_INFO } from "@/types/user.types";
 import { getPhysicalLocationById } from "@/api/physicalLocation.api";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
@@ -56,7 +58,13 @@ function Cuenta() {
       <main className="container w-full h-full flex flex-col items-center justify-center">
         <section className="w-full flex flex-col items-center justify-center gap-2">
           <Image
-            src={UserIcon}
+            src={
+              userRole === "administrator"
+                ? UserAdminIcon
+                : userRole === "cashier"
+                ? UserCashierIcon
+                : UserIcon
+            }
             alt="Icono de usuario"
             width={150}
             height={150}
