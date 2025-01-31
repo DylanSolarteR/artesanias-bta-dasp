@@ -45,8 +45,8 @@ export default function Home() {
   const [products, setProducts] = useState<PRODUCT[]>([]);
 
   const center = { lat: 4.60971, lng: -74.08175 };
-  const [markers, setMarkers] = useState<Marker[]>([ ]);
-  
+  const [markers, setMarkers] = useState<Marker[]>([]);
+
   useEffect(() => {
     listPhysicalLocations().then((data) => {
       const transformedMarkers: Marker[] = data.map((location) => ({
@@ -56,11 +56,11 @@ export default function Home() {
         },
         title: `${location.address}`,
       }));
-  
+
       setMarkers((prevMarkers) => [...prevMarkers, ...transformedMarkers]);
     });
+    console.log(process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
   }, []);
-  
 
   useEffect(() => {
     apiProduct
@@ -159,7 +159,12 @@ export default function Home() {
           diferentes regiones del país.
         </p>
         <div>
-          <Map apiKey="AIzaSyB_PLx3pSl3r7czt8aoIjzb0hoUi65XcA8" center={center} zoom={12} markers={markers} />
+          <Map
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
+            center={center}
+            zoom={12}
+            markers={markers}
+          />
         </div>
       </section>
 

@@ -12,7 +12,7 @@ import { getProductById, getProductsByBaseId } from "@/api/product.api";
 import { useCart } from "@/app/context/CartContext";
 import { PRODUCT } from "@/types/product.types";
 import ProductVariants from "@/components/ProductVariants";
-
+import toast from "react-hot-toast";
 function Product() {
   const { addToCart } = useCart();
   const [ready, setReady] = useState(false);
@@ -52,6 +52,7 @@ function Product() {
     if (quantity > 0) {
       const newItem = { productId, quantity: quantity };
       addToCart(newItem);
+      toast.success("Producto añadido al carrito");
     }
   };
   //Product is fetched when the page is loaded

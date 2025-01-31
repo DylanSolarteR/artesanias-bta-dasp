@@ -8,6 +8,12 @@ import { getPhysicalLocationById } from "@/api/physicalLocation.api";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import Image from "next/image";
 
+const ROLES = {
+  cashier: "Cajero",
+  administrator: "Administrador",
+  manager: "Gerente",
+};
+
 function Cuenta() {
   const { authToken } = useAuthContext();
 
@@ -49,14 +55,19 @@ function Cuenta() {
     <div className="w-full">
       <main className="container w-full h-full flex flex-col items-center justify-center">
         <section className="w-full flex flex-col items-center justify-center gap-2">
-          <Image src={UserIcon} alt="Icono de usuario" />
+          <Image
+            src={UserIcon}
+            alt="Icono de usuario"
+            width={150}
+            height={150}
+          />
           <h1>{userName}</h1>
           <div>{/* Linea divisora */}</div>
         </section>
-        <section className="flex flex-col items-center justify-center w-full gap-6">
+        <section className="flex flex-col items-center justify-center w-full gap-6 min-w-fit">
           {/* Datos personales */}
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-row w-full">
+          <div className="flex flex-col gap-4 min-w-fit">
+            <div className="flex flex-row w-full min-w-fit">
               <label
                 htmlFor="userDocumentType"
                 className="self-start min-w-56 w-full"
@@ -65,7 +76,7 @@ function Cuenta() {
               </label>
               <input
                 id="userDocumentType"
-                className="text-center w-fit"
+                className="input-standard text-center min-w-fit "
                 type="text"
                 value={userDocumentType}
                 disabled
@@ -80,7 +91,7 @@ function Cuenta() {
               </label>
               <input
                 id="userDocument"
-                className="text-center w-fit"
+                className="input-standard text-center min-w-fit"
                 type="text"
                 value={userDocument}
                 disabled
@@ -92,7 +103,7 @@ function Cuenta() {
               </label>
               <input
                 id="userEmail"
-                className="text-center w-fit"
+                className="input-standard text-center min-w-fit"
                 type="text"
                 value={userEmail}
                 disabled
@@ -104,7 +115,7 @@ function Cuenta() {
               </label>
               <input
                 id="userPhone"
-                className="text-center w-fit"
+                className="input-standard text-center min-w-fit"
                 type="text"
                 value={userPhone}
                 disabled
@@ -116,9 +127,9 @@ function Cuenta() {
               </label>
               <input
                 id="userRole"
-                className="text-center w-fit"
+                className="input-standard text-center min-w-fit"
                 type="text"
-                value={userRole}
+                value={ROLES[userRole]}
                 disabled
               />
             </div>
@@ -131,7 +142,7 @@ function Cuenta() {
               </label>
               <input
                 id="userLocation"
-                className="text-center w-fit"
+                className="input-standard text-center min-w-fit"
                 type="text"
                 value={userLocation}
                 disabled
@@ -139,7 +150,13 @@ function Cuenta() {
             </div>
           </div>
 
-          <button onClick={handleUpdateUserDataBtn}>Actualizar datos</button>
+          <button
+            id="button-standard"
+            className="max-w-lg"
+            onClick={handleUpdateUserDataBtn}
+          >
+            Actualizar datos
+          </button>
         </section>
       </main>
     </div>

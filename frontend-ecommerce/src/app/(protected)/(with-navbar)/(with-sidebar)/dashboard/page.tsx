@@ -37,7 +37,7 @@ function Dashboard() {
   } else {
     return (
       <>
-        <main className="container-dashboard">
+        <main className="container">
           <section className="dashboard">
             <h1>DASHBOARD</h1>
             <div className="flex-grid">
