@@ -6,6 +6,7 @@ import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { hasPermission } from "@/util/RolePermissions";
+import InventoryManager from "@/components/InventoryManager";
 
 function Page({}: Props) {
   const { role } = useMainContext();
@@ -20,7 +21,14 @@ function Page({}: Props) {
   return !role ? (
     <Loading />
   ) : (
-    <>{hasPermission(role, "view:inventory") && <InventoryAdmin />}</>
+    <>
+      {hasPermission(role, "view:inventory") && role === "administrator" && (
+        <InventoryAdmin />
+      )}
+      {hasPermission(role, "view:inventory") && role === "manager" && (
+        <InventoryManager />
+      )}
+    </>
   );
 }
 

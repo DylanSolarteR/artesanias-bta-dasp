@@ -1,6 +1,6 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
-import EditIcon from "@/app/icons/EditIcon.svg?url";
-import TrashIcon from "@/app/icons/TrashIcon.svg?url";
+import PlusIcon from "@/app/icons/PlusIcon.svg?url";
+import MinusIcon from "@/app/icons/MinusIcon.svg?url";
 import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { LOW_STOCK_THRESHOLD, noAccents } from "@/util/utils";
@@ -60,7 +60,7 @@ function ConsultaProducto({
             <th scope="col">Categoría</th>
             <th scope="col">Punto Físico</th>
             <th scope="col">Cantidad</th>
-            {/* <th scope="col">Acciones</th> */}
+            <th scope="col">Acciones Stock</th>
           </tr>
         </thead>
 
@@ -79,24 +79,19 @@ function ConsultaProducto({
                   <td>{product.categoryName}</td>
                   <td>{product.locationAddress}</td>
                   <td>{product.ecommerceQuantity}</td>
-                  {/* <td>
+                  <td className="flex justify-center items-center gap-2">
                     <button>
                       <Image
-                        src={EditIcon}
-                        alt="search"
+                        src={MinusIcon}
+                        alt="liquidate"
                         width={30}
                         height={30}
                       />
                     </button>
                     <button>
-                      <Image
-                        src={TrashIcon}
-                        alt="search"
-                        width={30}
-                        height={30}
-                      />
+                      <Image src={PlusIcon} alt="add" width={30} height={30} />
                     </button>
-                  </td> */}
+                  </td>
                 </tr>
               ))
             : null}
