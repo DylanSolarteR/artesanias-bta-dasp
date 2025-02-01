@@ -14,7 +14,12 @@ type productFilters = {
 
 export async function createProduct(product) {
     try {
-        const response = await AxiosInstance.post('/product', product, {
+        const form = new FormData();
+        for (const key in product) {
+            console.log(key, product[key]);
+            form.append(key, product[key]);
+        }
+        const response = await AxiosInstance.post('/product', form, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
