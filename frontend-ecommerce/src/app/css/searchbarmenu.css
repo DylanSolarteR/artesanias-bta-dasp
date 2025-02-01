@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    /* gap: 5px; */
   }
   .search input:focus{
     border-bottom: 2px solid #DC8148;
