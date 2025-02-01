@@ -37,6 +37,7 @@ function ConsultaPOS({ product_list }: ConsultaPOSProps) {
                 return (
                   <li
                     key={product.productId}
+                    className="hover:bg-[--color-main-soft] overflow-x-clip"
                     onClick={() => {
                       setProduct_selected(product);
                       setIsListVisible(false);
