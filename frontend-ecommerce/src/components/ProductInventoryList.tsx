@@ -47,6 +47,7 @@ function ProductInventoryList({
 
     setProducts_table_display([...products_table]);
     setProductsGeneralInventory([...productsGeneralInventory]);
+    //Aca iria la llamada a la API para actualizar el stock segun la locationId y productId
   }
 
   useEffect(() => {
