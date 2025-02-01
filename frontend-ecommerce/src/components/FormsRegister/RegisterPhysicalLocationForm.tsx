@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, ChangeEvent } from "react";
 //import { loginAuth } from "@/api/auth.api";
-//import "@/app/css/Buy.css";
 
 
 function RegisterPhysicalLocationForm() {

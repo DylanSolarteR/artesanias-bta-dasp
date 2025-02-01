@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import MarkerOwn from "@/app/icons/marker.png"
-import Marker from "@/app/icons/marker.svg"
+import SearchIcon from "@/app/icons/UserIcon.svg?url";
 
 interface GoogleMapProps {
   apiKey: string;
@@ -59,7 +58,8 @@ const GoogleMap: React.FC<GoogleMapProps> = ({ apiKey, center, zoom, markers }) 
           const infoWindow = new google.maps.InfoWindow({
             content: `
               <div class="info-window">
-              <p>${title}</p>
+                <Image src=${SearchIcon.src} alt="search" width={20} height={20} />
+                <p>${title}</p>
               </div>
             `,
           });

@@ -1,11 +1,10 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { PRODUCT } from "@/types/product.types";
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
-import { PRODUCT } from "@/types/product.types";
-import * as apiProduct from "@/api/product.api";
 
 interface ConsultProductsProps {
   products_table: PRODUCT[];

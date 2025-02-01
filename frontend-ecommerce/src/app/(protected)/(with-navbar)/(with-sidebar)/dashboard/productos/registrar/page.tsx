@@ -13,7 +13,6 @@ function Page() {
   const handleSubmit = async (data) => {
     try {
       await apiProduct.createProduct(data);
-      console.log("Producto creado:", data);
       router.push("/dashboard/productos");
     } catch (error) {
       console.error("Error al crear producto:", error);

@@ -1,27 +1,31 @@
 "use client";
-type Props = {};
-import RegisterUserData from "@/components/FormsRegister/RegisterUserDataForm";
 import { useMainContext } from "@/app/context/MainContext";
-import Loading from "@/components/Loading";
-import { useRouter } from "next/navigation";
 import { hasPermission } from "@/util/RolePermissions";
+import { useRouter } from "next/navigation";
+import RegisterUserData from "@/components/FormsRegister/RegisterUserDataForm";
+import Loading from "@/components/Loading";
+import * as apiUser from "@/api/auth.api";
 
-function Page({}: Props) {
+function Page() {
   const { role } = useMainContext();
   const router = useRouter();
 
+  const handleSubmit = async (data) => {
+    try {
+      await apiUser.createUser(data)
+      console.log(apiUser.createUser(data));
+      router.push("/dashboard/empleados");
+    } catch (error) {
+      console.error("Error al crear empleado:", error);
+    }
+  };
+
   return !role ? (
     <Loading />
+  ) : !hasPermission(role, "view:employees") ? (
+    router.push("/POS")
   ) : (
-    <>
-      {!hasPermission(role, "view:employees") ? (
-        router.push("/POS")
-      ) : (
-        <>
-          <RegisterUserData />
-        </>
-      )}
-    </>
+    <RegisterUserData onSubmit={handleSubmit} />
   );
 }
 

@@ -1,20 +1,29 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { onlyNumberInput } from "@/util/utils";
 
-function RegisterUserDataForm() {
-  const [name, setName] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
-  const [telephone, setTelephone] = useState<string>("");
-  const [role, setRole] = useState<string>("A"); // Valor inicial
-  const [locationId, setLocationId] = useState<string>("");
-  const [docType, setDocType] = useState<string>("CC"); // Valor inicial
-  const [docNumber, setDocNumber] = useState<string>("");
+function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data: any) => void }) {
+  const [name, setName] = useState<string>(user?.name || "");
+  const [lastName, setLastname] = useState<string>(user?.lastName || "");
+  const [email, setEmail] = useState<string>(user?.email || "");
+  const [telephone, setTelephone] = useState<string>(user?.telephone || "");
+  const [role, setRole] = useState<string>(user?.role || "Cashier");
+  const [locationId, setLocationId] = useState<string>(user?.locationId || "");
+  const [docType, setDocType] = useState<string>(user?.docType || "CC");
+  const [docNumber, setDocNumber] = useState<string>(user?.docNumber || "");
+
+  // Para enviar el formulario
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    onSubmit({ name, lastName, email, telephone, role, locationId, docType, docNumber });
+  };
 
   return (
     <div className="container-dashboard">
       <div className="main-center">
         <div className="container-inf-step">
-          <form className="form-inf-buy" onSubmit={(e) => e.preventDefault()}>
+          <form className="form-inf-buy"  onSubmit={handleSubmit}>
             <h1>Registrar Empleado</h1>
             {/* Sección de Datos Personales */}
             <h2>Datos personales</h2>
@@ -37,6 +46,7 @@ function RegisterUserDataForm() {
               type="text"
               value={docNumber}
               name="docNumber"
+              onKeyDown={onlyNumberInput}
               onChange={(e) => setDocNumber(e.target.value)}
             />
 
@@ -53,9 +63,18 @@ function RegisterUserDataForm() {
             <input
               className="input-standard"
               type="text"
-              value={lastname}
+              value={lastName}
               name="lastname"
               onChange={(e) => setLastname(e.target.value)}
+            />
+
+            <label htmlFor="email">Correo electrónico: </label>
+            <input
+              className="input-standard"
+              type="text"
+              value={email}
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
             />
 
             <label htmlFor="telephone">Teléfono: </label>
@@ -64,6 +83,7 @@ function RegisterUserDataForm() {
               type="text"
               value={telephone}
               name="telephone"
+              onKeyDown={onlyNumberInput}
               onChange={(e) => setTelephone(e.target.value)}
             />
 
@@ -77,9 +97,9 @@ function RegisterUserDataForm() {
               name="role"
               onChange={(e) => setRole(e.target.value)}
             >
-              <option value="A">Administrador</option>
-              <option value="S">Supervisor</option>
-              <option value="C">Cliente</option>
+              <option value="administrator">Administrador</option>
+              <option value="manager">Gerente</option>
+              <option value="cashier">Cajero</option>
             </select>
 
             <label htmlFor="locationId">Número de tienda: </label>
@@ -88,6 +108,7 @@ function RegisterUserDataForm() {
               type="text"
               value={locationId}
               name="locationId"
+              onKeyDown={onlyNumberInput}
               onChange={(e) => setLocationId(e.target.value)}
             />
 

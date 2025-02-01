@@ -49,7 +49,7 @@ function Navbar() {
       </div>
       <div>
         <ul>
-          <li>
+          <li className="topButton">
             <div className="products">
               <button
                 className="buttom-products"
@@ -59,7 +59,7 @@ function Navbar() {
               </button>
             </div>
           </li>
-          <li>
+          <li className="topButton">
             <div className="products">
               <button
                 className="buttom-products"
@@ -69,7 +69,7 @@ function Navbar() {
               </button>
             </div>
           </li>
-          <li>
+          <li className="topButton">
             {/*<h1>1</h1> por si se quiere mostrar el número de productos en el carrito*/}
             <div className="shopping-cart">
               <button className="count">
@@ -86,7 +86,7 @@ function Navbar() {
             </div>
           </li>
           {isLogged() && (
-            <li>
+            <li className="topButton">
               <div className="employeeMenu">
                 <button
                   className="employeeNameButton"
@@ -104,7 +104,7 @@ function Navbar() {
                   <li>
                     <Link href="/cuenta">Cuenta</Link>
                   </li>
-                  <li>
+                  <li className="logout">
                     <button
                       onClick={() => {
                         clearToken();

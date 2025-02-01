@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import * as apiCategory from "@/api/category.api";
-import defaultImage from "@/app/icons/BagsadIcon.png";
 import { onlyNumberInput } from "@/util/utils";
+import Image from "next/image";
+import defaultImage from "@/app/icons/BagsadIcon.png";
+import * as apiCategory from "@/api/category.api";
 
 function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (data: any) => void }) {
   const [baseProductId, setProductBase] = useState<string>(product?.baseProductId || "");
