@@ -145,7 +145,7 @@ function RegistroPOS({
 
             {/* ACA ESTA LA LISTA DESPLEGABLE DE LOS PRODUCTOS, TOCA CAMBIAR EL CSS PARA QUE NO SEA RELATIVA SINO ABSOLUTA Y MOSTRARLA POR ENCIMA */}
             {isListVisible && (
-              <div className="relative z-10 ">
+              <div className="relative z-10">
                 <ul className="absolute z-10 bg-white w-96 top-0 -left-48 border border-gray-300 rounded-md h-32 overflow-auto">
                   {product_list_filtered.length > 0 ? (
                     product_list_filtered.map((product) => (
