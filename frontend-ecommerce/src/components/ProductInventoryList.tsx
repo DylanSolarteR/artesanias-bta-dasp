@@ -1,25 +1,53 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
-import PlusIcon from "@/app/icons/PlusIcon.svg?url";
-import MinusIcon from "@/app/icons/MinusIcon.svg?url";
+import ChangeStockButton from "./ChangeStockButton";
 import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { LOW_STOCK_THRESHOLD, noAccents } from "@/util/utils";
 import { useState, useEffect } from "react";
 
-function ConsultaProducto({
+function ProductInventoryList({
   products_table,
+  productsGeneralInventory,
+  setProductsGeneralInventory,
 }: {
   products_table: PRODUCT_FROM_INVENTARY[];
+  productsGeneralInventory: PRODUCT_FROM_INVENTARY[];
+  setProductsGeneralInventory: (products: PRODUCT_FROM_INVENTARY[]) => void;
 }) {
   const [search, setSearch] = useState("");
   const [products_table_display, setProducts_table_display] = useState<
     PRODUCT_FROM_INVENTARY[]
   >(products_table ?? []);
 
-  const handleSearchChange = (e) => {
+  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
     e.preventDefault();
     setSearch(e.target.value);
-  };
+  }
+
+  function handleStockChange(
+    product: PRODUCT_FROM_INVENTARY,
+    stockQuantity: number
+  ) {
+    products_table.forEach((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        product_from_list.ecommerceQuantity = stockQuantity;
+      }
+    });
+    productsGeneralInventory.forEach((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        product_from_list.ecommerceQuantity = stockQuantity;
+      }
+    });
+
+    setProducts_table_display([...products_table]);
+    setProductsGeneralInventory([...productsGeneralInventory]);
+  }
 
   useEffect(() => {
     if (search.length > 0) {
@@ -70,7 +98,7 @@ function ConsultaProducto({
                 <tr
                   className={
                     (LOW_STOCK_THRESHOLD >= product.ecommerceQuantity &&
-                      `text-amber-700 font-bold`) + ` text center`
+                      `text-amber-700 font-bold`) + ` text center h-full`
                   }
                   key={index}
                 >
@@ -79,18 +107,11 @@ function ConsultaProducto({
                   <td>{product.categoryName}</td>
                   <td>{product.locationAddress}</td>
                   <td>{product.ecommerceQuantity}</td>
-                  <td className="flex justify-center items-center gap-2">
-                    <button>
-                      <Image
-                        src={MinusIcon}
-                        alt="liquidate"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                    <button>
-                      <Image src={PlusIcon} alt="add" width={30} height={30} />
-                    </button>
+                  <td>
+                    <ChangeStockButton
+                      product={product}
+                      handleStockChange={handleStockChange}
+                    />
                   </td>
                 </tr>
               ))
@@ -108,4 +129,4 @@ function ConsultaProducto({
   ) : null;
 }
 
-export default ConsultaProducto;
+export default ProductInventoryList;

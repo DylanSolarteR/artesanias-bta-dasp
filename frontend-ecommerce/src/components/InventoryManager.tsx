@@ -5,7 +5,7 @@ import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { listProductsFromInventoryByLocationId } from "@/api/inventory.api";
 import Loading from "@/components/Loading";
 import { listCategories } from "@/api/category.api";
-import ConsultaProducto from "@/components/ConsultaProducto";
+import ConsultaProducto from "@/components/ProductInventoryList";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import { decodeToken, LOW_STOCK_THRESHOLD } from "@/util/utils";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -66,10 +66,14 @@ function InventoryManager() {
       <section className="zone-count">
         <KPICard title={"Categorías"} value={categories.length} />
         <KPICard title={"Productos"} value={productsInventory.length} />
-        <KPICard title={"Alerta bajo stock"} value={productsBelowThreshold} />
+        <KPICard title={"Bajo stock"} value={productsBelowThreshold} />
       </section>
       <section className="zone-inventary">
-        <ConsultaProducto products_table={products_table} />
+        <ConsultaProducto
+          products_table={products_table}
+          productsGeneralInventory={productsInventory}
+          setProductsGeneralInventory={setProductsInventory}
+        />
       </section>
     </div>
   ) : (
