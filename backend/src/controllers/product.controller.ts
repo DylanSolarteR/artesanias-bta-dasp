@@ -2,26 +2,42 @@ import { Request, Response } from 'express';
 import { ProductDAOPostgres } from '../dao/implementation/postgresDAO/productDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
 import { employeeRoles, Product } from '../model/businessTypes';
+import { MulterRequest } from '../custom';
+import fs from 'fs';
+import { AwsImageManager } from "../model/awsImageManager";
+import { ImageManager } from '../model/imagesManager';
 
+function deleteImage(file: Express.Multer.File) {
+    if (!file) return
+    const path = file.path
+    fs.unlink(path, (err) => {
+        if (err) {
+            console.error(err)
+        }
+    })
+}
 
-export async function createProduct(req: Request, res: Response) {
-
+export async function createProduct(req: MulterRequest, res: Response) {
+    const file = req.file // Require uploadMiddleware.single('imgFile') (See Multer)
     const userRole = req['user_role'];
 
     if (userRole !== employeeRoles.administrator) {
         res.status(401).send('Es necesario ser administrador para crear un producto')
+        deleteImage(req.file)
         return
     }
 
     let { name, description, price, img, categoryId, baseProductId, isOwnBase } = req.body;
     const dao = new ProductDAOPostgres();
-    if (!name || !description || !price || !img || !categoryId) {
+    if (!name || !description || !price || !categoryId) {
         res.status(400).send('Los campos nombre, descripcion, precio, imagen y categoria son requeridos')
+        deleteImage(req.file)
         return
     }
 
     if (!isOwnBase && !baseProductId) {
         res.status(400).send('El campo baseProductId es requerido')
+        deleteImage(req.file)
         return
     }
 
@@ -32,13 +48,14 @@ export async function createProduct(req: Request, res: Response) {
         categoryId,
         baseProductId,
         price,
-        img,
+        'https://artesaniasbucket.s3.us-east-2.amazonaws.com/default_image.webp',
         true
     )
 
     let insertResult = await dao.create(newProduct)
     if (!insertResult.hasResponse()) {
         res.status(500).send(insertResult.error)
+        deleteImage(req.file)
         return
     }
 
@@ -49,11 +66,39 @@ export async function createProduct(req: Request, res: Response) {
         const updateResult = await dao.update(product)
         if (!updateResult) {
             res.status(500).send("Error al establecer la base del producto")
+            deleteImage(req.file)
             return
         }
     }
 
+    if (file === undefined) {
+        res.status(200).send({ product, message: "Producto creado (No se envió imagen)" })
+        return
+    }
+    const imageManager: ImageManager = new AwsImageManager()
+    let imgUrl: string
+    try {
+        imgUrl = await imageManager.uploadImage({
+            fileName: product.id + '_' + file.originalname.split('.').pop(),
+            contentType: file.mimetype,
+            imagePath: file.path
+        })
+    } catch (error) {
+        res.status(200).send({ product, message: "Producto creado (sin imagen)" })
+        deleteImage(file)
+        return
+    }
+    product.img = imgUrl
+    const updateRes = await dao.update(product)
+    if (!updateRes) {
+        res.status(200).send({ product, message: "Producto creado (sin imagen)" })
+        deleteImage(file)
+        return
+    }
+
     res.status(200).send({ product })
+
+    deleteImage(file)
 }
 
 export async function listProducts(req: Request, res: Response) {

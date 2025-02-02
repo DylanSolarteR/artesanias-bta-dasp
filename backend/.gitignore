@@ -146,3 +146,5 @@ dist
 .env.prod
 
 pnpm-lock.yaml
+
+/uploads/*

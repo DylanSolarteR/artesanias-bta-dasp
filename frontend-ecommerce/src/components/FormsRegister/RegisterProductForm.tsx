@@ -10,7 +10,8 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
   const [name, setName] = useState<string>(product?.name || "");
   const [description, setDescription] = useState<string>(product?.description || "");
   const [price, setPrice] = useState<number>(product?.price || "");
-  const [img, setImage] = useState<any>(product?.img || "");
+  const [img, setImage] = useState<string>(product?.img || "");
+  const [imgFile, setImageFile] = useState<File>();
   const [isOwnBase, setOwnBase] = useState<Boolean>();
   const [categoryId, setCategoryId] = useState<string>(product?.categoryId || "");
   const [category, setCategory] = useState<string>(product?.categoryName || "");
@@ -32,16 +33,17 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
 
     setOwnBase(newOwnBase);
 
-    onSubmit({ name, description, price, img, categoryId, baseProductId: newBaseProductId, isOwnBase: newOwnBase });
+    onSubmit({ name, description, price, imgFile, categoryId, baseProductId: newBaseProductId, isOwnBase: newOwnBase });
   };
 
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const maxSize = 75 * 1024; // Lo máximo que acepta es 75 KB en bytes (primer intento en la base de datos)
+      console.log('sisa')
+      const maxSize = 500000;
       if (file.size > maxSize) {
-        alert("El tamaño de la imagen no puede ser mayor a 75 KB.");
+        alert(`El tamaño de la imagen no puede ser mayor a ${maxSize / 1000} KB.`);
         return;
       }
 
@@ -51,6 +53,8 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
           setImage(event.target.result); // Guardar la imagen como base64
         }
       };
+      console.log(file)
+      setImageFile(file);
       reader.readAsDataURL(file);
     }
   };
