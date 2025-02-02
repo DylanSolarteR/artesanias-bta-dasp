@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMainContext } from "@/app/context/MainContext";
 import "@/app/css/Catalog-product.css";
 
-function Catalog({ products }) {
+function Catalog({ products }: { products: PRODUCT[] }) {
   const { gridClass } = useMainContext();
 
   return products?.length === 0 ? (

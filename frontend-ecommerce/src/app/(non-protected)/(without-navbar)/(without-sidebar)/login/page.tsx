@@ -3,8 +3,7 @@ import Image from "next/image";
 import UserLogo from "@/app/icons/UserLogo.svg?url";
 import LoginForm from "@/components/LoginForm";
 import LoginSideImage from "@/app/images/LoginSideImage2.jpg";
-import '@/app/css/Login.css'
-import Link from "next/link";
+import "@/app/css/Login.css";
 
 function Login() {
   return (

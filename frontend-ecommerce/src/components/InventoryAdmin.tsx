@@ -1,7 +1,5 @@
 "use client";
-import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
-import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import KPICard from "@/components/KPICard";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { listProductsFromAllInventories } from "@/api/inventory.api";
