@@ -21,13 +21,49 @@ export interface PRODUCT {
 }
 
 export default function Home() {
-  const { gridClass, setGridClass } = useMainContext();
 
   const [categories, setCategories] = useState([]);
-
   const [products, setProducts] = useState<PRODUCT[]>([]);
-
   const [showLoader, setShowLoader] = useState(true);
+  const [showCategories, setShowCategories] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState("Precio");
+  const [maxHeight, setMaxHeight] = useState("0px"); // Estado para manejar max-height dinámico
+  const categoryOptionsRef = useRef(null); // Referencia al contenedor del menú
+
+  const minPriceRef = useRef(null);
+  const maxPriceRef = useRef(null);
+  const orderTypeRef = useRef(null);
+  const nameProdRef = useRef(null);
+
+  const handleCategoryChange = (e) => {
+    if (selectedCategory === e.target.value) {
+      e.target.checked = false;
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(e.target.value);
+    }
+  };
+
+  const handleOrderChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSelectedOrder(e.target.value);
+  };
+
+  const filterhandle = () => {
+    // console.log("filtrando");
+    apiProduct
+      .listProducts({
+        orderBy: [
+          selectedOrder === "Precio" ? "price" : "name",
+          orderTypeRef.current.selectedOptions[0].value,
+        ],
+        category: selectedCategory,
+        minPrice: minPriceRef.current.value || null,
+        maxPrice: maxPriceRef.current.value || null,
+        nameProd: nameProdRef.current.value || null,
+      })
+      .then((p) => setProducts(p));
+  };
 
   useEffect(() => {
     apiProduct
@@ -46,47 +82,6 @@ export default function Home() {
       setCategories(categories);
     });
   }, []);
-
-  const [showCategories, setShowCategories] = useState(false);
-
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedOrder, setSelectedOrder] = useState("Precio");
-
-  const handleCategoryChange = (e) => {
-    if (selectedCategory === e.target.value) {
-      e.target.checked = false;
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(e.target.value);
-    }
-  };
-  const handleOrderChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSelectedOrder(e.target.value);
-  };
-
-  const minPriceRef = useRef(null);
-  const maxPriceRef = useRef(null);
-  const orderTypeRef = useRef(null);
-  const nameProdRef = useRef(null);
-
-  const filterhandle = () => {
-    // console.log("filtrando");
-    apiProduct
-      .listProducts({
-        orderBy: [
-          selectedOrder === "Precio" ? "price" : "name",
-          orderTypeRef.current.selectedOptions[0].value,
-        ],
-        category: selectedCategory,
-        minPrice: minPriceRef.current.value || null,
-        maxPrice: maxPriceRef.current.value || null,
-        nameProd: nameProdRef.current.value || null,
-      })
-      .then((p) => setProducts(p));
-  };
-
-  const [maxHeight, setMaxHeight] = useState("0px"); // Estado para manejar max-height dinámico
-  const categoryOptionsRef = useRef(null); // Referencia al contenedor del menú
 
   useEffect(() => {
     // Función que calcula la altura del contenedor de opciones
@@ -118,9 +113,8 @@ export default function Home() {
 
             <div
               ref={categoryOptionsRef} // Asigna la referencia al contenedor de opciones
-              className={`category-options ${
-                showCategories ? "open" : "close"
-              }`}
+              className={`category-options ${showCategories ? "open" : "close"
+                }`}
               style={{
                 maxHeight: maxHeight, // Aplica el maxHeight calculado
               }}
@@ -174,11 +168,11 @@ export default function Home() {
                   style={{ userSelect: "none" }}
                   checked={selectedOrder === "Precio"}
                   type="radio"
-                  id="cat2"
+                  id="precio"
                   name="ordenar-por"
                   value="Precio"
                 />
-                <label htmlFor="cat2">Precio</label>
+                <label htmlFor="precio">Precio</label>
               </div>
               <div className="option">
                 <input
@@ -186,11 +180,11 @@ export default function Home() {
                   style={{ userSelect: "none" }}
                   checked={selectedOrder === "Nombre"}
                   type="radio"
-                  id="cat1"
+                  id="nombre"
                   name="ordenar-por"
                   value="Nombre"
                 />
-                <label htmlFor="cat1">Nombre</label>
+                <label htmlFor="nombre">Nombre</label>
               </div>
             </div>
             <select ref={orderTypeRef} defaultValue={"desc"}>
@@ -208,41 +202,18 @@ export default function Home() {
         <section className="content">
           <h1>PRODUCTOS</h1>
           <div className="search-product">
-            <div className="view">
-              <Image
-                src={Grid3Icon}
-                alt="Grid3"
-                width={48}
-                height={48}
-                onClick={() => setGridClass("grid-3")}
-                className={gridClass === "grid-3" ? "icon active" : "icon"}
-                style={{
-                  cursor: "pointer",
-                  maxWidth: "40px",
-                  maxHeight: "40px",
-                  objectFit: "contain",
-                }}
-              />
-              <Image
-                src={Grid4Icon}
-                alt="Grid4"
-                width={48}
-                height={48}
-                onClick={() => setGridClass("grid-4")}
-                className={gridClass === "grid-4" ? "icon active" : "icon"}
-                style={{ cursor: "pointer" }}
-              />
-            </div>
-            <div className="search">
-              <input type="input" placeholder="Buscar" ref={nameProdRef} />
-              <Image
-                src={SearchIcon}
-                alt="Search"
-                width={20}
-                height={20}
-                onClick={filterhandle}
-                style={{ cursor: "pointer" }}
-              />
+            <div className="flex justify-end">
+              <div className="search">
+                <input type="input" placeholder="Buscar" ref={nameProdRef} />
+                <Image
+                  src={SearchIcon}
+                  alt="Search"
+                  width={20}
+                  height={20}
+                  onClick={filterhandle}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
             </div>
           </div>
           <div className="flex h-full w-full justify-center items-center">

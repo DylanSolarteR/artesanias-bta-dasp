@@ -6,19 +6,20 @@ import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 
+
 interface ConsultEmployeesProps {
   employees_table: EMPLOYEE[];
-  //deleteEmployeee: (id: number) => void;
+  deleteEmployee: (id: number) => void;
 }
 
 function ConsultEmployees({
   employees_table,
-  //deleteEmployeee,
+  deleteEmployee,
 }: ConsultEmployeesProps) {
   const router = useRouter();
 
   const handleDelete = (id: number) => {
-    //deleteEmployeee(id);
+    deleteEmployee(id);
   };
 
   const handleUpdate = (id: number) => {
@@ -50,12 +51,12 @@ function ConsultEmployees({
             {employees_table.length !== 0 ? (
               employees_table.map((employee) => (
                 <tr key={employee.id} className="text-center">
-                  <td>{employee.id}</td>
-                  <td>{employee.name}</td>
-                  <td>{employee.role}</td>
-                  <td>{employee.locationId}</td>
-                  <td>{employee.telephone}</td>
-                  <td>
+                  <td data-label="Identificación">{employee.id}</td>
+                  <td data-label="Nombre">{employee.name}</td>
+                  <td data-label="Rol">{employee.role}</td>
+                  <td data-label="Punto Físico">{employee.locationId}</td>
+                  <td data-label="Celular">{employee.telephone}</td>
+                  <td data-label="Acciones">
                     <button onClick={() => handleUpdate(employee.id)}>
                       <Image
                         src={UpdateIcom}

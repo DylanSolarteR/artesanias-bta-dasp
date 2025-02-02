@@ -1,20 +1,67 @@
 @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Josefin+Slab:ital,wght@0,400;1,400&display=swap');
 
 .Navbar {
-    background-color: var(--color-main-opaque);
+    background-color: var(--color-main);
     width: 100%;
     display: flex;
     position: fixed;
     z-index: 1000;
     height: 70px;
     justify-content: space-between;
-    padding: 0 1em;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 0 15px;
+    align-items: center;
 }
 
-.Navbar ul {
+.navbarUl {
     display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Ocultar menú en móviles y hacerlo un menú hamburguesa */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.menu-toggle span {
+    background: var(--foreground);
+    height: 3px;
+    width: 25px;
+    margin: 3px 0;
+    transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+    .navbarUl {
+        display: none;
+        flex-direction: row;
+        width: auto; 
+        max-width: 80%;
+        background: var(--color-main);
+        position: absolute;
+        top: 90%;
+        right: 0;
+        padding: 10px 15px;
+        border-radius: 4px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transform: translateY(10px);
+    }
+
+    .navbarUl.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .topButton {
+        display: flex;
+    }  
 }
 
 .title {
@@ -35,21 +82,51 @@
 .shopping-cart {
     position: relative;
     width: 30px;
+    height: 30px;
+    align-self: center;
+}
+
+.shopping-cart:hover img {
+    filter: invert(1);
+}
+
+.shopping-cart:hover .counter {
+    background: var(--background);
+    color: var(--color-accent);
 }
 
 .topButton {
-    border-left: 1px solid;
     display: flex;
-    padding: 10px;
+    padding: 2px 0px;
+    padding-left: 20px;
     text-align: center;
+    align-items: center;
 }
 
-.products, .employeeNameButton {
+.products,
+.employeeNameButton {
     justify-content: space-between;
 }
 
 .employeeNameButton {
     display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.buttom-products:hover {
+    background: var(--color-accent);
+    color: var(--background);
+}
+
+.foto {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: fill;
+    border: 1px solid var(--foreground);
 }
 
 .Navbar h1 {
@@ -71,20 +148,30 @@
 
 .employeeMenu {
     position: relative;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.employeeMenu.active {
+    background-color: var(--background);
+    border-radius: 4px;
+    padding: 4px 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.employeeMenu:hover {
+    border: 1px solid var(--background);
 }
 
 .employeeMenu ul {
     position: absolute;
-    top: 100%;
+    top: 110%;
     right: 0;
-    background-color: white;
+    background-color: var(--background);
     border-radius: 4px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    min-width: 150px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
     display: none;
-    transition: opacity 0.3s ease-in-out, transform 0.2s ease-in-out;
-    opacity: 0;
     transform: translateY(10px);
 }
 
@@ -94,20 +181,16 @@
     transform: translateY(0);
 }
 
-.employeeMenu ul li {
-    list-style: none;
-    padding: 10px 15px;
-    text-align: left;
+.employeeMenu li {
+    padding: 5px 0px;
+    text-align: center;
     cursor: pointer;
 }
 
 .employeeMenu ul li a {
-    text-decoration: none;
-    color: var(--foreground);
-    font-weight: 500;
     display: block;
 }
 
-.employeeMenu ul li:hover {
-    background-color: var(--color-gray-soft);
+.employeeMenu li:hover {
+    background-color: var(--color-main);
 }

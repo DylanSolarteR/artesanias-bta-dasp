@@ -227,7 +227,7 @@ function Carrito() {
                 })}
               </tbody>
             </table>
-            <h5>Total: $ {total}</h5>
+            <h5>Total (sin IVA): $ {total}</h5>
             {/*Boton para proceder al pago*/}
             <button id="button-standard" onClick={handleRedirectButton}>
               Proceder al pago

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import CarritoIcon from "@/app/icons/ShoppingCartIcon.png";
+import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import Link from "next/link";
 import Image from "next/image";
 import "@/app/css/Navbar.css";
@@ -32,93 +33,97 @@ function Navbar() {
     }
   }, []);
 
-  // Alterna el estado de apertura del menú
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
     <nav className="Navbar">
       <div className="title">
         <Link href="/">
-          <strong>
-            Artesanías
-            <br /> Bogotá LTDA
-          </strong>
+          <strong>Artesanías<br />Bogotá LTDA</strong>
         </Link>
       </div>
-      <div>
-        <ul>
-          <li className="topButton">
-            <div className="products">
-              <button
-                className="buttom-products"
-                onClick={() => (window.location.href = "/")}
-              >
-                Inicio
-              </button>
-            </div>
-          </li>
-          <li className="topButton">
-            <div className="products">
-              <button
-                className="buttom-products"
-                onClick={() => (window.location.href = "/catalogo")}
-              >
-                Catálogo
-              </button>
-            </div>
-          </li>
-          <li className="topButton">
-            {/*<h1>1</h1> por si se quiere mostrar el número de productos en el carrito*/}
-            <div className="shopping-cart">
-              <button className="count">
-                <Link href="/carrito">
-                  <Image
-                    src={CarritoIcon}
-                    alt="Icono de carrito"
-                    width={25}
-                    height={25}
-                  />
-                  <span className="counter">{cart.length}</span>
-                </Link>
-              </button>
-            </div>
-          </li>
-          {isLogged() && (
-            <li className="topButton">
-              <div className="employeeMenu">
-                <button
-                  className="employeeNameButton"
-                  onClick={() => {
-                    setIsOpenEmployee(!isOpenEmployee);
-                  }}
-                >
-                  <Image src={UserIcon} alt="Icono de usuario" />
-                  <span>{employeeName}</span>
-                </button>
-                <ul className={`${isOpenEmployee ? "" : "invisible"}`}>
-                  <li>
-                    <Link href="/dashboard">Dashboard</Link>
-                  </li>
-                  <li>
-                    <Link href="/cuenta">Cuenta</Link>
-                  </li>
-                  <li className="logout">
-                    <button
-                      onClick={() => {
-                        clearToken();
-                      }}
-                    >
-                      <Link href="/login">Cerrar sesión</Link>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          )}
-        </ul>
+
+      {/* Botón del menú hamburguesa */}
+      <div className="menu-toggle" onClick={() => setIsOpen(!isOpen)}>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
+
+      <ul className={`navbarUl ${isOpen ? "active" : ""}`}>
+        <li className="topButton">
+          <div className="products">
+            <button
+              className="buttom-products"
+              onClick={() => (window.location.href = "/")}
+            >
+              Inicio
+            </button>
+          </div>
+        </li>
+        <li className="topButton">
+          <div className="products">
+            <button
+              className="buttom-products"
+              onClick={() => (window.location.href = "/catalogo")}
+            >
+              Catálogo
+            </button>
+          </div>
+        </li>
+        <li className="topButton">
+          <div className="shopping-cart">
+            <button 
+              className="count"
+              onClick={() => (window.location.href = "/carrito")}
+            >
+                <Image
+                  src={CarritoIcon}
+                  alt="Icono de carrito"
+                  width={25}
+                  height={25}
+                />
+                <span className="counter">{cart.length}</span>
+            </button>
+          </div>
+        </li>
+
+        {isLogged() && (
+          <li className="topButton">
+            <div className={`employeeMenu ${isOpenEmployee ? "active" : ""}`}>
+              <button
+                className="employeeNameButton"
+                onClick={() => {
+                  setIsOpenEmployee(!isOpenEmployee);
+                }}
+              >
+                <Image className="foto" src={UserIcon} alt="Icono de usuario" />
+                <span>{employeeName}</span>
+                <span
+                    className={`arrow-icon ${isOpenEmployee ? "open" : ""}`}
+                  >
+                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  </span>
+              </button>
+              <ul className={isOpenEmployee ? "" : "invisible"}>
+                <li>
+                  <Link href="/dashboard">Dashboard</Link>
+                </li>
+                <li>
+                  <Link href="/cuenta">Cuenta</Link>
+                </li>
+                <li className="logout">
+                  <button
+                    onClick={() => {
+                      clearToken();
+                    }}
+                  >
+                    <Link href="/login">Cerrar sesión</Link>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </li>
+        )}
+      </ul>
     </nav>
   );
 }

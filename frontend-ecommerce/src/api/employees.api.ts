@@ -22,8 +22,12 @@ export async function listAllEmployees() {
 // Obtener un empleado por ID
 export async function getEmployeeById(id: number) {
     try {
-        const response = await AxiosInstance.get(`/employee/${id}`);
-        const employee: EMPLOYEE = response.data;
+        const response = await AxiosInstance.get(`/employee/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        const employee: EMPLOYEE = response.data[0];
         return employee;
     } catch (err) {
         if (isAxiosError(err)) {
@@ -33,9 +37,13 @@ export async function getEmployeeById(id: number) {
 }
 
 // Actualizar un empleado
-export async function updateEmployee(employee: EMPLOYEE) {
+export async function updateEmployee(id: number, email: String, name: String, lastName: String, telephone: String, role: String, locationId: String, active: Boolean) {
     try {
-        const response = await AxiosInstance.put('/employee/', employee);
+        const response = await AxiosInstance.put('/employee/', {id, email, name, lastName, telephone, role, locationId, active}, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
         return response.data;
     } catch (err) {
         if (isAxiosError(err)) {

@@ -12,6 +12,8 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
   const [docType, setDocType] = useState<string>(user?.docType || "CC");
   const [docNumber, setDocNumber] = useState<string>(user?.docNumber || "");
 
+  console.log(user);
+
   // Para enviar el formulario
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -112,7 +114,7 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
               onChange={(e) => setLocationId(e.target.value)}
             />
 
-            <button id="button-standard" type="submit">Registrar Usuario</button>
+            <button id="button-standard" type="submit">Guardar</button>
 
           </form>
         </div>

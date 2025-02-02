@@ -1,4 +1,5 @@
 import "@/app/css/globals.css";
+import "@/app/css/dashboard.css";
 import DashboardSideBar from "@/components/DashboardSideBar";
 import Navbar from "@/components/Navbar";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -10,12 +11,14 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex-simple">
+    <div className="h-full">
       <Providers>
         <ProtectedRoute>
           <Navbar />
-          <DashboardSideBar />
-          {children}
+          <div className="dashboard-main">
+            <DashboardSideBar />
+            {children}
+          </div>
         </ProtectedRoute>
       </Providers>
     </div>

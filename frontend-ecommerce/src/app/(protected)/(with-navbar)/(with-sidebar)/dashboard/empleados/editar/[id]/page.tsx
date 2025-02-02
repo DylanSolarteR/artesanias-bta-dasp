@@ -29,8 +29,17 @@ function EditEmployeePage() {
   }, [id]);
 
   const handleSubmit = async (data) => {
-    await apiEmployee.updateEmployee(data);
-    router.push("/dashboard/productos");
+    await apiEmployee.updateEmployee(
+      Number(id),
+      data.email,
+      data.name,
+      data.lastName,
+      data.telephone,
+      data.role,
+      data.locationId,
+      data.activeS
+    );
+    router.push("/dashboard/empleados");
   };
 
   useEffect(() => {

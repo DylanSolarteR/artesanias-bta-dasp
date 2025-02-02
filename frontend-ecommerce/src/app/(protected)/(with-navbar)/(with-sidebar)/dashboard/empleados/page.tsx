@@ -41,7 +41,7 @@ function Page() {
       {hasPermission(role, "view:employees") && (
         <ConsultEmployees
           employees_table={employees_table}
-          //deleteEmployee={deleteEmployee}
+          deleteEmployee={deleteEmployee}
         />
       )}
     </>

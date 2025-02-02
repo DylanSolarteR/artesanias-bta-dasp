@@ -17,8 +17,6 @@ import { hasPermission } from "@/util/RolePermissions";
 
 import { useEffect, useState } from "react";
 import Loading from "@/components/Loading";
-import "@/app/css/dashboard.css";
-
 import { useRouter } from "next/navigation";
 
 function Dashboard() {
@@ -36,9 +34,9 @@ function Dashboard() {
     return <Loading />;
   } else {
     return (
-      <>
-        <main className="container">
-          <section className="dashboard">
+      <div className="container-dashboard">
+        <main className="h-full">
+          <section className="h-full">
             <h1>DASHBOARD</h1>
             <div className="flex-grid">
               {hasPermission(role, "view:employees") && (
@@ -109,7 +107,7 @@ function Dashboard() {
             </div>
           </section>
         </main>
-      </>
+      </div>
     );
   }
 }

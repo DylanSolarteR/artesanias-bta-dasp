@@ -10,7 +10,7 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
   const [name, setName] = useState<string>(product?.name || "");
   const [description, setDescription] = useState<string>(product?.description || "");
   const [price, setPrice] = useState<number>(product?.price || "");
-  const [img, setImage] = useState<string>(product?.img || "");
+  const [img, setImage] = useState<any>(product?.img || "");
   const [isOwnBase, setOwnBase] = useState<Boolean>();
   const [categoryId, setCategoryId] = useState<string>(product?.categoryId || "");
   const [category, setCategory] = useState<string>(product?.categoryName || "");

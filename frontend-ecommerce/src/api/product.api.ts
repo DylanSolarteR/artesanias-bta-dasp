@@ -10,6 +10,8 @@ type productFilters = {
     minPrice?: number,
     maxPrice?: number,
     nameProd?: string,
+    limit?: number,
+    offset?: number,
 }
 
 export async function createProduct(product) {
@@ -33,6 +35,8 @@ export async function listProducts({
     minPrice = null,
     maxPrice = null,
     nameProd = null,
+    limit = null,
+    offset = null,
 }: productFilters) {
     const query = new URLSearchParams();
     query.append('orderBy', `${orderBy[0]},${orderBy[1]}`)
@@ -47,6 +51,12 @@ export async function listProducts({
     }
     if (maxPrice) {
         query.append('maxPrice', maxPrice.toString())
+    }
+    if (limit) {
+        query.append('limit', limit.toString())
+    }
+    if (offset) {
+        query.append('offset', offset.toString())
     }
     try {
         const response = await AxiosInstance.get('/product/list?' + query.toString())

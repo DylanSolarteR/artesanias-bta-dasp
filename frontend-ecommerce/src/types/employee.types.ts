@@ -6,6 +6,7 @@ export interface EMPLOYEE {
     telephone: string;
     role: string;
     locationId: string;
+    active: boolean;
     docType: string;
     docNumber: string;
 }

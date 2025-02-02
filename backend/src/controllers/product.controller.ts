@@ -114,8 +114,8 @@ export async function listProducts(req: Request, res: Response) {
     let result = await dao.query(new Criteria({
         filters,
         sortBy: sorts,
-        limit: query['limit'] || null,
-        offset: query['offset'] || null
+        limit: Number(query['limit']) || null,
+        offset: Number(query['offset']) || null
 
     }));
 
