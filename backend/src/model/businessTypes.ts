@@ -51,6 +51,9 @@ export class Product {
         return this._id;
     }
 
+    getbaseImageKey() {
+        return `prod_${this.id}.`
+    }
 }
 
 
@@ -159,6 +162,10 @@ export class PhysicalLocation {
             throw Error('id is inmutable')
         }
         this._id = _id;
+    }
+
+    getbaseImageKey() {
+        return `loc_${this.id}.`
     }
 
 }

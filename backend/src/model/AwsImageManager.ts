@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import fs from "fs";
 import { ImageManager, type ImageParams } from "./imagesManager";
 import { urlencoded } from "express";
@@ -39,11 +39,18 @@ export class AwsImageManager implements ImageManager {
 
         const response = await this.s3.send(new PutObjectCommand({
             Bucket: this.bucketName,
-            Key: params.fileName,
+            Key: params.key,
             Body: payload,
             ContentType: params.contentType
         }))
 
-        return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.fileName}`;
+        return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.key}`;
+    }
+
+    async deleteImage(key: string): Promise<void> {
+        await this.s3.send(new DeleteObjectCommand({
+            Bucket: this.bucketName,
+            Key: key,
+        }))
     }
 }

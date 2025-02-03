@@ -98,7 +98,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     //
     async update(physical_location: PhysicalLocation): Promise<boolean> {
         let query = `UPDATE physical_location 
-                    SET address=$2, telephone=$3, active=$4, latitude=$5, longitude=$6
+                    SET address=$2, telephone=$3, active=$4, latitude=$5, longitude=$6,
                     image=$7
                     WHERE pk_id=$1;`
         try {

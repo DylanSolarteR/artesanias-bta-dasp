@@ -7,23 +7,12 @@ import fs from 'fs';
 import { AwsImageManager } from "../model/AwsImageManager";
 import { ImageManager } from '../model/imagesManager';
 
-function deleteImage(file: Express.Multer.File) {
-    if (!file) return
-    const path = file.path
-    fs.unlink(path, (err) => {
-        if (err) {
-            console.error(err)
-        }
-    })
-}
-
 export async function createProduct(req: MulterRequest, res: Response) {
     const file = req.file // Require uploadMiddleware.single('imgFile') (See Multer)
     const userRole = req['user_role'];
 
     if (userRole !== employeeRoles.administrator) {
         res.status(401).send('Es necesario ser administrador para crear un producto')
-        deleteImage(req.file)
         return
     }
 
@@ -31,13 +20,11 @@ export async function createProduct(req: MulterRequest, res: Response) {
     const dao = new ProductDAOPostgres();
     if (!name || !description || !price || !categoryId) {
         res.status(400).send('Los campos nombre, descripcion, precio, imagen y categoria son requeridos')
-        deleteImage(req.file)
         return
     }
 
     if (!isOwnBase && !baseProductId) {
         res.status(400).send('El campo baseProductId es requerido')
-        deleteImage(req.file)
         return
     }
 
@@ -55,7 +42,6 @@ export async function createProduct(req: MulterRequest, res: Response) {
     let insertResult = await dao.create(newProduct)
     if (!insertResult.hasResponse()) {
         res.status(500).send(insertResult.error)
-        deleteImage(req.file)
         return
     }
 
@@ -66,7 +52,6 @@ export async function createProduct(req: MulterRequest, res: Response) {
         const updateResult = await dao.update(product)
         if (!updateResult) {
             res.status(500).send("Error al establecer la base del producto")
-            deleteImage(req.file)
             return
         }
     }
@@ -79,26 +64,22 @@ export async function createProduct(req: MulterRequest, res: Response) {
     let imgUrl: string
     try {
         imgUrl = await imageManager.uploadImage({
-            fileName: product.id + '_' + file.originalname.split('.').pop(),
+            key: product.getbaseImageKey() + file.originalname.split('.').pop(),
             contentType: file.mimetype,
             imagePath: file.path
         })
     } catch (error) {
         res.status(200).send({ product, message: "Producto creado (sin imagen)" })
-        deleteImage(file)
         return
     }
     product.img = imgUrl
     const updateRes = await dao.update(product)
     if (!updateRes) {
         res.status(200).send({ product, message: "Producto creado (sin imagen)" })
-        deleteImage(file)
         return
     }
 
     res.status(200).send({ product })
-
-    deleteImage(file)
 }
 
 export async function listProducts(req: Request, res: Response) {
@@ -173,9 +154,8 @@ export async function listProducts(req: Request, res: Response) {
 
 }
 
-export async function updateProduct(req: Request, res: Response) {
+export async function updateProduct(req: MulterRequest, res: Response) {
     const userRole = req['user_role'];
-    console.log(userRole)
 
     if (userRole !== employeeRoles.administrator) {
         res.status(401).send('Es necesario ser administrador para actualizar un producto')
@@ -184,7 +164,7 @@ export async function updateProduct(req: Request, res: Response) {
     }
 
     let id = req.params.id;
-    let { baseProductId, name, description, price, img, categoryId } = req.body;
+    let { baseProductId, name, description, price, categoryId } = req.body;
 
     const dao = new ProductDAOPostgres();
     if (!id) {
@@ -204,7 +184,30 @@ export async function updateProduct(req: Request, res: Response) {
         res.status(500).send("Producto no encontrado")
         return
     }
+
     const product = productRes.value[0]
+
+    let img
+    if (req.file) {
+        const imageManager: ImageManager = new AwsImageManager()
+        try {
+            const key = product.img.split('/').pop() // Get the existing image key from the URL
+            const extension = req.file.originalname.split('.').pop()
+            // Prevents the deletion of default image
+            if (product.img.indexOf(product.getbaseImageKey()) !== -1) {
+                await imageManager.deleteImage(key)
+            }
+            img = await imageManager.uploadImage({
+                key: product.getbaseImageKey() + extension,
+                contentType: req.file.mimetype,
+                imagePath: req.file.path
+            })
+        } catch (error) {
+            res.status(500).send("Error al subir la imagen")
+            return
+        }
+    }
+
 
     product.baseProductId = baseProductId ?? product.baseProductId
     product.name = name ?? product.name

@@ -34,6 +34,10 @@ export async function identifyRole(req: Request, res: Response, next: NextFuncti
         return
     }
     const data = verifyToken(token);
+    if (!data) {
+        res.status(401).send('Invalid token')
+        return
+    }
     const userId = data['id'];
 
     try {
