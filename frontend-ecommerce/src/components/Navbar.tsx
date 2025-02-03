@@ -6,6 +6,9 @@ import Link from "next/link";
 import Image from "next/image";
 import "@/app/css/Navbar.css";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
+import HomeIcon from "@/app/icons/HomeIcon.svg?url";
+import ProfileIcon from "@/app/icons/ProfileIcon.svg?url";
+import LogoutIcon from "@/app/icons/LogoutIcon.svg?url";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { useCart } from "@/app/context/CartContext";
 import { decodeBadEncodeStrings } from "@/util/utils";
@@ -104,18 +107,22 @@ function Navbar() {
                   </span>
               </button>
               <ul className={isOpenEmployee ? "" : "invisible"}>
-                <li>
+                <li className="account-item">
+                  <Image src={HomeIcon} alt="Icono de dashboard" />
                   <Link href="/dashboard">Dashboard</Link>
                 </li>
-                <li>
+                <li className="account-item">
+                  <Image src={ProfileIcon} alt="Icono de cuenta" />
                   <Link href="/cuenta">Cuenta</Link>
                 </li>
-                <li className="logout">
+                <li className="account-item">
                   <button
+                    className="flex"
                     onClick={() => {
                       clearToken();
                     }}
                   >
+                    <Image src={LogoutIcon} alt="Icono de cerrar sesión" />
                     <Link href="/login">Cerrar sesión</Link>
                   </button>
                 </li>

@@ -11,18 +11,19 @@ import MenuIcon from "@/app/icons/MenuIcon.svg?url";
 import CloseSquareIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
-import BagIcon from "@/app/icons/BagIcon.svg?url";
 import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
 import ShopIcon from "@/app/icons/ShopIcon.svg?url";
 import ReportIcon from "@/app/icons/ReportIcon.svg?url";
-import ProductAdd from "@/app/icons/ProductAdd.svg?url";
-import ProductSearch from "@/app/icons/ProductSearch.svg?url";
-import UserAdd from "@/app/icons/UserAdd.svg?url";
-import UserSearch from "@/app/icons/UserSearch.svg?url";
-import LocationAdd from "@/app/icons/LocationAdd.svg?url";
-import LocationSearch from "@/app/icons/LocationSearch.svg?url";
-import ReportSales from "@/app/icons/ReportSales.svg?url";
-import ReportAnalysis from "@/app/icons/ReportAnalysis.svg?url";
+import ProductAdd from "@/app/icons/ProductAddIcon.svg?url";
+import ProductSearch from "@/app/icons/ProductSearchIcon.svg?url";
+import UserAdd from "@/app/icons/UserAddIcon.svg?url";
+import UserSearch from "@/app/icons/UserIcon.svg?url";
+import LocationAdd from "@/app/icons/LocationAddIcon.svg?url";
+import LocationSearch from "@/app/icons/LocationSearchIcon.svg?url";
+import ReportSales from "@/app/icons/ReportSalesIcon.svg?url";
+import ReportAnalysis from "@/app/icons/ReportAnalysisIcon.svg?url";
+import HomeIcon from "@/app/icons/HomeIcon.svg?url";
+import ProductIcon from "@/app/icons/ProductIcon.svg?url";  
 
 import Link from "next/link";
 
@@ -76,12 +77,12 @@ function DashboardSideBar() {
 
             <div className="option-dashboard">
               <h5 className="menu-title">
-              <Link href="/dashboard">
+              <Link href="../dashboard">
                 <span className="icon-and-text">
                 
                   <Image
-                    src={BagIcon}
-                    alt="Icono de inventario"
+                    src={HomeIcon}
+                    alt="Icono del dashboard"
                     width={24}
                     height={24}
                   />
@@ -98,7 +99,7 @@ function DashboardSideBar() {
               <h5 className="menu-title">
                 <span className="icon-and-text">
                   <Image
-                    src={BagIcon}
+                    src={InventoryIcon}
                     alt="Icono de inventario"
                     width={24}
                     height={24}
@@ -174,7 +175,7 @@ function DashboardSideBar() {
               >
                 <span className="icon-and-text">
                   <Image
-                    src={InventoryIcon}
+                    src={ProductIcon}
                     alt="Icono de producto"
                     width={24}
                     height={24}

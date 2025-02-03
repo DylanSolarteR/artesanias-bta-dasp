@@ -39,7 +39,7 @@
     .navbarUl {
         display: none;
         flex-direction: row;
-        width: auto; 
+        width: auto;
         max-width: 80%;
         background: var(--color-main);
         position: absolute;
@@ -61,7 +61,7 @@
 
     .topButton {
         display: flex;
-    }  
+    }
 }
 
 .title {
@@ -193,4 +193,13 @@
 
 .employeeMenu li:hover {
     background-color: var(--color-main);
+}
+
+.account-item {
+    display: flex;
+    align-items: center;
+}
+
+.account-item img {
+    margin: 0 10px;
 }
