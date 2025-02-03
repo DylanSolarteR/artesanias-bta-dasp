@@ -1,5 +1,23 @@
 
 
+export class Department {
+    constructor(
+        public name: string,
+        private _id?: number
+    ) { }
+
+    set id(_id) {
+        if (this._id != null) {
+            throw Error('id is inmutable')
+        }
+        this._id = _id;
+    }
+
+    get id() {
+        return this._id;
+    }
+}
+
 export class Product {
 
     public static readonly filterDict = {
@@ -33,6 +51,9 @@ export class Product {
         return this._id;
     }
 
+    getbaseImageKey() {
+        return `prod_${this.id}.`
+    }
 }
 
 
@@ -128,6 +149,7 @@ export class PhysicalLocation {
         public active: boolean,
         public latitude: number,
         public longitude: number,
+        public image: string,
         private _id?: number
     ) { }
 
@@ -140,6 +162,10 @@ export class PhysicalLocation {
             throw Error('id is inmutable')
         }
         this._id = _id;
+    }
+
+    getbaseImageKey() {
+        return `loc_${this.id}.`
     }
 
 }

@@ -41,7 +41,7 @@ export async function getUserRole(userId: number): Promise<employeeRoles> {
         throw Error(employeeResult.error);
     }
     if (employeeResult.value.length == 0) {
-        throw Error('This user was deleted');
+        throw Error('El usuario con id ' + userId + ' no existe');
     }
     if (employeeResult.value.length == 0) {
         console.log('Se nos metieron al rancho');

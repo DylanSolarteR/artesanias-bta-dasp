@@ -12,6 +12,7 @@ http://localhost:3200/api/product/list
 @token = token
 
 ### Crear producto, siendo este su misma base
+#NOTA: Para enviar enviar una imagen se debe enviar con el nombre imgFile
 POST http://localhost:3200/api/product
 Content-Type: application/json
 Authorization: Barer {{token}}
@@ -53,7 +54,6 @@ Authorization: Barer {{token}}
     "name": "Sanitario invisible artesanal",
     "description": "Espectacular sanitario invisible artesanal",
     "price": 20,
-    "img": "si soy una imagen x2",
     "categoryId": 2,
     "baseProductId": 2
 }

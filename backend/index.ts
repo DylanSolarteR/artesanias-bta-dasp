@@ -7,6 +7,7 @@ import physicalLocationRoutes from "./src/routes/physicalLocation.routes"
 import purchaseRoutes from "./src/routes/purchase.routes";
 import employeeRoutes from "./src/routes/employee.routes";
 import inventoryRoutes from "./src/routes/inventory.routes";
+import parametersRoutes from "./src/routes/parameters.routes";
 import cors from 'cors'
 
 //For env File 
@@ -26,6 +27,7 @@ app.use('/api/location', physicalLocationRoutes)
 app.use('/api/purchase', purchaseRoutes)
 app.use('/api/employee', employeeRoutes)
 app.use('/api/inventory', inventoryRoutes)
+app.use('/api/parameters', parametersRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Panthousand api :)');

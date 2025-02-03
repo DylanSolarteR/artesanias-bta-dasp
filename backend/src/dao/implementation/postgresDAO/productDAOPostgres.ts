@@ -35,7 +35,6 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     res.rows[0].isActive,
                     res.rows[0].pk_id
                 )
-                console.log(createdProduct)
                 return new ObjectResponse(true, createdProduct, null)
             }
         }
@@ -162,7 +161,6 @@ export class ProductDAOPostgres implements IDAO<Product> {
                     res.rows[0].fk_category,
                     res.rows[0].pk_id
                 );
-                console.log(updatedProduct);
                 return true;
             } else {
                 return false;
