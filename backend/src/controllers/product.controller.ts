@@ -4,7 +4,7 @@ import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
 import { employeeRoles, Product } from '../model/businessTypes';
 import { MulterRequest } from '../custom';
 import fs from 'fs';
-import { AwsImageManager } from "../model/awsImageManager";
+import { AwsImageManager } from "../model/AwsImageManager";
 import { ImageManager } from '../model/imagesManager';
 
 function deleteImage(file: Express.Multer.File) {
