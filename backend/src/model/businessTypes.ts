@@ -1,5 +1,23 @@
 
 
+export class Department {
+    constructor(
+        public name: string,
+        private _id?: number
+    ) { }
+
+    set id(_id) {
+        if (this._id != null) {
+            throw Error('id is inmutable')
+        }
+        this._id = _id;
+    }
+
+    get id() {
+        return this._id;
+    }
+}
+
 export class Product {
 
     public static readonly filterDict = {
