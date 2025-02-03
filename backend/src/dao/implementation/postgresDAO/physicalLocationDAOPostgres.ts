@@ -7,7 +7,7 @@ import { CriteriaPostgresConverter } from "../CriteriaPostgresConverter";
 
 export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     async create(physicalLocation: PhysicalLocation): Promise<ObjectResponse<PhysicalLocation>> {
-        let query = 'INSERT INTO physical_location VALUES (DEFAULT, $1, $2, $3, $4, $5) RETURNING *'
+        let query = 'INSERT INTO physical_location VALUES (DEFAULT, $1, $2, $3, $4, $5, $6) RETURNING *'
         try {
             let pool = await PostgresConnection.getInstance().getPool()
             let res = await pool.query({
@@ -17,7 +17,8 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                     physicalLocation.telephone,
                     physicalLocation.active,
                     physicalLocation.latitude,
-                    physicalLocation.longitude
+                    physicalLocation.longitude,
+                    physicalLocation.image
                 ]
             })
 
@@ -28,6 +29,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                     res.rows[0].active,
                     res.rows[0].latitude,
                     res.rows[0].longitude,
+                    res.rows[0].image,
                     res.rows[0].pk_id
                 )
                 return new ObjectResponse(true, createdLocation, null)
@@ -59,6 +61,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                     l.active,
                     l.latitude,
                     l.longitude,
+                    l.image,
                     l.pk_id
                 ))
             }
@@ -96,6 +99,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
     async update(physical_location: PhysicalLocation): Promise<boolean> {
         let query = `UPDATE physical_location 
                     SET address=$2, telephone=$3, active=$4, latitude=$5, longitude=$6
+                    image=$7
                     WHERE pk_id=$1;`
         try {
             let pool = await PostgresConnection.getInstance().getPool()
@@ -107,7 +111,8 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
                     physical_location.telephone,
                     physical_location.active,
                     physical_location.latitude,
-                    physical_location.longitude
+                    physical_location.longitude,
+                    physical_location.image
                 ]
             })
 

@@ -146,6 +146,7 @@ export class PhysicalLocation {
         public active: boolean,
         public latitude: number,
         public longitude: number,
+        public image: string,
         private _id?: number
     ) { }
 

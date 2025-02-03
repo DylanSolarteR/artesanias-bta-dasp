@@ -48,7 +48,7 @@ export async function createPhysicalLocation(req: Request, res: Response) {
         longitude
     } = req.body
     let dao = new PhysicalLocationDAOPostgres();
-    let result = await dao.create(new PhysicalLocation(address, telephone, true, latitude, longitude))
+    let result = await dao.create(new PhysicalLocation(address, telephone, true, latitude, longitude, ''))
 
     if (result.hasResponse()) {
         res.status(200).send(result.value)
@@ -107,7 +107,8 @@ export async function updatePhysicalLocation(req: Request, res: Response) {
         res.status(400).send("No se encontró el punto físico")
         return
     }
-    let result = await dao.update(new PhysicalLocation(address, telephone, active, latitude, longitude, id))
+    // TODO add image
+    let result = await dao.update(new PhysicalLocation(address, telephone, active, latitude, longitude, '', id))
 
     if (result) {
         res.status(200).send('Punto físico actualizado')
