@@ -1,9 +1,16 @@
 "use client";
 import PdfIcon from "@/app/icons/PdfIcon.svg?url";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
+import { useState } from "react";
 
 function page() {
+  const [dateStart, setDateStart] = useState<Date>(new Date());
+  const [dateEnd, setDateEnd] = useState<Date>(new Date());
+  const [saleType, setSaleType] = useState<string>("");
+  const [physicalPoint, setPhysicalPoint] = useState<string>("");
+  const [order, setOrder] = useState<string>("");
   return (
     <div>
       <main>
@@ -12,26 +19,68 @@ function page() {
         <section>
           <div>
             <h2>Filtros de búsqueda</h2>
-            <input
-              type="text"
-              className="input max-w-sm"
-              placeholder="YYYY-MM-DD"
-              id="flatpickr-date-start"
+            <DatePicker
+              selected={dateStart}
+              onChange={(date: Date) => setDateStart(date)}
+              dateFormat={"dd/MM/yyyy"}
+              showYearDropdown={true}
+              showMonthDropdown={true}
+              scrollableYearDropdown={true}
+              title="Fecha de inicio"
+              dateFormatCalendar=" "
+              customInput={
+                <input
+                  className="input-standard"
+                  placeholder="Select Month and Year"
+                />
+              }
             />
-            <input
-              type="text"
-              className="input max-w-sm"
-              placeholder="YYYY-MM-DD"
-              id="flatpickr-date-end"
+            <DatePicker
+              selected={dateEnd}
+              onChange={(date: Date) => setDateEnd(date)}
+              dateFormat={"dd/MM/yyyy"}
+              showYearDropdown={true}
+              showMonthDropdown={true}
+              scrollableYearDropdown={true}
+              title="Fecha de inicio"
+              dateFormatCalendar=" "
+              customInput={
+                <input
+                  className="input-standard"
+                  placeholder="Select Month and Year"
+                />
+              }
             />
-            <select name="" id="">
+            <select
+              name="sale-type-select"
+              id=""
+              onSelect={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setSaleType(e.target.value);
+              }}
+            >
+              <option value="">Todo</option>
+              <option value="">Online</option>
+              <option value="">Físico</option>
+            </select>
+            <select
+              name="physical-point-select"
+              id=""
+              onSelect={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setPhysicalPoint(e.target.value);
+              }}
+            >
               <option value=""></option>
             </select>
-            <select name="" id="">
-              <option value=""></option>
-            </select>
-            <select name="" id="">
-              <option value=""></option>
+            <select
+              name="order-select"
+              id=""
+              onSelect={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setOrder(e.target.value);
+              }}
+            >
+              <option value="">Más vendido</option>
+              <option value="">Menos vendido</option>
+              <option value="">Categoria</option>
             </select>
           </div>
         </section>
