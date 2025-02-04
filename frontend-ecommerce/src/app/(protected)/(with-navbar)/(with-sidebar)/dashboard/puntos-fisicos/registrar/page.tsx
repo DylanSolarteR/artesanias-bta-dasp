@@ -10,19 +10,16 @@ function Page({}: Props) {
   const { role } = useMainContext();
   const router = useRouter();
 
-  return !role ? (
-    <Loading />
-  ) : (
-    <>
-      {!hasPermission(role, "view:physical-stores") ? (
-        router.push("/POS")
-      ) : (
-        <>
-          <RegisterPhysicalLocation />
-        </>
-      )}
-    </>
-  );
+  if (!role) {
+    return <Loading />;
+  }
+
+  if (!hasPermission(role, "view:physical-stores")) {
+    router.push("/POS");
+    return null;
+  }
+
+  return <RegisterPhysicalLocation />;
 }
 
 export default Page;

@@ -23,7 +23,7 @@ import LocationSearch from "@/app/icons/LocationSearchIcon.svg?url";
 import ReportSales from "@/app/icons/ReportSalesIcon.svg?url";
 import ReportAnalysis from "@/app/icons/ReportAnalysisIcon.svg?url";
 import HomeIcon from "@/app/icons/HomeIcon.svg?url";
-import ProductIcon from "@/app/icons/ProductIcon.svg?url";  
+import ProductIcon from "@/app/icons/ProductIcon.svg?url";
 
 import Link from "next/link";
 
@@ -75,11 +75,10 @@ function DashboardSideBar() {
 
           {/* Menú Inventario */}
 
-            <div className="option-dashboard">
-              <h5 className="menu-title">
+          <div className="option-dashboard">
+            <h5 className="menu-title select-none">
               <Link href="../dashboard">
                 <span className="icon-and-text">
-                
                   <Image
                     src={HomeIcon}
                     alt="Icono del dashboard"
@@ -87,25 +86,26 @@ function DashboardSideBar() {
                     height={24}
                   />
                   {!collapsed && " Dashboard"}
-                  
                 </span>
-                </Link>
-              </h5>
-            </div>
+              </Link>
+            </h5>
+          </div>
 
           {/* Menú Inventario */}
           {hasPermission(role, "view:inventory") && (
             <div className="option-dashboard">
-              <h5 className="menu-title">
-                <span className="icon-and-text">
-                  <Image
-                    src={InventoryIcon}
-                    alt="Icono de inventario"
-                    width={24}
-                    height={24}
-                  />
-                  {!collapsed && " Inventario"}
-                </span>
+              <h5 className="menu-title select-none">
+                <Link href={`/dashboard/inventario`}>
+                  <span className="icon-and-text">
+                    <Image
+                      src={InventoryIcon}
+                      alt="Icono de inventario"
+                      width={24}
+                      height={24}
+                    />
+                    {!collapsed && " Inventario"}
+                  </span>
+                </Link>
               </h5>
             </div>
           )}
@@ -135,7 +135,7 @@ function DashboardSideBar() {
                 )}
               </h5>
               {showEmployeeMenu && (
-                <ul className="submenu">
+                <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
                       <Image
@@ -222,7 +222,7 @@ function DashboardSideBar() {
               )}
             </div>
           )}
-          
+
           {/* Menú Puntos Fisicos */}
           {hasPermission(role, "view:physical-stores") && (
             <div className="option-dashboard">
@@ -243,8 +243,9 @@ function DashboardSideBar() {
                 </span>
                 {!collapsed && (
                   <span
-                    className={`arrow-icon ${showPhysicalPointsMenu ? "open" : ""
-                      }`}
+                    className={`arrow-icon ${
+                      showPhysicalPointsMenu ? "open" : ""
+                    }`}
                   >
                     <Image src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
