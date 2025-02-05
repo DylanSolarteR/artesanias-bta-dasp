@@ -16,20 +16,20 @@ function Page() {
 
   function deleteEmployee(id: number) {
     apiEmployees.deleteEmployee(String(id));
-    const newEmployee = employees_table.filter((employee) => employee.id !== id);
+    const newEmployee = employees_table.filter(
+      (employee) => employee.id !== id
+    );
     setEmployees_table(newEmployee);
   }
 
   useEffect(() => {
-    apiEmployees
-      .listAllEmployees()
-      .then((employee) => {
-        setEmployees_table(employee);
-      })
+    apiEmployees.listAllEmployees().then((employee) => {
+      setEmployees_table(employee);
+    });
   }, []);
 
   useEffect(() => {
-    if (role && !hasPermission(role, "view:products")) {
+    if (role && !hasPermission(role, "view:employees")) {
       router.push("/POS");
     }
   }, [role, router]);

@@ -43,7 +43,7 @@ function EditEmployeePage() {
   };
 
   useEffect(() => {
-    if (role && !hasPermission(role, "view:products")) {
+    if (role && !hasPermission(role, "view:employees")) {
       router.push("/POS");
     }
   }, [role, router]);

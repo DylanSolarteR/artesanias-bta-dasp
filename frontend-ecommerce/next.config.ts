@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: "https", // or http
         hostname: "placehold.co", // if your website has no www, drop it
       },
+      {
+        protocol: "https",
+        hostname: process.env.AWS_BUCKET_URL,
+      }
     ],
   },
   webpack(config) {

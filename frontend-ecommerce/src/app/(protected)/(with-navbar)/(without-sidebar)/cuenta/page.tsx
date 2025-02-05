@@ -1,7 +1,7 @@
 "use client";
-import UserIcon from "@/app/icons/UserIcon.svg?url";
-import UserCashierIcon from "@/app/images/UserCashierIcon.png";
-import UserAdminIcon from "@/app/images/UserAdminIcon.png";
+import UserManagerIcon from "@/app/icons/UserManagerIcon.svg?url";
+import UserCashierIcon from "@/app/icons/UserCashierIcon.svg?url";
+import UserAdminIcon from "@/app/icons/UserAdminIcon.svg?url";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/app/context/AuthContext";
 import { decodeBadEncodeStrings, decodeToken } from "@/util/utils";
@@ -63,7 +63,7 @@ function Cuenta() {
                 ? UserAdminIcon
                 : userRole === "cashier"
                 ? UserCashierIcon
-                : UserIcon
+                : UserManagerIcon
             }
             alt="Icono de usuario"
             width={150}

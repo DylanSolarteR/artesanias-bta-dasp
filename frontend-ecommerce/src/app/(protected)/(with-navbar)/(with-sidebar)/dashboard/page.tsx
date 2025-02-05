@@ -98,7 +98,7 @@ function Dashboard() {
                   href={[
                     {
                       title: "Ver reportes",
-                      href: "/dashboard/reportes",
+                      href: "/dashboard/reporte/ventas",
                       icon: ReportIcon,
                     },
                   ]}
