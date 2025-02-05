@@ -9,10 +9,10 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { listProductsFromInventoryByLocationId } from "@/api/inventory.api";
 import { decodeToken } from "@/util/utils";
 import Bill from "@/app/icons/Bill.svg?url";
-import BoxSearch from "@/app/icons/BoxSearch.svg?url";
+import BoxSearch from "@/app/icons/BoxSearchIcon.svg?url";
 import toast from "react-hot-toast";
-import RegistroPOS from "@/components/POS/RegistroPOS";
-import ConsultaPOS from "@/components/POS/ConsultaPOS";
+import RegistroPOS from "@/components/POS/RegisterPOS";
+import ConsultaPOS from "@/components/POS/ConsultPOS";
 import "@/app/css/POS.css";
 
 export type PAY_METHOD = "credit_card" | "debit_card" | "cash" | "";
@@ -31,6 +31,10 @@ function Page() {
   const [products_added, setProducts_added] = useState<POS_ADDED_PRODUCT[]>([]);
   const [pay_method, setPay_method] = useState<PAY_METHOD>("");
   const [total, setTotal] = useState<number>(0);
+
+  const [imageSource, setImageSource] = useState<string>(
+    "https://placehold.co/450x300/EEE/31343C?font=lato&text=NoImage"
+  );
 
   const { authToken } = useAuthContext();
   const user_info = decodeToken(authToken);
@@ -85,6 +89,7 @@ function Page() {
       product: product,
       subtotal: product.price,
     });
+    setImageSource(product.product_image);
     setIsListVisible(false); // Oculta la lista al seleccionar un elemento
   };
 
@@ -106,16 +111,16 @@ function Page() {
       <div className="container-pos">
         <aside className="filter">
           <h1 className="h-fit text-[2.875rem] px-0">MÓDULO DE FACTURACIÓN</h1>
-          <div>
+          <div className="flex flex-col gap-4">
             <button
-              className="flex items-center gap-2"
+              className="flex items-center gap-4"
               onClick={() => setSidebarPage("register")}
             >
               <Image alt="icono" src={Bill} width={80} height={80} />
               <span className="text-[2.875rem]">Registrar productos</span>
             </button>
             <button
-              className="flex items-center gap-2"
+              className="flex items-center gap-4"
               onClick={() => setSidebarPage("search")}
             >
               <Image alt="icono" src={BoxSearch} width={80} height={80} />
@@ -123,7 +128,7 @@ function Page() {
             </button>
           </div>
         </aside>
-        <main className="basis-128 grow">
+        <main className="basis-128 grow min-h-[54rem] h-full">
           {sidebarPage === "register" && (
             <RegistroPOS
               product_list={product_list}
@@ -137,7 +142,9 @@ function Page() {
               handleProductSelect={handleProductSelect}
               removeFromProductsAdded={removeFromProductsAdded}
               changeSubtotalByProductId={changeSubtotalByProductId}
+              payMethod={pay_method}
               handlePayMethodSelect={handlePayMethodSelect}
+              imageSource={imageSource}
             />
           )}
           {sidebarPage === "search" && (

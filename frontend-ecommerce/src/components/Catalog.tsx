@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMainContext } from "@/app/context/MainContext";
 import "@/app/css/Catalog-product.css";
 
-function Catalog({ products }) {
+function Catalog({ products }: { products: PRODUCT[] }) {
   const { gridClass } = useMainContext();
 
   return products?.length === 0 ? (
@@ -21,7 +21,7 @@ function Catalog({ products }) {
             <Image
               src={
                 product.imagen ??
-                "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+                "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
               }
               alt={product.nombre}
               height={200}

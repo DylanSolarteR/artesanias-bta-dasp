@@ -8,10 +8,16 @@ import { onlyNumberInput } from "@/util/utils";
 import PlusIcon from "@/app/icons/PlusIcon.png";
 import MinusIcon from "@/app/icons/MinusIcon.png";
 import Loading from "@/components/Loading";
-import { getProductById, getProductsByBaseId } from "@/api/product.api";
+import {
+  getProductById,
+  getProductsByBaseId,
+  listProducts,
+} from "@/api/product.api";
 import { useCart } from "@/app/context/CartContext";
 import { PRODUCT } from "@/types/product.types";
 import ProductVariants from "@/components/ProductVariants";
+import toast from "react-hot-toast";
+import { shuffle } from "@/util/utils";
 
 function Product() {
   const { addToCart } = useCart();
@@ -31,6 +37,16 @@ function Product() {
   });
   const [productVariants, setProductVariants] = useState<PRODUCT[]>([]);
   const [quantity, setQuantity] = useState<any>(0);
+
+  const [recommendations, setRecommendations] = useState<
+    {
+      imagen: string;
+      nombre: string;
+      precio: number;
+      id: number;
+    }[]
+  >([]);
+
   const aumentarCantidad = () => {
     if (product.stock === 0) return;
     if (quantity >= product?.stock) {
@@ -52,6 +68,7 @@ function Product() {
     if (quantity > 0) {
       const newItem = { productId, quantity: quantity };
       addToCart(newItem);
+      toast.success("Producto añadido al carrito");
     }
   };
   //Product is fetched when the page is loaded
@@ -61,11 +78,21 @@ function Product() {
       setReady(true);
     });
   }, []);
-  //Product Variants are fetched when the product is loaded
+
+  //Product Variants & recommendations are fetched when the product is loaded
   useEffect(() => {
     if (!productVariants.length && product.baseProductId) {
       getProductsByBaseId(product.baseProductId).then((data) => {
         setProductVariants(data);
+      });
+    }
+    if (!recommendations.length && product.categoryId) {
+      listProducts({
+        orderBy: ["price", "desc"],
+        category: product.categoryId,
+      }).then((data) => {
+        shuffle(data);
+        setRecommendations(data.slice(0, 10));
       });
     }
   }, [product]);
@@ -80,7 +107,7 @@ function Product() {
     <Loading />
   ) : (
     <div className="container">
-      <main className="main-center">
+      <main className="main-center justify-center items-start flex flex-col md:px-48">
         <div className="return">
           <Link href={"/catalogo"}>
             <Image
@@ -92,15 +119,16 @@ function Product() {
           </Link>
           <Link href={"/catalogo"}>Seguir mirando productos</Link>
         </div>
-        <section className="flex-simple">
-          <div className="image-product">
+        <section className="flex gap-[10px] max-w-full w-full self-center pt-2 md:flex-row flex-col">
+          <div className="image-product max-w-[32rem] w-full flex flex-col justify-center items-center">
             <Image
               src={
-                "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+                "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
               }
               alt={"Imagen " + product?.name}
               height={500}
               width={500}
+              className="rounded-lg"
             />
             {productVariants.length > 1 ? (
               <ProductVariants
@@ -109,8 +137,8 @@ function Product() {
               />
             ) : null}
           </div>
-          <div className="flex-column">
-            <h4>{product?.name}</h4>
+          <div className="flex-column min-w-[20rem] max-w-[30rem]">
+            <h4 className="font-bold">{product?.name}</h4>
             <h4>{"Precio: $" + product?.price || "Por asignar"} </h4>
             <p>{"Cantidad disponible: " + product?.stock}</p>
             <div className="cantProduct">
@@ -172,9 +200,33 @@ function Product() {
             </button>
           </div>
         </section>
-        <h3>Descripción del producto</h3>
-        <p>{product?.description}</p>
-        <p>{"Categoría: " + product?.categoryName}</p>
+        <section className="py-10 w-full">
+          <h3 className="">Descripción del producto</h3>
+          <p className="py-2">{product?.description}</p>
+          <p className="py-2">{"Categoría: " + product?.categoryName}</p>
+        </section>
+        <section className="py-10 w-full">
+          <h3 className="mb-2">Recomendaciones</h3>
+          <div className="grid grid-cols-2 items-center justify-center">
+            {recommendations.map((rec) => (
+              <div key={rec.id} className="p-2">
+                <Link href={"/producto/" + rec.id}>
+                  <Image
+                    src={
+                      "https://placehold.co/300x200/EEE/31343C?font=lato&text=NoImage"
+                    }
+                    alt={"Imagen " + rec.nombre}
+                    height={200}
+                    width={300}
+                    className="rounded-lg"
+                  />
+                  <h4 className="text-ellipsis">{rec.nombre}</h4>
+                  <p>{"Precio: $" + rec.precio}</p>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
     </div>
   );

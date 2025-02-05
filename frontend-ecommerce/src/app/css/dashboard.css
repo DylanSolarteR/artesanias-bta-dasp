@@ -29,12 +29,36 @@
 .option-dashboard {
     width: 100%;
     cursor: pointer;
-    transition: background-color 0.3s;
-    padding: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    padding: 10px; 
+    margin-bottom: 8px;   
+    border-radius: 8px;
 }
 
 .option-dashboard:hover {
-    background-color: var(--color-gray-soft);
+    background-color: var(--color-main-hover);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.submenu {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.submenu li {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.submenu li:hover {
+    color: var(--background);
+}
+
+.submenu li:hover img {
+    filter: brightness(0) invert(1);
 }
 
 .menu-title {
@@ -65,6 +89,8 @@
     right: 100%;
     cursor: pointer;
 }
+
+/* Aquí inicia la parte de las tarjetas */
 
 .dashboard-card-motion {
     width: var(--card-motion-width);

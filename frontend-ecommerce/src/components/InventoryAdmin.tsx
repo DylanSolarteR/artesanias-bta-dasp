@@ -1,14 +1,12 @@
 "use client";
-import Image from "next/image";
 import { useState, useEffect, useMemo } from "react";
-import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import KPICard from "@/components/KPICard";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { listProductsFromAllInventories } from "@/api/inventory.api";
 import Loading from "@/components/Loading";
 import { listCategories } from "@/api/category.api";
 import { listPhysicalLocations } from "@/api/physicalLocation.api";
-import ConsultaProducto from "@/components/ConsultaProducto";
+import ConsultaProducto from "@/components/ProductInventoryList";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import PhysicalPointCard from "@/components/PhysicalPointCard";
 import { LOW_STOCK_THRESHOLD } from "@/util/utils";
@@ -112,7 +110,7 @@ function InventoryAdmin() {
               : products_table.length
           }
         />
-        <KPICard title={"Alerta bajo stock"} value={productsBelowThreshold} />
+        <KPICard title={"Bajo stock"} value={productsBelowThreshold} />
       </section>
       <section className="flex-column">
         <h2>Inventario de cada punto físico</h2>
@@ -148,7 +146,11 @@ function InventoryAdmin() {
         </div>
       </section>
       <section className="zone-inventary">
-        <ConsultaProducto products_table={products_table} />
+        <ConsultaProducto
+          products_table={products_table}
+          productsGeneralInventory={productsAllInventories}
+          setProductsGeneralInventory={setProductsAllInventories}
+        />
       </section>
     </div>
   ) : (

@@ -1,9 +1,30 @@
 "use client";
 import Image from "next/image";
-import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import { EMPLOYEE } from "@/types/employee.types";
+import { useRouter } from "next/navigation";
+import SearchIcon from "@/app/icons/SearchIcon.svg?url";
+import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
+import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 
-function ConsultEmployees({ employees_table }: { employees_table: EMPLOYEE[] }) {
+
+interface ConsultEmployeesProps {
+  employees_table: EMPLOYEE[];
+  deleteEmployee: (id: number) => void;
+}
+
+function ConsultEmployees({
+  employees_table,
+  deleteEmployee,
+}: ConsultEmployeesProps) {
+  const router = useRouter();
+
+  const handleDelete = (id: number) => {
+    deleteEmployee(id);
+  };
+
+  const handleUpdate = (id: number) => {
+    router.push(`empleados/editar/${id}`);
+  };
   return (
     <div className="container-dashboard">
       <div className="flex-column">
@@ -30,23 +51,23 @@ function ConsultEmployees({ employees_table }: { employees_table: EMPLOYEE[] }) 
             {employees_table.length !== 0 ? (
               employees_table.map((employee) => (
                 <tr key={employee.id} className="text-center">
-                  <td>{employee.identificacion}</td>
-                  <td>{employee.nombre}</td>
-                  <td>{employee.rol}</td>
-                  <td>{employee.puntoFisico}</td>
-                  <td>{employee.celular}</td>
-                  <td>
-                    <button>
+                  <td data-label="Identificación">{employee.id}</td>
+                  <td data-label="Nombre">{employee.name}</td>
+                  <td data-label="Rol">{employee.role}</td>
+                  <td data-label="Punto Físico">{employee.locationId}</td>
+                  <td data-label="Celular">{employee.telephone}</td>
+                  <td data-label="Acciones">
+                    <button onClick={() => handleUpdate(employee.id)}>
                       <Image
-                        src={SearchIcon}
+                        src={UpdateIcom}
                         alt="update"
                         width={30}
                         height={30}
                       />
                     </button>
-                    <button>
+                    <button onClick={() => handleDelete(employee.id)}>
                       <Image
-                        src={SearchIcon}
+                        src={DeleteIcon}
                         alt="delete"
                         width={30}
                         height={30}

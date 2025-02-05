@@ -10,24 +10,25 @@ const jwt_config: SignOptions = {
     expiresIn: '2h'
 }
 
-export function singToken(payload) {
-    return jwt.sign(payload, process.env.JWT_SECRET, jwt_config)
+export function singToken(payload, options?: SignOptions): string {
+    const _jwt_config = { ...jwt_config, ...options }
+    return jwt.sign(payload, process.env.JWT_SECRET, _jwt_config)
 }
 
-export function verifyToken(token): false | { id: string } {
+export function verifyToken(token): false | any {
     try {
-        return <{ id: string }>jwt.verify(token, process.env.JWT_SECRET)
+        return jwt.verify(token, process.env.JWT_SECRET)
     } catch (error) {
         return false
     }
 }
 
-export async function comparePassword(toCompare, originalPassword) {
-    return await compare(toCompare, originalPassword)
+export async function compareHashString(toCompare, hashedString) {
+    return await compare(toCompare, hashedString)
 }
 
-export async function hashPassword(password: string) {
-    return await hash(password, parseInt(process.env.SALT))
+export async function hashString(str: string) {
+    return await hash(str, parseInt(process.env.SALT))
 }
 
 export async function getUserRole(userId: number): Promise<employeeRoles> {
@@ -40,7 +41,7 @@ export async function getUserRole(userId: number): Promise<employeeRoles> {
         throw Error(employeeResult.error);
     }
     if (employeeResult.value.length == 0) {
-        throw Error('This user was deleted');
+        throw Error('El usuario con id ' + userId + ' no existe');
     }
     if (employeeResult.value.length == 0) {
         console.log('Se nos metieron al rancho');

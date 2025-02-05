@@ -43,10 +43,11 @@ function scrollRight() {
 export default function Home() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState<PRODUCT[]>([]);
-
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [categoryProducts, setCategoryProducts] = useState([]);
   const center = { lat: 4.60971, lng: -74.08175 };
-  const [markers, setMarkers] = useState<Marker[]>([ ]);
-  
+  const [markers, setMarkers] = useState<Marker[]>([]);
+
   useEffect(() => {
     listPhysicalLocations().then((data) => {
       const transformedMarkers: Marker[] = data.map((location) => ({
@@ -56,17 +57,20 @@ export default function Home() {
         },
         title: `${location.address}`,
       }));
-  
+
       setMarkers((prevMarkers) => [...prevMarkers, ...transformedMarkers]);
     });
+    console.log(process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
   }, []);
-  
 
   useEffect(() => {
     apiProduct
-      .listProducts({ orderBy: ["price", "desc"] })
+      .listProducts({ 
+        orderBy: ["price", "desc"], 
+        limit: 6, 
+      })
       .then((products) => {
-        setProducts(products.slice(1, 7));
+        setProducts(products);
       })
       .catch((error) => {
         console.error("Error al obtener productos:", error);
@@ -79,7 +83,23 @@ export default function Home() {
     });
   }, []);
 
-  console.log(markers);
+  const handleCategorySelect = async (category) => {
+    setSelectedCategory(category);
+    apiProduct
+      .listProducts({ 
+        orderBy: ["price", "desc"], 
+        category: selectedCategory, 
+        limit: 4,
+      })
+      .then((products) => {
+        console.log(products);
+        setCategoryProducts(products.slice(1, 4));
+      })
+      .catch((error) => {
+        console.error("Error al obtener productos:", error);
+      });
+    
+  };
 
   return (
     <div className="flex-column">
@@ -123,12 +143,13 @@ export default function Home() {
           </button>
           <div className="carousel-track" id="track">
             {categories.map((category, index) => (
-              <div className="carousel-item" key={index}>
-                <CategCard
-                  title={category.name}
-                  backImg={DefaultImage}
-                  link={`/catalogo`}
-                />
+              <div 
+                className="carousel-item"
+                key={index}
+                onClick={() => handleCategorySelect(category.id)}
+                style={{ cursor: "pointer" }}
+              >
+                <CategCard title={category.name} backImg={DefaultImage} />
               </div>
             ))}
           </div>
@@ -138,6 +159,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/*{selectedCategory && (
+        <section className="category-products-section">
+          <h1 className="section-title text-center">
+            - Productos de {selectedCategory.name} -
+          </h1>
+          <p>Estos son los productos de la categoría {selectedCategory.name}.</p>
+          <div className="products-grid">
+            {categoryProducts.map((product) => (
+              <div key={product.id} className="product-card">
+                <h2>{product.name}</h2>
+                <p>{product.description}</p>
+                <p>Precio: ${product.price}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}*/}
+      
       <section className="section-products">
         <h1 className="section-title text-center">- Productos Populares -</h1>
         <p className="mb-0">
@@ -161,7 +200,12 @@ export default function Home() {
           diferentes regiones del país.
         </p>
         <div>
-          <Map apiKey="AIzaSyB_PLx3pSl3r7czt8aoIjzb0hoUi65XcA8" center={center} zoom={12} markers={markers} />
+          <Map
+            apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
+            center={center}
+            zoom={12}
+            markers={markers}
+          />
         </div>
       </section>
 

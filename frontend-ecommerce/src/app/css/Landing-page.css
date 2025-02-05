@@ -3,12 +3,17 @@
 }
 
 .header {
-  position: relative;
   height: 100vh;
   min-height: 500px;
-  background: url(../images/Header.jpg) no-repeat center center fixed;
+  background: url(../images/Header.jpg) no-repeat center center;
   background-size: cover;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 80vh;
+  }
 }
 
 .header .overlay-f {
@@ -35,6 +40,16 @@
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .header .overlay-f .title {
+    font-size: 36px;
+  }
+
+  .header .overlay-f .subtitle {
+    font-size: 18px;
+  }
 }
 
 .header .overlay-f .subtitle {

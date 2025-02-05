@@ -11,39 +11,14 @@ import "@/app/css/Detail-shoppingCart.css";
 import { useCart } from "@/app/context/CartContext";
 import { getProductById } from "@/api/product.api";
 import { PRODUCT } from "@/types/product.types";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 function Carrito() {
   const { cart, addToCart, removeFromCart } = useCart();
   const [productDetails, setProductDetails] = useState<PRODUCT[]>([]);
   const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const productDetails = await Promise.all(
-        cart.map(async (cartItem) => {
-          const product = await getProductById(cartItem.productId);
-          return { ...product, quantity: cartItem.quantity };
-        })
-      );
-      setProductDetails(productDetails);
-    };
-
-    fetchProducts();
-  }, [cart]);
-
-  useEffect(() => {
-    const calculateTotal = async () => {
-      const total = cart.reduce((acc, productCart) => {
-        const products = productDetails.find(
-          (product) => product._id === productCart.productId
-        );
-        return acc + (products ? products.price * productCart.quantity : 0);
-      }, 0);
-      setTotal(total);
-    };
-
-    calculateTotal();
-  }, [cart, productDetails]);
+  const router = useRouter();
 
   const eliminarProducto = (productId: number) => {
     removeFromCart(productId);
@@ -82,6 +57,42 @@ function Carrito() {
       addToCart({ productId, quantity: newQuantity });
     }
   };
+
+  function handleRedirectButton() {
+    if (cart.length === 0) {
+      toast.error("No hay productos en tu carrito");
+    } else {
+      router.push("/comprar");
+    }
+  }
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const productDetails = await Promise.all(
+        cart.map(async (cartItem) => {
+          const product = await getProductById(cartItem.productId);
+          return { ...product, quantity: cartItem.quantity };
+        })
+      );
+      setProductDetails(productDetails);
+    };
+
+    fetchProducts();
+  }, [cart]);
+
+  useEffect(() => {
+    const calculateTotal = async () => {
+      const total = cart.reduce((acc, productCart) => {
+        const products = productDetails.find(
+          (product) => product._id === productCart.productId
+        );
+        return acc + (products ? products.price * productCart.quantity : 0);
+      }, 0);
+      setTotal(total);
+    };
+
+    calculateTotal();
+  }, [cart, productDetails]);
 
   return (
     <div className="container">
@@ -130,7 +141,7 @@ function Carrito() {
                     {/* Aquí va la información de cada producto*/}
                     <Image
                       src={
-                        "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+                        "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
                       }
                       alt={product.name}
                       width={150}
@@ -216,11 +227,11 @@ function Carrito() {
                 })}
               </tbody>
             </table>
-            <h5>Total: $ {total}</h5>
+            <h5>Total (sin IVA): $ {total}</h5>
             {/*Boton para proceder al pago*/}
-            <Link href={"/comprar"}>
-              <button id="button-standard">Proceder al pago</button>
-            </Link>
+            <button id="button-standard" onClick={handleRedirectButton}>
+              Proceder al pago
+            </button>
           </div>
         </section>
       </main>

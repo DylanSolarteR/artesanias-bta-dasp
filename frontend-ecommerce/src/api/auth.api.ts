@@ -2,6 +2,7 @@ import { loginSchema } from '@/util/validation'
 import { ZodError } from 'zod'
 import { AxiosInstance } from '@/api/axios'
 import { isAxiosError } from 'axios'
+
 export async function loginAuth(prevState: null, queryData: FormData) {
     const data = {
         userId: parseInt(queryData.get('userId') as string),
@@ -38,6 +39,23 @@ export async function getRole() {
             return { success: false, message: err.response.data, status: err.status }
         }
         return { success: false, message: 'Error inesperado, revise las credenciales o intentelo más tarde.', status: 400 }
+    }
+
+}
+
+export async function createUser(employee) {
+    try {
+        const response = await AxiosInstance.post('/auth/singup', employee, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        })
+        return response.data;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            return { success: false, message: err.response.data, status: err.status }
+        }
+        return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
     }
 
 }

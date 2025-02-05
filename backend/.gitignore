@@ -144,3 +144,7 @@ dist
 /sql/teste.sql
 .env.dev
 .env.prod
+
+pnpm-lock.yaml
+
+/uploads/*

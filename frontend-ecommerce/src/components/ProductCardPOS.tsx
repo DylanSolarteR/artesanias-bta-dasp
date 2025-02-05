@@ -51,7 +51,7 @@ function ProductCardPOS({
   }
 
   return (
-    <div className="relative border p-10">
+    <div className="relative border p-10 h-48">
       <button
         className="delete absolute top-2 right-2"
         onClick={() => removeFromProductsAdded(productPos)}
@@ -69,7 +69,7 @@ function ProductCardPOS({
         </span>
         <span>{"C/U: $ " + productPos.product.price}</span>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-start">
         <div>
           <label htmlFor="quantity">Cantidad: </label>
           <input
