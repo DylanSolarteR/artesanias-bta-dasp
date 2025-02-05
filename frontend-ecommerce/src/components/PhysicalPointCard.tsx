@@ -55,9 +55,7 @@ function PhysicalPointCard({
         disabled={disabledCheck}
       />
       <Image
-        src={
-          "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
-        }
+        src={"https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"}
         alt={physicalPoint.address}
         width={100}
         height={70}
