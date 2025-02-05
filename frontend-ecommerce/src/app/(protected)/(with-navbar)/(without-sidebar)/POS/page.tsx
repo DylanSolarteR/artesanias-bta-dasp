@@ -9,7 +9,7 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { listProductsFromInventoryByLocationId } from "@/api/inventory.api";
 import { decodeToken } from "@/util/utils";
 import Bill from "@/app/icons/Bill.svg?url";
-import BoxSearch from "@/app/icons/BoxSearch.svg?url";
+import BoxSearch from "@/app/icons/BoxSearchIcon.svg?url";
 import toast from "react-hot-toast";
 import RegistroPOS from "@/components/POS/RegisterPOS";
 import ConsultaPOS from "@/components/POS/ConsultPOS";
@@ -33,7 +33,7 @@ function Page() {
   const [total, setTotal] = useState<number>(0);
 
   const [imageSource, setImageSource] = useState<string>(
-    "https://placehold.co/450x300/EEE/31343C?font=lato&text=Producto"
+    "https://placehold.co/450x300/EEE/31343C?font=lato&text=NoImage"
   );
 
   const { authToken } = useAuthContext();

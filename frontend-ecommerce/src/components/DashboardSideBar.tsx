@@ -115,7 +115,7 @@ function DashboardSideBar() {
             <div className="option-dashboard">
               <h5
                 onClick={() => setShowEmployeeMenu(!showEmployeeMenu)}
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
                   <Image
@@ -171,7 +171,7 @@ function DashboardSideBar() {
             <div className="option-dashboard">
               <h5
                 onClick={() => setShowProductMenu(!showProductMenu)}
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
                   <Image
@@ -191,7 +191,7 @@ function DashboardSideBar() {
                 )}
               </h5>
               {showProductMenu && (
-                <ul className="submenu">
+                <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
                       <Image
@@ -230,7 +230,7 @@ function DashboardSideBar() {
                 onClick={() =>
                   setShowPhysicalPointsMenu(!showPhysicalPointsMenu)
                 }
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
                   <Image
@@ -252,7 +252,7 @@ function DashboardSideBar() {
                 )}
               </h5>
               {showPhysicalPointsMenu && (
-                <ul className="submenu">
+                <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
                       <Image
@@ -288,7 +288,7 @@ function DashboardSideBar() {
             <div className="option-dashboard">
               <h5
                 onClick={() => setShowReportsMenu(!showReportsMenu)}
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
                   <Image
@@ -308,7 +308,7 @@ function DashboardSideBar() {
                 )}
               </h5>
               {showReportsMenu && (
-                <ul className="submenu">
+                <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
                       <Image

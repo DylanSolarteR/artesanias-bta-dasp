@@ -3,7 +3,7 @@ import PdfIcon from "@/app/icons/PdfIcon.svg?url";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Image from "next/image";
-import { useState, use, useEffect } from "react";
+import { use, useState } from "react";
 import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 
@@ -17,14 +17,11 @@ function page() {
   const [order, setOrder] = useState<string>("");
 
   const physicalPoints: PHYSICAL_LOCATION[] = use(physicalLocations);
-
-  const [reportData, setReportData] = useState<any[]>([]);
-
   return (
     <div>
       <main>
         {/* Seccion Filtros */}
-        <h1>Reporte de ventas</h1>
+        <h1>Reporte de asociación</h1>
         <section>
           <div>
             <h2>Filtros de búsqueda</h2>
@@ -107,38 +104,7 @@ function page() {
               <Image src={PdfIcon} alt="pdf-export" width={100} height={100} />
             </span>
           </div>
-          <div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Identificador</th>
-                  <th>Nombre producto</th>
-                  <th>Categoría</th>
-                  <th>Punto Físico</th>
-                  <th>Categoría</th>
-                  <th>Punto Físico</th>
-                </tr>
-              </thead>
-              <tbody>
-                {reportData.length > 0 ? (
-                  reportData.map((data) => (
-                    <tr key={data._id}>
-                      <td>{data._id}</td>
-                      <td>{data.productName}</td>
-                      <td>{data.category}</td>
-                      <td>{data.physicalPoint}</td>
-                      <td>{data.category}</td>
-                      <td>{data.physicalPoint}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6}>No hay datos</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <div>{/* <TablaReporteAsociacion/> */}</div>
         </section>
       </main>
     </div>
