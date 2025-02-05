@@ -22,7 +22,7 @@ function Page() {
 
   return !role ? (
     <Loading />
-  ) : !hasPermission(role, "view:employees") ? (
+  ) : !hasPermission(role, "create:employees") ? (
     router.push("/POS")
   ) : (
     <RegisterUserData onSubmit={handleSubmit} />
