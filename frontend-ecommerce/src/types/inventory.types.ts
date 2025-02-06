@@ -14,5 +14,6 @@ export interface PRODUCT_FROM_INVENTARY {
 
 export interface POS_ADDED_PRODUCT {
     product: PRODUCT_FROM_INVENTARY
+    quantity: number
     subtotal: number
 }

@@ -17,3 +17,5 @@ export enum docTypes {
     ce = 'CE',
     ti = 'TI'
 }
+
+export interface productSchema { id: number, quantity: number }[]
