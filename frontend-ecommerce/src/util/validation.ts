@@ -66,8 +66,8 @@ export const EmployeeDataScheme = z.object({
     role: z.enum(["cashier", "manager", "administrator"], { message: "Rol no válido" }),
     locationId: z.string().min(1, { message: "" }),
     docType: z.enum(["CC", "CE", "NIT", "TI"], { message: "El tipo de documento no es válido" }),
-    docNumber: z.string().min(8, { message: "El documento debe tener minimo 8 caracteres" })
-
+    docNumber: z.string().min(8, { message: "El documento debe tener minimo 8 caracteres" }),
+    email: z.string().email({ message: "El email no es válido" }).optional(),
 })
 
 
