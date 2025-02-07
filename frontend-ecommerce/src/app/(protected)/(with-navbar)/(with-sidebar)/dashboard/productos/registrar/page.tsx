@@ -21,7 +21,7 @@ function Page() {
 
   return !role ? (
     <Loading />
-  ) : !hasPermission(role, "view:products") ? (
+  ) : !hasPermission(role, "create:products") ? (
     router.push("/POS")
   ) : (
     <RegisterProduct onSubmit={handleSubmit} />

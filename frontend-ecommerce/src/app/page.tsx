@@ -60,14 +60,13 @@ export default function Home() {
 
       setMarkers((prevMarkers) => [...prevMarkers, ...transformedMarkers]);
     });
-    console.log(process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
   }, []);
 
   useEffect(() => {
     apiProduct
-      .listProducts({ 
-        orderBy: ["price", "desc"], 
-        limit: 6, 
+      .listProducts({
+        orderBy: ["price", "desc"],
+        limit: 6,
       })
       .then((products) => {
         setProducts(products);
@@ -86,9 +85,9 @@ export default function Home() {
   const handleCategorySelect = async (category) => {
     setSelectedCategory(category);
     apiProduct
-      .listProducts({ 
-        orderBy: ["price", "desc"], 
-        category: selectedCategory, 
+      .listProducts({
+        orderBy: ["price", "desc"],
+        category: selectedCategory,
         limit: 4,
       })
       .then((products) => {
@@ -98,7 +97,6 @@ export default function Home() {
       .catch((error) => {
         console.error("Error al obtener productos:", error);
       });
-    
   };
 
   return (
@@ -143,7 +141,7 @@ export default function Home() {
           </button>
           <div className="carousel-track" id="track">
             {categories.map((category, index) => (
-              <div 
+              <div
                 className="carousel-item"
                 key={index}
                 onClick={() => handleCategorySelect(category.id)}
@@ -176,7 +174,7 @@ export default function Home() {
           </div>
         </section>
       )}*/}
-      
+
       <section className="section-products">
         <h1 className="section-title text-center">- Productos Populares -</h1>
         <p className="mb-0">

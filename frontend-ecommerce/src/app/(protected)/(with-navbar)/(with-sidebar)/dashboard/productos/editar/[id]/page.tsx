@@ -42,7 +42,7 @@ function EditProductPage() {
   };
 
   useEffect(() => {
-    if (role && !hasPermission(role, "view:products")) {
+    if (role && !hasPermission(role, "update:products")) {
       router.push("/POS");
     }
   }, [role, router]);

@@ -21,7 +21,7 @@ function Catalog({ products }: { products: PRODUCT[] }) {
             <Image
               src={
                 product.imagen ??
-                "https://placehold.co/600x400/EEE/31343C?font=lato&text=Placeholder"
+                "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
               }
               alt={product.nombre}
               height={200}

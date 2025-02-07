@@ -24,7 +24,7 @@ function Navbar() {
   useEffect(() => {
     if (isLogged() && typeof window !== "undefined") {
       const token = localStorage.getItem("authToken");
-      if (!token) {
+      if (!token || token === "") {
         return;
       }
 
@@ -40,7 +40,11 @@ function Navbar() {
     <nav className="Navbar">
       <div className="title">
         <Link href="/">
-          <strong>Artesanías<br />Bogotá LTDA</strong>
+          <strong>
+            Artesanías
+            <br />
+            Bogotá LTDA
+          </strong>
         </Link>
       </div>
 
@@ -74,17 +78,17 @@ function Navbar() {
         </li>
         <li className="topButton">
           <div className="shopping-cart">
-            <button 
+            <button
               className="count"
               onClick={() => (window.location.href = "/carrito")}
             >
-                <Image
-                  src={CarritoIcon}
-                  alt="Icono de carrito"
-                  width={25}
-                  height={25}
-                />
-                <span className="counter">{cart.length}</span>
+              <Image
+                src={CarritoIcon}
+                alt="Icono de carrito"
+                width={25}
+                height={25}
+              />
+              <span className="counter">{cart.length}</span>
             </button>
           </div>
         </li>
@@ -100,11 +104,9 @@ function Navbar() {
               >
                 <Image className="foto" src={UserIcon} alt="Icono de usuario" />
                 <span>{employeeName}</span>
-                <span
-                    className={`arrow-icon ${isOpenEmployee ? "open" : ""}`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
+                <span className={`arrow-icon ${isOpenEmployee ? "open" : ""}`}>
+                  <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                </span>
               </button>
               <ul className={isOpenEmployee ? "" : "invisible"}>
                 <li className="account-item">

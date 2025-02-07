@@ -36,9 +36,9 @@ export async function getPhysicalLocationById(id: string | number): Promise<PHYS
 }
 
 
-export async function createPhysicalLocation(location: PHYSICAL_LOCATION) {
+export async function createPhysicalLocation(address : string, telephone : string, latitude : number, longitude : number) {
     try {
-        const response = await AxiosInstance.post('/location', location, {
+        const response = await AxiosInstance.post('/location', {address, telephone, latitude, longitude}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -52,14 +52,14 @@ export async function createPhysicalLocation(location: PHYSICAL_LOCATION) {
 }
 
 // Actualizar un punto físico existente
-export async function updatePhysicalLocation(location: PHYSICAL_LOCATION) {
+export async function updatePhysicalLocation(address: string, telephone: string, active: boolean, latitude: number, longitude: number) {
     try {
-        const response = await AxiosInstance.put('/location', location, {
+        const response = await AxiosInstance.put('/location', {address, telephone, active, latitude, longitude}, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data; // Devuelve un mensaje de éxito
+        return response.data; 
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;
@@ -70,15 +70,19 @@ export async function updatePhysicalLocation(location: PHYSICAL_LOCATION) {
 // Eliminar un punto físico por ID
 export async function deletePhysicalLocation(id: string) {
     try {
-        const response = await AxiosInstance.delete(`/location/${id}`, {
+        const response = await AxiosInstance.delete(`/location/${id}`, id,{
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data; // Devuelve un mensaje de éxito
+        return response.data;
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;
         }
     }
+}
+
+export function getlistPhysicalLocations() {
+  throw new Error("Function not implemented.");
 }
