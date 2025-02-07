@@ -37,17 +37,20 @@ export async function getEmployeeById(id: number) {
 }
 
 // Actualizar un empleado
-export async function updateEmployee(id: number, email: String, name: String, lastName: String, telephone: String, role: String, locationId: String, active: Boolean) {
+export async function updateEmployee(employeeData: EMPLOYEE) {
+    const { id, email, name, lastName, telephone, role, locationId, active } = employeeData;
     try {
-        const response = await AxiosInstance.put('/employee/', {id, email, name, lastName, telephone, role, locationId, active}, {
+        const response = await AxiosInstance.put('/employee/', { id, email, name, lastName, telephone, role, locationId, active }, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data;
+        // console.log(response)
+        return response;
     } catch (err) {
         if (isAxiosError(err)) {
-            throw err;
+            // console.log(err.response)
+            return err.response;
         }
     }
 }

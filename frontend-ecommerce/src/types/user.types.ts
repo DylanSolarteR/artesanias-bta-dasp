@@ -9,4 +9,5 @@ export interface USER_INFO {
     id: number;
     iat: number;
     exp: number;
+    email: string;
 }
