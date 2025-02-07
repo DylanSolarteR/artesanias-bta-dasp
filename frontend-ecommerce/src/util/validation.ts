@@ -56,17 +56,7 @@ export const PurchaseCustomerInfoScheme = z.object({
             .refine(value => parseInt(value) > 0, { message: 'El teléfono debe ser mayor a 0' })
     ),
 })
-/*
-Nombre
-Correo
-Tipo Doc (TI, CC, CE, NIT)
-Documento Num
-Direccion
-Telefono
-Departamento
-Ciudad
-Codigo Postal
-*/
+
 
 //RegisterUserForm
 export const EmployeeDataScheme = z.object({
@@ -80,15 +70,6 @@ export const EmployeeDataScheme = z.object({
 
 })
 
-/*
-Nombre
-Apellido
-Telefono
-Rol
-Id del local
-Tipo Documento (TI, CC, CE, NIT)
-Numero de documento
-*/
 
 // RegisterProductForm
 export const ProductDataScheme = z.object({
@@ -108,15 +89,6 @@ export const ProductDataScheme = z.object({
 
 })
 
-/*
-Producto base
-nombre
-descripcion
-precio
-imagen
-activo
-categoria
-*/
 
 
 //RegisterPhysicalLocationForm
@@ -125,28 +97,7 @@ export const PhysicalLocationDataScheme = z.object({
     telephone: z.string()
 })
 
-/*
-direccion
-telefono
-*/
-
-const basicUserDataSchema = z.object({
-    email: z.string().email({ message: 'Email inválido' }),
-    name: z.string({ message: 'Nombre inválido' }).trim()
-        .min(3, 'Nombre inválido'),
-    docType: z.enum(docTypeValues, {
-        message: 'Tipo de documento inválido'
-    }),
-    identification: z.preprocess(value => String(value).replace(/^0+/g, ''),
-        z.string()
-            .regex(/^\d+$/, { message: 'La identificación inválida' })
-            .refine(value => parseInt(value) > 0, { message: 'La identificación debe ser mayor a 0' })
-            .and(z.string().min(1, { message: 'Identificación inválida' })
-                .max(15, { message: 'Identificación inválida' }))
-    ),
-    telephone: z.preprocess(value => String(value).replace(/^0+/g, ''),
-        z.string()
-            .regex(/^\d+$/, { message: 'Teléfono inválido' })
-            .refine(value => parseInt(value) > 0, { message: 'El teléfono debe ser mayor a 0' })
-    )
+export const recoveryDataSchema = z.object({
+    employeeId: z.number(),
+    email: z.string().email({ message: 'Email inválido' })
 });

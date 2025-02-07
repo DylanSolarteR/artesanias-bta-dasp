@@ -42,7 +42,7 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
       locationId: location_id,
     });
 
-    console.log(purchaseData);
+    // console.log(purchaseData);
 
     if (purchaseData.status === 401) {
       toast.error("Ocurrio un error, vuelva a iniciar sesión.");
@@ -143,28 +143,6 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
               filter_keys={["productName", "productId"]}
               onFilter={setProduct_list_filtered}
             />
-
-            {/* ACA ESTA LA LISTA DESPLEGABLE DE LOS PRODUCTOS, TOCA CAMBIAR EL CSS PARA QUE NO SEA RELATIVA SINO ABSOLUTA Y MOSTRARLA POR ENCIMA */}
-            {/* {isListVisible && (
-              <div className="relative z-10">
-                <ul className="absolute z-10 bg-white w-96 top-0 -left-48 border border-gray-300 rounded-md h-32 overflow-auto">
-                  {product_list_filtered.length > 0 ? (
-                    product_list_filtered.map((product) => (
-                      <li
-                        key={product.productId}
-                        className="hover:bg-[--color-main-soft] overflow-x-clip"
-                      >
-                        <button onClick={() => handleProductSelect(product)}>
-                          {product.productName + " - ID " + product.productId}
-                        </button>
-                      </li>
-                    ))
-                  ) : (
-                    <span>No hay productos disponibles</span>
-                  )}
-                </ul>
-              </div>
-            )} */}
             <div className="min-h-full w-full px-10 flex flex-col items-center h-64">
               <ul className="bg-white w-[32rem] border border-gray-300 rounded-md h-full overflow-auto flex flex-col">
                 {product_list_filtered.length > 0 ? (
