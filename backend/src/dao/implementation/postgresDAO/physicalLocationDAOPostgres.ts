@@ -75,7 +75,7 @@ export class PhysicalLocationDAOPostgres implements IDAO<PhysicalLocation> {
 
 
     async delete(physicalLocation: PhysicalLocation): Promise<boolean> {
-        let query = `DELETE FROM physical_location WHERE pk_id=$1;`
+        let query = `UPDATE physical_location SET active = FALSE WHERE pk_id=$1;`
         try {
             let pool = await PostgresConnection.getInstance().getPool()
             let res = await pool.query({
