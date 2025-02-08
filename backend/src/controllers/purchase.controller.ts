@@ -148,7 +148,7 @@ export async function initializePurchase(req: Request, res: Response) {
                         title: item.title,
                         quantity: item.quantity,
                         currency_id: 'COP',
-                        unit_price: item.unit_price
+                        unit_price: Math.round(item.unit_price)
                     }
                 }) as Items[]
                 ,
@@ -159,7 +159,6 @@ export async function initializePurchase(req: Request, res: Response) {
                     success: process.env.FRONT_URL,
                     failure: process.env.FRONT_URL + '/carrito'
                 }
-                //TODO CAMBIAR A LA URL DE PRODUCCION
             },
         });
 

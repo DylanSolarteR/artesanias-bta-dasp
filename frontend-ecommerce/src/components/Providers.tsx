@@ -10,7 +10,14 @@ function Providers({ children }: { children: React.ReactNode }) {
       <MainContextProvider>
         <AuthContextProvider>
           <CartContextProvider>
-            <Toaster position="bottom-right" />
+            <Toaster
+              position="bottom-right"
+              toastOptions={{
+                style: {
+                  border: "1px solid #e47b3a",
+                },
+              }}
+            />
             {children}
           </CartContextProvider>
         </AuthContextProvider>
