@@ -6,8 +6,8 @@ export interface IDAO<T> {
 
     create(object: T): Promise<ObjectResponse<T>>;
     query(criteria: Criteria | null): Promise<ObjectResponse<T[]>>;
-    update(object: T): Promise<boolean>;
-    delete(object: T): Promise<boolean>;
+    update(object: T): Promise<boolean | ObjectResponse<T>>;
+    delete(object: T): Promise<boolean | ObjectResponse<T>>;
 }
 
 export class ObjectResponse<T> {
