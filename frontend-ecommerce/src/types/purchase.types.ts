@@ -18,4 +18,6 @@ export enum docTypes {
     ti = 'TI'
 }
 
-export interface productSchema { id: number, quantity: number }[]
+export interface productSchema { id: number, quantity: number }
+
+

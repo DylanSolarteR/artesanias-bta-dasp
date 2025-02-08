@@ -99,12 +99,18 @@ function PurchaseDataForm() {
       toast.error(result.error.errors[0].message);
       return;
     }
-    const purchaseId = await initializePurchase(data);
-    await completePurchase(purchaseId);
-    toast.success("Compra realizada correctamente, redirigiendo...");
-    flushCart();
+    // const purchaseId = await initializePurchase(data);
+    const url = await initializePurchase(data);
+    if (!url) {
+      toast.error("Error al inicializar la compra");
+      return;
+    }
+
+    // await completePurchase(purchaseId);
+    toast.success("Redirigiendo a la pasarela...");
+    // flushCart();
     setTimeout(() => {
-      router.push("/catalogo");
+      router.push(url);
     }, 1500);
   }
 
