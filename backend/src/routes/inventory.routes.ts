@@ -5,6 +5,6 @@ const router = Router();
 
 router.post("/", createInventory);
 router.get("/list", listInventory);
-router.put("/:id", updateInventory);
+router.put("/", updateInventory);
 
 export default router;

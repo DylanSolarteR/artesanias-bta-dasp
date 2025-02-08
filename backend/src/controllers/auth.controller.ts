@@ -149,8 +149,10 @@ export async function forgotPassword(req: Request, res: Response) {
 
     // Send email
     const mail = new MailSender()
-    let html = `<a href="${process.env.FRONTEND_URL}/reset-password?token=${token}">Click aquí para recuperar tu contraseña</a>`
-    html += `<p>${token}</p>`
+    const urlWithToken = `${process.env.FRONT_URL}/olvidaste-tu-contrasena/${token}`
+    let html = `<a href="${urlWithToken}">Click aquí para recuperar tu contraseña</a>`
+    html += `<p>Si no puedes usar el link, copia y pega el siguiente enlace en tu navegador:</p>`
+    html += `<p>${urlWithToken}</p>`
     mail.sendMail({
         to: email,
         subject: 'Recuperación de contraseña',
