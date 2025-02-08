@@ -1,12 +1,9 @@
-###Consultar todos los inventarios
-http://localhost:3200/api/inventory/list
+### Consultar todos los inventarios
+http://localhost:3200/api/inventory/
 Authorization: barer {{token}}
 
-###Consultar el inventario 
-http://localhost:3200/api/inventory/list?id=1
-
-##Consultar el inventario 1
-GET http://localhost:3200/api/inventory/list?id=1
+### Consultar el inventario 1
+GET http://localhost:3200/api/inventory/?locationId=1
 Content-Type: application/json
 Authorization: barer {{token}}
 
@@ -20,8 +17,8 @@ Content-Type: application/json
 Authorization: barer {{token}}
 
 {
-    "productId": 4,
-    "physicalLocationId": 2,
+    "productId": 1,
+    "physicalLocationId": 1,
     "quantity": 39,
-    "displayQuantity": 38
+    "displayQuantity": 3
 }

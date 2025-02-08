@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { InventoryDAOPostgres } from '../dao/implementation/postgresDAO/inventoryDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
-import { Inventory } from '../model/businessTypes';
+import { employeeRoles, Inventory } from '../model/businessTypes';
 import { ObjectResponse } from '../dao/dao';
 import { z } from 'zod';
+import { EmployeeDAOPostgres } from '../dao/implementation/postgresDAO/employeeDAOPostrgres';
 
 
 export async function createInventory(req: Request, res: Response) {
@@ -96,6 +97,24 @@ const updateSchema = z.object({
 })
 export async function updateInventory(req: Request, res: Response) {
 
+    const userId = req['user_id'] // Requiere verifyAuth middleware
+
+    const employeeDao = new EmployeeDAOPostgres();
+    const employeeRes = await employeeDao.query(new Criteria({
+        filters: [new Filter('pk_id', userId, matchType.strictEqual)]
+    }));
+    if (!employeeRes.hasResponse()) {
+        res.status(500).send('No se puedo validar la autenticidad del usuario');
+        return;
+    }
+
+    if (employeeRes.value.length !== 1) {
+        res.status(404).send('Usuario no encontrado');
+        return;
+    }
+
+    const user = employeeRes.value[0];
+
     const parseRes = updateSchema.safeParse(req.body);
     if (!parseRes.success) {
         const messages = parseRes.error.errors.map(e => e.message);
@@ -107,6 +126,13 @@ export async function updateInventory(req: Request, res: Response) {
         quantity,
         displayQuantity } = parseRes.data;
     console.log(productId, physicalLocationId, quantity, displayQuantity);
+
+    const isNotAdmin = user.role !== employeeRoles.administrator;
+    const isLocationManager = user.role === employeeRoles.manager && user.locationId === physicalLocationId;
+    if (isNotAdmin && !isLocationManager) {
+        res.status(403).send('No tienes permisos para realizar esta acción');
+        return;
+    }
 
     const dao = new InventoryDAOPostgres();
 
