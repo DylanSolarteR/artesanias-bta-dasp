@@ -2,14 +2,14 @@
 import { isAxiosError } from "axios";
 import { AxiosInstance } from "./axios";
 import { addressDataSchema, basicUserDataSchema, productSchema } from '../types/purchase.types';
-import { loadGetInitialProps } from "next/dist/shared/lib/utils";
-import { headers } from "next/headers";
 
-export async function initializePurchase(data: { basicUserData: basicUserDataSchema, addressData: addressDataSchema, productList: productSchema[] }): Promise<number> {
+export async function initializePurchase(data: { basicUserData: basicUserDataSchema, addressData: addressDataSchema, productList: productSchema[] }): Promise<string> {
     try {
         const response = await AxiosInstance.post('/purchase/initialize-purchase', data);
         console.log(response.data.purchaseId)
-        return response.data.purchaseId;
+        console.log(response.data.url)
+        return response.data.url;
+        return
     } catch (err) {
         if (isAxiosError(err)) {
             console.log(err)

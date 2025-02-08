@@ -7,8 +7,14 @@ import { ProductDAOPostgres } from "../dao/implementation/postgresDAO/productDAO
 import { PurchaseDAOPostgres } from "../dao/implementation/postgresDAO/purchaseDAOPostrgres";
 import z from "zod";
 import { EmployeeDAOPostgres } from "../dao/implementation/postgresDAO/employeeDAOPostrgres";
+import { Preference, Payment } from "mercadopago";
+import { Items } from "mercadopago/dist/clients/commonTypes";
+import { clienteMercadoPago } from "../model/MercadoPago";
 
 const docTypeValues = Object.values(docTypes) as [string, ...string[]]
+
+
+
 
 const basicUserDataSchema = z.object({
     email: z.string().email({ message: 'Email inválido' }),
@@ -49,6 +55,13 @@ const productSchema = z.object({
     quantity: z.number({ message: 'La cantidad del producto es requerida' }).min(1)
 });
 
+interface PRODUCT_ONLINE {
+    id: number;
+    quantity: number;
+    unit_price: number;
+    title: string;
+}
+
 const ecommercePurchaseSchema = z.object({
     basicUserData: basicUserDataSchema,
     addressData: addressDataSchema,
@@ -60,6 +73,8 @@ const posPurchaseSchema = z.object({
     productList: z.array(productSchema),
     locationId: z.number({ message: 'La id del punto físico es requerida' }).min(1)
 });
+
+
 
 export async function initializePurchase(req: Request, res: Response) {
     try {
@@ -73,6 +88,7 @@ export async function initializePurchase(req: Request, res: Response) {
         }
 
         let { basicUserData, addressData, productList } = validateResult.data
+
 
         let purchase = new EcommercePurchase(
             new Date(),
@@ -90,6 +106,7 @@ export async function initializePurchase(req: Request, res: Response) {
 
         let inventoryDao = new InventoryDAOPostgres()
         let productDao = new ProductDAOPostgres()
+        const items: PRODUCT_ONLINE[] = []
         for (let product of productList) {
             let productDetailsRes = (await productDao.query(new Criteria(
                 {
@@ -106,6 +123,12 @@ export async function initializePurchase(req: Request, res: Response) {
                 product.quantity,
                 productDetails.price,
             )
+            items.push({
+                id: product.id,
+                quantity: product.quantity,
+                unit_price: productDetails.price / 1000,
+                title: productDetails.name
+            })
             purchase.addProduct(productPurchase)
         }
 
@@ -115,43 +138,76 @@ export async function initializePurchase(req: Request, res: Response) {
             res.status(500).send(purchaseRes.error)
             return;
         }
+        //Integracion con mercado pago
 
-        res.status(200).send({ purchaseId: purchaseRes.value.id })
+        const preference = await new Preference(clienteMercadoPago.getMercadoPago()).create({
+            body: {
+                items: items.map((item) => {
+                    return {
+                        id: String(item.id),
+                        title: item.title,
+                        quantity: item.quantity,
+                        currency_id: 'COP',
+                        unit_price: item.unit_price
+                    }
+                }) as Items[]
+                ,
+                metadata: {
+                    purchaseId: purchaseRes.value.id,
+                },
+            },
+        });
+
+
+        res.status(200).send({ purchaseId: purchaseRes.value.id, url: preference.init_point })
     } catch (error) {
+        console.log(error)
         res.status(500).send('Error interno')
     }
 }
 
+
 export async function completePurchase(req: Request, res: Response) {
-    if (!req.body.purchaseId) {
+    if (!req.body.data.id) {
         res.status(400).send('No se envió el id de la compra')
         return
     }
-    let purchaseId = req.body.purchaseId
-    let purchaseDao = new PurchaseDAOPostgres()
-    let purchaseRes = await purchaseDao.query(new Criteria({
-        filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
-    }))
-    if (!purchaseRes.hasResponse()) {
-        res.status(500).send('No se encontró la compra')
-        return
-    }
-    if (purchaseRes.value.length === 0) {
-        res.status(500).send('No se encontró la compra')
-        return
-    }
-    let purchase = purchaseRes.value[0]
-    if (!(purchase instanceof EcommercePurchase)) {
-        res.status(500).send('La compra no es de tipo ecommerce')
-        return
-    }
-    if (purchase.isComplete) {
-        res.status(500).send('La compra ya ha sido completada')
-        return
-    }
-    purchaseDao.completePurchase(purchase)
+    let purchaseIdMercadoPago = req.body.data.id
 
-    res.status(200).send('Compra completada')
+    try {
+        const payment = await new Payment(clienteMercadoPago.getMercadoPago()).get({ id: purchaseIdMercadoPago });
+        if (payment.status === "approved") {
+
+            const purchaseId = payment.metadata.purchaseId
+            let purchaseDao = new PurchaseDAOPostgres()
+            let purchaseRes = await purchaseDao.query(new Criteria({
+                filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
+            }))
+            if (!purchaseRes.hasResponse()) {
+                res.status(500).send('No se encontró la compra')
+                return
+            }
+            if (purchaseRes.value.length === 0) {
+                res.status(500).send('No se encontró la compra')
+                return
+            }
+            let purchase = purchaseRes.value[0]
+            if (!(purchase instanceof EcommercePurchase)) {
+                res.status(500).send('La compra no es de tipo ecommerce')
+                return
+            }
+            if (purchase.isComplete) {
+                res.status(500).send('La compra ya ha sido completada')
+                return
+            }
+            purchaseDao.completePurchase(purchase)
+
+            res.status(200).send('Compra completada')
+        }
+        res.status(200)
+    } catch (e) {
+        console.log(e)
+    }
 
 }
 
