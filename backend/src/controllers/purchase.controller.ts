@@ -155,6 +155,11 @@ export async function initializePurchase(req: Request, res: Response) {
                 metadata: {
                     purchaseId: purchaseRes.value.id,
                 },
+                back_urls: {
+                    success: process.env.FRONT_URL,
+                    failure: process.env.FRONT_URL + '/carrito'
+                }
+                //TODO CAMBIAR A LA URL DE PRODUCCION
             },
         });
 
@@ -172,8 +177,7 @@ export async function completePurchase(req: Request, res: Response) {
         res.status(400).send('No se envió el id de la compra')
         return
     }
-    let purchaseIdMercadoPago = req.body.data.id
-
+    const purchaseIdMercadoPago = req.body.data.id
     try {
         const payment = await new Payment(clienteMercadoPago.getMercadoPago()).get({ id: purchaseIdMercadoPago });
         if (payment.status === "approved") {
