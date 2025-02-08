@@ -126,7 +126,7 @@ export async function initializePurchase(req: Request, res: Response) {
             items.push({
                 id: product.id,
                 quantity: product.quantity,
-                unit_price: productDetails.price / 1000,
+                unit_price: productDetails.price,
                 title: productDetails.name
             })
             purchase.addProduct(productPurchase)
@@ -153,7 +153,7 @@ export async function initializePurchase(req: Request, res: Response) {
                 }) as Items[]
                 ,
                 metadata: {
-                    purchaseId: purchaseRes.value.id,
+                    purchase_id: purchaseRes.value.id,
                 },
                 back_urls: {
                     success: process.env.FRONT_URL,
@@ -182,7 +182,7 @@ export async function completePurchase(req: Request, res: Response) {
         const payment = await new Payment(clienteMercadoPago.getMercadoPago()).get({ id: purchaseIdMercadoPago });
         if (payment.status === "approved") {
 
-            const purchaseId = payment.metadata.purchaseId
+            const purchaseId = payment.metadata.purchase_id
             let purchaseDao = new PurchaseDAOPostgres()
             let purchaseRes = await purchaseDao.query(new Criteria({
                 filters: [new Filter('purchase.pk_id', purchaseId, matchType.strictEqual)]
