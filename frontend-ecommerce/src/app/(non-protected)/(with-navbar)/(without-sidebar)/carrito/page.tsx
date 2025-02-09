@@ -140,7 +140,7 @@ function Carrito() {
                     </button>{" "}
                     {/* Aquí va la información de cada producto*/}
                     <Image
-                      src={
+                      src={ product.img ||
                         "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
                       }
                       alt={product.name}

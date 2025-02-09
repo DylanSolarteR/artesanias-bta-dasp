@@ -59,7 +59,7 @@ function Page() {
             </button>
           </div>
         </aside>
-        <main className="basis-128 grow min-h-[54rem] h-full">
+        <main className="container-consul-view">
           {sidebarPage === "register" && (
             <RegistroPOS
               product_list={product_list}

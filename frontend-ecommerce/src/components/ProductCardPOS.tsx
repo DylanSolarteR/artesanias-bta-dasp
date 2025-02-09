@@ -59,7 +59,7 @@ function ProductCardPOS({
   }
 
   return (
-    <div className="relative border p-10 h-48">
+    <div className="relative border p-3 pt-8">
       <button
         className="delete absolute top-2 right-2"
         onClick={() => removeFromProductsAdded(productPos)}
@@ -71,13 +71,13 @@ function ProductCardPOS({
           height={20}
         />
       </button>
-      <div className="flex flex-row justify-between">
+      <div className="header-product">
         <span id="title_badge">
           {productPos.product.productName ?? "Artesanía"}
         </span>
         <span>{"C/U: $ " + productPos.product.price}</span>
       </div>
-      <div className="flex flex-col items-start">
+      <div className="details-product">
         <div>
           <label htmlFor="quantity">Cantidad: </label>
           <input

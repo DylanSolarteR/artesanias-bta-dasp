@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import SearchBarMenu from "@/components/SearchBarMenu";
 import ProductCardPOS from "../ProductCardPOS";
+import ShoppingPOSImage from "@/app/images/ShoppingPOSImage.jpg"
 
 import {
   POS_ADDED_PRODUCT,
@@ -25,7 +26,7 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
 
   const [total, setTotal] = useState<number>(0);
   const [imageSource, setImageSource] = useState<string>(
-    "https://placehold.co/450x300/EEE/31343C?font=lato&text=NoImage"
+    ShoppingPOSImage.src
   );
 
   const [products_added, setProducts_added] = useState<POS_ADDED_PRODUCT[]>([]);
@@ -120,10 +121,10 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
     setProduct_list_filtered(product_list);
   }, [product_list]);
   return (
-    <main className="flex justify-around h-[54rem] px-2">
-      <section className="flex flex-col h-full grow justify-start items-center py-8">
+    <main className="container-registration">
+      <section className="container-scanner">
         {/* producto */}
-        <div className="flex flex-col w-full justify-start h-[66%]">
+        <div className="flex flex-col w-full justify-start">
           <div className="flex justify-center">
             <Image
               className="self-center rounded-md"
@@ -134,6 +135,12 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
               }
               width={450}
               height={300}
+              style={{
+                objectFit: "cover",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                boxShadow: "1px 2px 5px rgba(0,0,0,0.2)"
+              }}
             />
           </div>
           <div className="relative flex flex-col items-center gap-2">
@@ -143,13 +150,13 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
               filter_keys={["productName", "productId"]}
               onFilter={setProduct_list_filtered}
             />
-            <div className="min-h-full w-full px-10 flex flex-col items-center h-64">
-              <ul className="bg-white w-[32rem] border border-gray-300 rounded-md h-full overflow-auto flex flex-col">
+            <div className="min-h-full w-full flex flex-col items-center h-64">
+              <ul className="bg-white w-full border border-gray-300 rounded-md h-full overflow-auto flex flex-col">
                 {product_list_filtered.length > 0 ? (
                   product_list_filtered.map((product) => (
                     <li
                       key={product.productId}
-                      className="hover:bg-[--color-main-soft] overflow-x-clip w-full"
+                      className="hover:bg-[--color-gray-soft] overflow-x-clip w-full"
                     >
                       <button
                         className="w-full"
@@ -167,10 +174,10 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
           </div>
         </div>
       </section>
-      <section className="flex flex-col h-full justify-center grow px-2">
+      <section className="container-list">
         {/* productos añadidos y total */}
-        <div className="flex flex-col justify-center gap-2">
-          <div className="border border-gray-300 rounded-md h-[40rem] min-w-96 overflow-auto gap-0 justify-start items-start">
+        <div className="flex flex-col w-full justify-center gap-2">
+          <div className="border border-gray-300 rounded-md h-[40rem] min-w-95 overflow-auto gap-0 justify-start items-start">
             {products_added.map((productPos) => (
               <ProductCardPOS
                 key={productPos.product.productId}
@@ -199,20 +206,19 @@ export default RegistroPOS;
 
 function ProductCardSelect({ product }: { product: PRODUCT_FROM_INVENTARY }) {
   return (
-    <div className="flex gap-2 justify-around items-center p-4 w-full">
+    <div className="flex gap-2 items-center w-full">
       <div className="">
         <Image
           src={
             product.productImage
           }
           alt={product.productName}
-          width={200}
+          width={100}
           height={100}
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <span>{product.productName}</span>
-        <span>Precio: {product.price}</span>
+      <div className="text-left">
+        <span>{product.productName} | Precio: {product.price}</span>
       </div>
     </div>
   );
