@@ -2,7 +2,7 @@ export interface PRODUCT_FROM_INVENTARY {
     productId: number
     locationId: number
     productName: string
-    product_image: string
+    productImage: string
     totalQuantity: number
     displayQuantity: number
     ecommerceQuantity: number

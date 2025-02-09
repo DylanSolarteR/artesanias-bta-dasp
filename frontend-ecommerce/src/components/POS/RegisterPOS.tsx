@@ -109,7 +109,7 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
       quantity: 1,
       subtotal: product.price,
     });
-    setImageSource(product.product_image);
+    setImageSource(product.productImage);
   };
 
   useEffect(() => {
@@ -203,7 +203,7 @@ function ProductCardSelect({ product }: { product: PRODUCT_FROM_INVENTARY }) {
       <div className="">
         <Image
           src={
-            "https://placehold.co/450x300/EEE/31343C?font=lato&text=Producto"
+            product.productImage
           }
           alt={product.productName}
           width={200}

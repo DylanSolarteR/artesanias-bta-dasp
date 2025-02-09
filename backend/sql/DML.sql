@@ -115,7 +115,7 @@ INSERT INTO department VALUES (DEFAULT, 'Amazonas'),
 	(DEFAULT, 'Vichada');
 	
 --- Punto fisico
-INSERT INTO physical_location VALUES (DEFAULT, 'Av. La Esmeralda #44-100', '2123213', true, 4.6511008, -74.0971553, 'https://lh3.googleusercontent.com/p/AF1QipN1P14OzJgiEpNaK5pBptwZoXsZQR-5Hm8n2OL7=s680-w680-h510');
+INSERT INTO physical_location VALUES (DEFAULT, 'Av. La Esmeralda #44-100', '2123213', true, 4.6511008, -74.0971553, 'https://artesaniasbucket.s3.us-east-2.amazonaws.com/loc_1.jpg');
 INSERT INTO physical_location VALUES (DEFAULT, 'Aut SUR No. 50-11, C.P 11001', '312231', true, 4.5939012, -74.1347491, 'https://artesaniasbucket.s3.us-east-2.amazonaws.com/default_loc_image.webp');
 -- Default employees
 INSERT INTO employee values (DEFAULT, null, 'gasnoble@helios.com', 'Gas', 'Noble', '1123', 'administrator', '$2a$12$17yT0ne3NTuCqZo7Ifgzqu5k8U1rppaWU2UEP6sbv5iNiGpsp3iJC', 'CC', '1001');
@@ -125,12 +125,57 @@ INSERT INTO employee values (DEFAULT, 1, 'joseveles285@gmail.com', 'José', 'Vé
 
 --- Inventario (provicional) más adelante se expandirá
 INSERT INTO inventory (pk_fk_product, pk_fk_physical_location, quantity, display_quantity) 
-						 VALUES (1, 1, 50, 15), 
-								(2, 1, 75, 10), 
-								(1, 2, 50, 15),
-								(2, 2, 23, 3),
-								(3, 2, 25, 5), 
-								(4, 2, 38, 6);
+VALUES 
+    (1, 1, 50, 15), 
+    (2, 1, 75, 10), 
+    (1, 2, 50, 15),
+    (2, 2, 23, 3),
+    (3, 2, 25, 5), 
+    (4, 2, 38, 6),
+    (5, 1, 0, 0),
+    (6, 1, 45, 20),
+    (7, 2, 100, 30),
+    (8, 1, 60, 25),
+    (9, 2, 12, 5),
+    (10, 1, 0, 0),
+    (11, 2, 90, 45),
+    (12, 1, 78, 10),
+    (13, 2, 35, 8),
+    (14, 1, 50, 10),
+    (15, 2, 0, 0),
+    (16, 1, 20, 5),
+    (17, 2, 67, 20),
+    (18, 1, 80, 30),
+    (19, 2, 0, 0),
+    (20, 1, 55, 15),
+    (21, 2, 40, 10),
+    (22, 1, 32, 8),
+    (23, 2, 0, 0),
+    (24, 1, 77, 18),
+    (25, 2, 63, 12),
+    (26, 1, 0, 0),
+    (27, 2, 95, 35),
+    (28, 1, 41, 9),
+    (29, 2, 56, 14),
+    (30, 1, 0, 0),
+    (31, 2, 68, 22),
+    (32, 1, 88, 33),
+    (33, 2, 12, 2),
+    (34, 1, 43, 6),
+    (35, 2, 0, 0),
+    (36, 1, 74, 19),
+    (37, 2, 59, 11),
+    (38, 1, 0, 0),
+    (39, 2, 97, 40),
+    (40, 1, 29, 7),
+    (41, 2, 55, 10),
+    (42, 1, 0, 0),
+    (43, 2, 78, 25),
+    (44, 1, 64, 12),
+    (45, 2, 0, 0),
+    (46, 1, 92, 30),
+    (47, 2, 48, 10);
+
 
 INSERT INTO purchase (date, total_price, email, name, doc_type, identification, telephone, is_physical_purchase) VALUES
 ('2025-01-14 05:54:15', 46164, 'cliente1@mail.com', 'Juan Pérez', 'CC', '123456789', '3015550001', FALSE),

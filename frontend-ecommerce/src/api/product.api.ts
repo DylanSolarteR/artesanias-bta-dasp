@@ -69,7 +69,7 @@ export async function listProducts({
         // TODO No hay imagenes de los productos
         // NOTE En las pages no se usa el id, lo dejo por si acaso
         return products.map(p => ({
-            imagen: "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage",
+            imagen: p.img,
             // imagen: <string>p.img,
             nombre: <string>p.name,
             precio: <number>p.price,
