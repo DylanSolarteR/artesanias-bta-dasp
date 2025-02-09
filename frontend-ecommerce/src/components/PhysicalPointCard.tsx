@@ -56,7 +56,7 @@ function PhysicalPointCard({
       />
       <div className="w-[300px] h-[200px] overflow-hidden">
         <Image
-          src="https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
+          src= {physicalPoint?.image || "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"}
           alt={physicalPoint.address}
           width={100}
           height={70}
