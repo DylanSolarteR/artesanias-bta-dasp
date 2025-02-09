@@ -12,8 +12,6 @@ export interface addressDataSchema {
     zipCode: string;
 }
 
-export enum docTypes {
-    cc = 'CC',
-    ce = 'CE',
-    ti = 'TI'
-}
+export interface productSchema { id: number, quantity: number }
+
+

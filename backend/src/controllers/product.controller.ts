@@ -137,6 +137,10 @@ export async function listProducts(req: Request, res: Response) {
         }
     }
 
+    if (sorts.length == 0) {
+        sorts.push(new Sort(Product.filterDict['id'], true));
+    }
+
     let result = await dao.query(new Criteria({
         filters,
         sortBy: sorts,

@@ -26,6 +26,7 @@ export class Product {
         'category': 'category',
         'name': 'name',
         'price': 'price',
+        'id': 'pk_id'
     }
     constructor(
         public name: string,

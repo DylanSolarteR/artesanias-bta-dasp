@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: process.env.AWS_BUCKET_HOSTNAME || "artesaniasbucket.s3.us-east-2.amazonaws.com",
+        hostname: "artesaniasbucket.s3.us-east-2.amazonaws.com",
       }
     ],
   },

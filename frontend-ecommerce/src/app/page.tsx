@@ -70,6 +70,9 @@ export default function Home() {
       .listProducts({
         orderBy: ["price", "desc"],
         limit: 6,
+      .listProducts({
+        orderBy: ["price", "desc"],
+        limit: 6,
       })
       .then((products) => {
         setProducts(products);
@@ -88,6 +91,9 @@ export default function Home() {
   const handleCategorySelect = async (category) => {
     setSelectedCategory(category);
     apiProduct
+      .listProducts({
+        orderBy: ["price", "desc"],
+        category: selectedCategory,
       .listProducts({
         orderBy: ["price", "desc"],
         category: selectedCategory,
@@ -145,6 +151,7 @@ export default function Home() {
           </button>
           <div className="carousel-track" id="track">
             {categories.map((category, index) => (
+              <div
               <div
                 className="carousel-item"
                 key={index}

@@ -64,7 +64,7 @@ function ConsultaPOS({ product_list }: ConsultaPOSProps) {
               <div>
                 <Image
                   src={
-                    product_selected.product_image ??
+                    product_selected.productImage ??
                     "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
                   }
                   alt={product_selected.productName}

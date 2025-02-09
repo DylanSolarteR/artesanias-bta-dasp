@@ -6,7 +6,6 @@ import { listProductsFromInventoryByLocationId } from "@/api/inventory.api";
 import Loading from "@/components/Loading";
 import { listCategories } from "@/api/category.api";
 import ConsultaProducto from "@/components/ProductInventoryList";
-import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import { decodeToken, LOW_STOCK_THRESHOLD } from "@/util/utils";
 import { useAuthContext } from "@/app/context/AuthContext";
 
@@ -45,6 +44,34 @@ function InventoryManager() {
     getAllCategories();
     getProducts();
   }
+  function changeProductInArrays(product: PRODUCT_FROM_INVENTARY) {
+    const newProducts_table = products_table.map((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        return product;
+      }
+      return product_from_list;
+    });
+    const newProductsGeneral = productsInventory.map((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        return product;
+      }
+      return product_from_list;
+    });
+    setProducts_table(newProducts_table);
+    setProductsInventory(newProductsGeneral);
+  }
+
+  // UseEffect to execute at the beginning
+  useEffect(() => {
+    retrieveInitialData();
+    setMounted(true);
+  }, []);
 
   // UseEffect to retrieve the initial data
   useEffect(() => {
@@ -71,8 +98,7 @@ function InventoryManager() {
       <section className="zone-inventary">
         <ConsultaProducto
           products_table={products_table}
-          productsGeneralInventory={productsInventory}
-          setProductsGeneralInventory={setProductsInventory}
+          changeProductInArrays={changeProductInArrays}
         />
       </section>
     </div>

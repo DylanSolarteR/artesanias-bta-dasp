@@ -8,7 +8,11 @@ import { useEffect, useState } from "react";
 interface ProductCardPOSProps {
   productPos: POS_ADDED_PRODUCT;
   removeFromProductsAdded: (productPos: POS_ADDED_PRODUCT) => void;
-  changeSubtotalByProductId: (productId: number, subtotal: number) => void;
+  changeSubtotalByProductId: (
+    productId: number,
+    quantity: number,
+    subtotal: number
+  ) => void;
 }
 
 function ProductCardPOS({
@@ -21,7 +25,11 @@ function ProductCardPOS({
 
   function setSubtotal(subtotal: number) {
     setSubtotal_(subtotal);
-    changeSubtotalByProductId(productPos.product.productId, subtotal);
+    changeSubtotalByProductId(
+      productPos.product.productId,
+      parseInt(quantity),
+      subtotal
+    );
   }
 
   useEffect(() => {
@@ -82,7 +90,7 @@ function ProductCardPOS({
           />
         </div>
         <p>
-          Subtotal: <span>{subtotal}</span>
+          Precio: <span>{subtotal}</span>
         </p>
       </div>
     </div>

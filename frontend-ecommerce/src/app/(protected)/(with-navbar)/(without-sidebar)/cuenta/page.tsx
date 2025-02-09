@@ -9,6 +9,10 @@ import { USER_INFO } from "@/types/user.types";
 import { getPhysicalLocationById } from "@/api/physicalLocation.api";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import Image from "next/image";
+import UpdateAccountDialog from "@/components/UpdateAccountDialog";
+import { updateEmployee } from "@/api/employees.api";
+import toast from "react-hot-toast";
+import { EMPLOYEE } from "@/types/employee.types";
 
 const ROLES = {
   cashier: "Cajero",
@@ -17,7 +21,7 @@ const ROLES = {
 };
 
 function Cuenta() {
-  const { authToken } = useAuthContext();
+  const { authToken, logOut } = useAuthContext();
 
   const user_info: USER_INFO = decodeToken(authToken);
   const [userName, setUserName] = useState("");
@@ -28,7 +32,21 @@ function Cuenta() {
   const [userRole, setUserRole] = useState("");
   const [userLocation, setUserLocation] = useState("");
 
-  function handleUpdateUserDataBtn() {}
+  async function handleUpdateUserDataBtn(employeeData: EMPLOYEE) {
+    const result = await updateEmployee({
+      id: user_info.id,
+      ...employeeData,
+    });
+
+    if (result.status === 200) {
+      toast.success("Datos actualizados correctamente, redirigiendo...");
+      setTimeout(() => {
+        logOut();
+      }, 1000);
+    } else {
+      toast.error("Error al actualizar los datos");
+    }
+  }
 
   async function initData() {
     if (!user_info) return;
@@ -38,7 +56,7 @@ function Cuenta() {
     );
     setUserDocumentType(user_info.docType);
     setUserDocument(user_info.docNumber);
-    setUserEmail("email@test.com");
+    setUserEmail(user_info.email);
     setUserPhone(user_info.telephone);
     setUserRole(user_info.role);
     if (!user_info.locationId) {
@@ -159,14 +177,11 @@ function Cuenta() {
               />
             </div>
           </div>
-
-          <button
-            id="button-standard"
-            className="max-w-lg"
-            onClick={handleUpdateUserDataBtn}
-          >
-            Actualizar datos
-          </button>
+          <div className="max-w-lg w-full">
+            <UpdateAccountDialog
+              handleUpdateUserDataBtn={handleUpdateUserDataBtn}
+            />
+          </div>
         </section>
       </main>
     </div>

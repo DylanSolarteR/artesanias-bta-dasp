@@ -19,6 +19,13 @@ export async function loginAuth(prevState: null, queryData: FormData) {
             return { success: false, message: err.issues[0].message, status: 400 }
         }
         if (isAxiosError(err)) {
+            console.log(err)
+            if (err.code === "ERR_NETWORK") {
+                return { success: false, message: 'Error de conexión, revise su conexión a internet o intentelo mas tarde.', status: 400 }
+            }
+            if (err.response.status === 401) {
+                return { success: false, message: 'Usuario o contraseña incorrectos.', status: 401 }
+            }
             return { success: false, message: err.message, status: err.status }
         }
         return { success: false, message: 'Error inesperado, revise las credenciales o intentelo más tarde.', status: 400 }
@@ -58,4 +65,28 @@ export async function createUser(employee) {
         return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
     }
 
+}
+
+export async function forgotPassword(userData: { id: number, email: string }) {
+    try {
+        const response = await AxiosInstance.post('/auth/forgot-password', userData)
+        return { success: true, message: response.data, status: response.status }
+    } catch (err) {
+        if (isAxiosError(err)) {
+            return { success: false, message: err.response.data, status: err.status }
+        }
+        return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
+    }
+}
+
+export async function resetPassword(pwData: { password: string, token: string }) {
+    try {
+        const response = await AxiosInstance.post('/auth/reset-password', pwData)
+        return { success: true, message: response.data, status: response.status }
+    } catch (err) {
+        if (isAxiosError(err)) {
+            return { success: false, message: err.response.data, status: err.status }
+        }
+        return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
+    }
 }

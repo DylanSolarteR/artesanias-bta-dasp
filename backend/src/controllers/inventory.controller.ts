@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import { InventoryDAOPostgres } from '../dao/implementation/postgresDAO/inventoryDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
-import { Inventory } from '../model/businessTypes';
+import { employeeRoles, Inventory } from '../model/businessTypes';
+import { ObjectResponse } from '../dao/dao';
+import { z } from 'zod';
+import { EmployeeDAOPostgres } from '../dao/implementation/postgresDAO/employeeDAOPostrgres';
 
 
 export async function createInventory(req: Request, res: Response) {
@@ -79,34 +82,91 @@ export async function listInventory(req: Request, res: Response) {
     }
 }
 
+const updateSchema = z.object({
+    productId: z.number({ message: 'La id del producto es requerida' })
+        .int({ message: 'La id del producto debe ser un entero' }),
 
+    physicalLocationId: z.number({ message: 'La id del punto fisico es requerida' })
+        .int({ message: 'La id del punto fisico debe ser un entero' }),
+
+    quantity: z.number({ message: 'La cantidad en bodega debe ser un número' })
+        .int({ message: 'La cantidad en bodega debe ser un entero' }).optional(),
+
+    displayQuantity: z.number({ message: 'La cantidad en exhibición debe ser un número' })
+        .int({ message: 'La cantidad en exhibición debe ser un entero' }).optional(),
+})
 export async function updateInventory(req: Request, res: Response) {
 
-    let productId, physicalLocationId, quantity, displayquantity, ecommerceavailable;
+    const userId = req['user_id'] // Requiere verifyAuth middleware
 
-    const dao = new InventoryDAOPostgres();
-    try {
-        ({ productId, physicalLocationId, quantity } = req.body);
-    }
-    catch (e) {
-        res.status(400).send('La id de producto, la id del punto físico y la cantidad son requeridos')
-        return
+    const employeeDao = new EmployeeDAOPostgres();
+    const employeeRes = await employeeDao.query(new Criteria({
+        filters: [new Filter('pk_id', userId, matchType.strictEqual)]
+    }));
+    if (!employeeRes.hasResponse()) {
+        res.status(500).send('No se puedo validar la autenticidad del usuario');
+        return;
     }
 
-    const newInventory = new Inventory(
-        productId,
+    if (employeeRes.value.length !== 1) {
+        res.status(404).send('Usuario no encontrado');
+        return;
+    }
+
+    const user = employeeRes.value[0];
+
+    const parseRes = updateSchema.safeParse(req.body);
+    if (!parseRes.success) {
+        const messages = parseRes.error.errors.map(e => e.message);
+        res.status(400).send(messages);
+        return;
+    }
+    let { productId,
         physicalLocationId,
         quantity,
-        displayquantity,
-        ecommerceavailable
-    )
+        displayQuantity } = parseRes.data;
+    // console.log(productId, physicalLocationId, quantity, displayQuantity);
 
-    let insertResult = await dao.decreaseQuantity(newInventory)
-    if (insertResult == false) {
-        res.status(500).send("Error")
+    const isNotAdmin = user.role !== employeeRoles.administrator;
+    const isLocationManager = user.role === employeeRoles.manager && user.locationId === physicalLocationId;
+    if (isNotAdmin && !isLocationManager) {
+        res.status(403).send('No tienes permisos para realizar esta acción');
+        return;
+    }
+
+    const dao = new InventoryDAOPostgres();
+
+    const invRes = await dao.query(new Criteria({
+        filters: [
+            new Filter('pk_fk_product', productId, matchType.strictEqual),
+            new Filter('pk_fk_physical_location', physicalLocationId, matchType.strictEqual)]
+    }));
+    if (!invRes.hasResponse()) {
+        res.status(500).send(invRes.error);
+        return;
+    }
+    if (invRes.value.length === 0) {
+        res.status(404).send('Inventario no encontrado');
+        return;
+    }
+    const inventory = invRes.value[0];
+
+    inventory.quantity = quantity ?? inventory.quantity;
+    inventory.displayQuantity = displayQuantity ?? inventory.displayQuantity;
+
+
+
+    let updateResult = await dao.update(inventory)
+    if (updateResult !== true) {
+        if (updateResult instanceof ObjectResponse) {
+            res.status(500).send(updateResult.error)
+            return
+        }
+        res.status(500).send('No se pudo actualizar el inventario')
         return
     }
 
-    res.status(200).send("Product remove")
+    res.status(200).send('Inventario actualizado')
+
 }
 

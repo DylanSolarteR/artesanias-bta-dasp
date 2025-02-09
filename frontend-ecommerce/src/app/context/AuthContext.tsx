@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 // Definir el tipo de dato para el contexto
 type AuthContextType = {
   isTokenExpired: () => boolean;
@@ -7,6 +8,7 @@ type AuthContextType = {
   isLogged: () => boolean;
   authToken: string;
   setAuthToken: (newToken: string) => void;
+  logOut: () => void;
 };
 
 // Crear el contexto
@@ -16,6 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const router = useRouter();
   const [authToken, setAuthToken_] = useState<string>(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("authToken") || "";
@@ -57,6 +60,11 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const logOut = () => {
+    clearToken();
+    router.push("/login");
+  };
+
   // Retornar el proveedor del contexto con los valores que se desean compartir
   return (
     <AuthContext.Provider
@@ -66,6 +74,7 @@ export const AuthContextProvider: React.FC<{ children: React.ReactNode }> = ({
         isLogged,
         authToken,
         setAuthToken,
+        logOut,
       }}
     >
       {children}
