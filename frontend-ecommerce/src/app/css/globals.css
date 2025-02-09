@@ -424,10 +424,15 @@ table td:last-child {
 }
 
 .flex-grid,
-.zone-count,
-.zone-physical {
+.zone-count {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.zone-physical {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, max-content));
   gap: 10px;
 }
 

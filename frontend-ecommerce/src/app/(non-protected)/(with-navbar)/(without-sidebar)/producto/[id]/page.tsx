@@ -107,7 +107,7 @@ function Product() {
     <Loading />
   ) : (
     <div className="container">
-      <main className="main-center justify-center items-start flex flex-col md:px-48">
+      <main className="main-center justify-center items-start flex flex-col md:px-48 pt-5">
         <div className="return">
           <Link href={"/catalogo"}>
             <Image
@@ -119,16 +119,20 @@ function Product() {
           </Link>
           <Link href={"/catalogo"}>Seguir mirando productos</Link>
         </div>
-        <section className="flex gap-[10px] max-w-full w-full self-center pt-2 md:flex-row flex-col">
-          <div className="image-product max-w-[32rem] w-full flex flex-col justify-center items-center">
+        <section className="flex gap-[20px] max-w-full w-full self-center pt-2 md:flex-row flex-col">
+          <div className="image-product flex flex-col justify-center items-center">
             <Image
-              src={
-                "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
-              }
+              src= {product?.img || "https://placehold.co/500x500/EEE/31343C?font=lato&text=NoImage"}
               alt={"Imagen " + product?.name}
-              height={500}
-              width={500}
-              className="rounded-lg"
+              height={480}
+              width={480}
+              className="rounded-lg border-radius: 8px;"
+              style={{
+                objectFit: "cover",
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+                boxShadow: "1px 2px 5px rgba(0,0,0,0.2)"
+              }}
             />
             {productVariants.length > 1 ? (
               <ProductVariants
@@ -140,6 +144,9 @@ function Product() {
           <div className="flex-column min-w-[20rem] max-w-[30rem]">
             <h4 className="font-bold">{product?.name}</h4>
             <h4>{"Precio: $" + product?.price || "Por asignar"} </h4>
+            <h3>Descripción del producto</h3>
+            <p>{product?.description}</p>
+            <p>{"Categoría: " + product?.categoryName}</p>
             <p>{"Cantidad disponible: " + product?.stock}</p>
             <div className="cantProduct">
               {/* Aquí va la quantity de productos, con posibilidad de aumentar y disminuir*/}
@@ -201,20 +208,13 @@ function Product() {
           </div>
         </section>
         <section className="py-10 w-full">
-          <h3 className="">Descripción del producto</h3>
-          <p className="py-2">{product?.description}</p>
-          <p className="py-2">{"Categoría: " + product?.categoryName}</p>
-        </section>
-        <section className="py-10 w-full">
           <h3 className="mb-2">Recomendaciones</h3>
           <div className="grid grid-cols-2 items-center justify-center">
             {recommendations.map((rec) => (
               <div key={rec.id} className="p-2">
                 <Link href={"/producto/" + rec.id}>
                   <Image
-                    src={
-                      "https://placehold.co/300x200/EEE/31343C?font=lato&text=NoImage"
-                    }
+                    src={rec.imagen}
                     alt={"Imagen " + rec.nombre}
                     height={200}
                     width={300}

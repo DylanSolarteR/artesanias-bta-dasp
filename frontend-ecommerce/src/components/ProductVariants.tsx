@@ -29,9 +29,7 @@ function ProductVariants({
             >
               <Link href={`/producto/${variant._id}`}>
                 <Image
-                  src={
-                    "https://placehold.co/80x80/EEE/31343C?font=lato&text=NoImage"
-                  }
+                  src={variant.img}
                   className="rounded-lg hover:border-2 hover:border-[--color-main] hover:shadow-md "
                   alt={variant.name}
                   width={80}

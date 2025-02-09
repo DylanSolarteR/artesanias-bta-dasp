@@ -3,8 +3,6 @@
 import { AxiosInstance } from '@/api/axios'
 import { isAxiosError } from 'axios'
 import { PRODUCT } from '@/types/product.types'
-import { string } from 'zod';
-import { spec } from 'node:test/reporters';
 
 type productFilters = {
     orderBy: [name: 'name' | 'price', type: string],
@@ -138,18 +136,9 @@ export async function getProductsByBaseId(baseid: number) {
     }
 }
 
-export async function updateProduct(id: number, baseProductId: string, name: string, description: string, price: string, img: string, categoryId: string) {
+export async function updateProduct(id: number, baseProductId: String, name: String, description: String, price: String, img: String, categoryId: String) {
     try {
-        const form = new FormData();
-        form.append("id", id.toString());
-        form.append("baseProductId", baseProductId);
-        form.append("name", name);
-        form.append("description", description);
-        form.append("price", price);
-        form.append("imgFile", img);
-        form.append("categoryId", categoryId);
-
-        const response = await AxiosInstance.put(`/product/${id}`, form , {
+        const response = await AxiosInstance.put(`/product/${id}`, { baseProductId, name, description, price, img, categoryId }, {
             headers: {
                 Authorization: `barer ${localStorage.getItem('authToken')}`
             }
@@ -176,4 +165,3 @@ export async function deleteProduct(id: string) {
         }
     }
 }
-

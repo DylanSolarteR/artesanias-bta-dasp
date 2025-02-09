@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { set } from "zod";
 import { resetPasswordSchema } from "@/util/validation";
 import { resetPassword } from "@/api/auth.api";
+import "@/app/css/PasswordProcess.css"
 
 function validateToken(token: string) {
   let data
@@ -74,28 +75,28 @@ function Page() {
     setIsValidToken(valid);
   }, [token]);
   return (
-    <main className="container">
-      <div className="flex flex-col justify-start items-center md:px-48 px-2 h-full pt-24">
-        <p className="font-black text-6xl p-10 text-[color:var(--color-main)]">
+    <main className="container-tod">
+      <div className="container-tod-password">
+        <p className="title-password">
           Cambia tu contraseña
         </p>
-        <section className="flex justify-around items-center gap-2">
-          <div className="grow shrink-0">
+        <section className="container-password">
+          <div className="image-password">
             <Image
               src={CambioContrasenaImage}
               alt="imagen olvidaste tu contraseña"
             />
           </div>
           { isValidToken ? (
-            <div className="flex flex-col gap-4 justify-center items-center">
-              <h2 className="text-center text-balance font-bold my-4">
-                Introduce tu nueva contraseña para completar el proceso de
-                restablecimiento.
-              </h2>
+            <div className="flex flex-col gap-4 justify-center items-center max-w-[400px]">
               <form
                 onSubmit={handlesubmit}
                 className="flex flex-col gap-4 text-center "
               >
+                <h2 className="text-center text-balance font-bold my-4">
+                  Introduce tu nueva contraseña para completar el proceso de
+                  restablecimiento.
+                </h2>
                 <label htmlFor="pw">Nueva Contraseña*</label>
                 <input type="password" className="input-standard" name="pw" />
                 <label htmlFor="confirm-pw">Confirmar Contraseña*</label>

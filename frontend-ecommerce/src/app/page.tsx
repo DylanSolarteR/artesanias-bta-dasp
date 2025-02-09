@@ -70,9 +70,6 @@ export default function Home() {
       .listProducts({
         orderBy: ["price", "desc"],
         limit: 6,
-      .listProducts({
-        orderBy: ["price", "desc"],
-        limit: 6,
       })
       .then((products) => {
         setProducts(products);
@@ -94,14 +91,10 @@ export default function Home() {
       .listProducts({
         orderBy: ["price", "desc"],
         category: selectedCategory,
-      .listProducts({
-        orderBy: ["price", "desc"],
-        category: selectedCategory,
         limit: 4,
       })
       .then((products) => {
-        console.log(products);
-        setCategoryProducts(products.slice(1, 4));
+        setCategoryProducts(products);
       })
       .catch((error) => {
         console.error("Error al obtener productos:", error);
@@ -152,7 +145,6 @@ export default function Home() {
           <div className="carousel-track" id="track">
             {categories.map((category, index) => (
               <div
-              <div
                 className="carousel-item"
                 key={index}
                 onClick={() => handleCategorySelect(category.id)}
@@ -191,6 +183,7 @@ export default function Home() {
           diferentes regiones del país.
         </p>
         <div>
+        <Suspense fallback={<Loading />}  >
           <Map
             apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
             center={center}
@@ -198,6 +191,7 @@ export default function Home() {
             markers={markers}
             allowSelection={false}
           />
+          </Suspense>
         </div>
       </section>
 
