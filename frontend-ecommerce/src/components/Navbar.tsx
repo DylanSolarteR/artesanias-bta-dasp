@@ -20,6 +20,11 @@ function Navbar() {
   const { isLogged, clearToken } = useAuthContext();
   const [employeeName, setEmployeeName] = useState("");
   const { cart } = useCart();
+  const [cartLength, setCartLength] = useState(0);
+
+  useEffect(() => {
+    setCartLength(cart.length);
+  }, [cart]);
 
   useEffect(() => {
     if (isLogged() && typeof window !== "undefined") {
@@ -88,7 +93,7 @@ function Navbar() {
                 width={25}
                 height={25}
               />
-              <span className="counter">{cart.length}</span>
+              <span className="counter">{cartLength}</span>
             </button>
           </div>
         </li>

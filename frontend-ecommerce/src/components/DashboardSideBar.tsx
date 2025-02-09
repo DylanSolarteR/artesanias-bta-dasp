@@ -77,7 +77,7 @@ function DashboardSideBar() {
 
           <div className="option-dashboard">
             <h5 className="menu-title select-none">
-              <Link href="../dashboard">
+              <Link href="/dashboard">
                 <span className="icon-and-text">
                   <Image
                     src={HomeIcon}

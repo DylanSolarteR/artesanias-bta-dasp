@@ -85,6 +85,14 @@ body {
   padding: 10px;
 }
 
+.container-report {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  padding: 0px 20px 20px 20px;
+}
+
 /* Estilos letras */
 
 h1,
@@ -229,6 +237,7 @@ input[type=radio] {
 .search {
   display: flex;
   padding-right: 5px;
+  margin-top: 20px;
   justify-content: center;
   align-items: center;
 }
@@ -242,6 +251,10 @@ input[type=radio] {
   padding-left: 8px;
   padding-right: 8px;
   background-color: var(--background);
+}
+
+.search:focus-within{
+  border-bottom: 1px solid var(--color-main);
 }
 
 .search-product {
@@ -549,8 +562,12 @@ table td:last-child {
 /* Ventana de los marcadores del mapa */
 
 .info-window {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 200px;
   border-radius: 8px;
-
 }
 
 @layer base {

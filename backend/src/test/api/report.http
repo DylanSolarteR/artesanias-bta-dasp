@@ -1,0 +1,25 @@
+http://localhost:3200/api/reportSales/list
+
+http://localhost:3200/api/reportSales/list?dateStart=2024-01-01&dateEnd=2025-12-31
+
+http://localhost:3200/api/reportSales/list?dateStart=2024-01-12&dateEnd=2024-12-12 --SOLO FISICO
+
+http://localhost:3200/api/reportSales/list?dateStart=2025-01-12&dateEnd=2025-12-12 --SOLO ECOMMERCE
+
+http://localhost:3200/api/reportSales/list?typeSale=FALSE
+
+http://localhost:3200/api/reportSales/list?&physicalLocation=1
+
+http://localhost:3200/api/reportSales/list?orderBy[0]=totalsales,asc
+
+-----------------------------------------------------------------------------------------
+
+http://localhost:3200/api/reportAssociation/list
+
+http://localhost:3200/api/reportAssociation/listt?dateStart=2024-01-01&dateEnd=2025-12-31
+
+http://localhost:3200/api/reportAssociation/listt?typeSale=FALSE
+
+http://localhost:3200/api/reportSales/list?&physicalLocation=2
+
+http://localhost:3200/api/reportSales/list?&category=2

@@ -1,6 +1,5 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import Image from "next/image";
-import "@/app/css/searchbarmenu.css";
 import { useState } from "react";
 import { noAccents } from "@/util/utils";
 
@@ -43,7 +42,6 @@ function SearchBarMenu({
   return (
     <>
       <div className="wrapper_search_bar">
-        <div className="content_search_bar">
           <div className="search">
             <input
               spellCheck={false}
@@ -65,7 +63,6 @@ function SearchBarMenu({
             <Image src={SearchIcon} alt="Icono Buscar" width={20} height={20} />
           </div>
         </div>
-      </div>
     </>
   );
 }

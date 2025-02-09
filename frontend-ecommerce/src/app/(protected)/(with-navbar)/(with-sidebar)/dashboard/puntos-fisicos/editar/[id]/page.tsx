@@ -30,11 +30,13 @@ function EditPhysicalLocationPage() {
 
   const handleSubmit = async (data) => {
     await apiPhysicalLocation.updatePhysicalLocation(
-      data.address, 
+      Number(id),
+      data.address,
       data.telephone,
-      false,
+      true,
       data.latitude,
-      data.longitude
+      data.longitude,
+      data.imgFile,
     );
     router.push("/dashboard/puntos-fisicos");
   };

@@ -118,6 +118,8 @@ export async function deletePhysicalLocation(req: Request, res: Response) {
 export async function updatePhysicalLocation(req: Request, res: Response) {
     const userRole: employeeRoles = req['user_role']; //Require identifyRole middleware
 
+    console.log(req.body)
+
     if (!Employee.validateRoleHierarchy(userRole, employeeRoles.administrator)) {
         res.status(400).send("Rol inválido, necesita ser administrador")
         return

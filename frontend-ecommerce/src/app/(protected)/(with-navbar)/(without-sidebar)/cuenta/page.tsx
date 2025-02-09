@@ -54,9 +54,10 @@ function Cuenta() {
     initData();
   }, []);
   return (
-    <div className="w-full">
+    <div className="w-full pt-[87px]">
       <main className="container w-full h-full flex flex-col items-center justify-center">
         <section className="w-full flex flex-col items-center justify-center gap-2">
+        <div className="w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-[#e47b3a] items-center justify-center flex">
           <Image
             src={
               userRole === "administrator"
@@ -66,9 +67,10 @@ function Cuenta() {
                 : UserManagerIcon
             }
             alt="Icono de usuario"
-            width={150}
-            height={150}
+            width={100}
+            height={100}
           />
+          </div>
           <h1>{userName}</h1>
           <div>{/* Linea divisora */}</div>
         </section>
