@@ -4,19 +4,31 @@ import Image from "next/image";
 import OlvidasteContrasenaImage from "@/app/images/OlvidasteContrasenaImage.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { recoveryDataSchema } from "@/util/validation";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { forgotPassword } from "@/api/auth.api";
 
 function Page() {
-  function handleFormAction(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target as HTMLFormElement);
     const userData = Object.fromEntries(formData);
-    console.log(userData);
     const result = recoveryDataSchema.safeParse({
       employeeId: parseInt(userData.employeeId as string),
       email: userData.email,
     });
     if (result.success) {
-      console.log("Formulario enviado");
+      console.log(result.data);
+      let { employeeId, email } = result.data;
+      const response = await forgotPassword({ id: employeeId, email });
+      if (response.success) {
+        toast.success(response.message, {duration: 5000});
+        return;
+      }
+      toast.error(response.message);
     } else {
-      console.log(result.error);
+      toast.error(result.error.errors[0].message);
     }
   }
   return (
@@ -39,7 +51,7 @@ function Page() {
               tu contraseña.
             </h2>
             <form
-              action={handleFormAction}
+              onSubmit={handleSubmit}
               className="flex flex-col gap-4 text-center "
             >
               <label htmlFor="employeeId">Identificación de Usuario*</label>

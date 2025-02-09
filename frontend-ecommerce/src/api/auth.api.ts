@@ -66,3 +66,27 @@ export async function createUser(employee) {
     }
 
 }
+
+export async function forgotPassword(userData: { id: number, email: string }) {
+    try {
+        const response = await AxiosInstance.post('/auth/forgot-password', userData)
+        return { success: true, message: response.data, status: response.status }
+    } catch (err) {
+        if (isAxiosError(err)) {
+            return { success: false, message: err.response.data, status: err.status }
+        }
+        return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
+    }
+}
+
+export async function resetPassword(pwData: { password: string, token: string }) {
+    try {
+        const response = await AxiosInstance.post('/auth/reset-password', pwData)
+        return { success: true, message: response.data, status: response.status }
+    } catch (err) {
+        if (isAxiosError(err)) {
+            return { success: false, message: err.response.data, status: err.status }
+        }
+        return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
+    }
+}

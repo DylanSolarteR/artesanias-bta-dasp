@@ -101,6 +101,14 @@ export const PhysicalLocationDataScheme = z.object({
 })
 
 export const recoveryDataSchema = z.object({
-    employeeId: z.number(),
+    employeeId: z.number({ message: 'Id de empleado inválido' }),
     email: z.string().email({ message: 'Email inválido' })
+});
+
+export const resetPasswordSchema = z.object({
+    password: z.string().min(8, { message: 'Contraseña inválida. Debe tener al menos 8 caracteres' }),
+    confirmPassword: z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas deben coincidir",
+    path: ["confirmPassword"], // Se asigna el error a este campo
 });
