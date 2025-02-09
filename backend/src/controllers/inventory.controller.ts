@@ -125,7 +125,7 @@ export async function updateInventory(req: Request, res: Response) {
         physicalLocationId,
         quantity,
         displayQuantity } = parseRes.data;
-    console.log(productId, physicalLocationId, quantity, displayQuantity);
+    // console.log(productId, physicalLocationId, quantity, displayQuantity);
 
     const isNotAdmin = user.role !== employeeRoles.administrator;
     const isLocationManager = user.role === employeeRoles.manager && user.locationId === physicalLocationId;

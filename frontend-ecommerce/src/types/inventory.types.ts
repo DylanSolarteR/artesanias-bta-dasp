@@ -17,3 +17,10 @@ export interface POS_ADDED_PRODUCT {
     quantity: number
     subtotal: number
 }
+
+export interface UPDATE_PRODUCT_INVENTORY {
+    productId: number
+    physicalLocationId: number
+    quantity: number
+    displayQuantity: number
+}

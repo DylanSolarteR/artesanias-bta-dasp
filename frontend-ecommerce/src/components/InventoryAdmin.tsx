@@ -70,8 +70,32 @@ function InventoryAdmin() {
     getAllPhysicalPoints();
     getAllProducts();
   }
+  function changeProductInArrays(product: PRODUCT_FROM_INVENTARY) {
+    const newProducts_table = products_table.map((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        return product;
+      }
+      return product_from_list;
+    });
+    const newProductsGeneral = productsAllInventories.map(
+      (product_from_list) => {
+        if (
+          product_from_list.productId === product.productId &&
+          product_from_list.locationId === product.locationId
+        ) {
+          return product;
+        }
+        return product_from_list;
+      }
+    );
+    setProducts_table(newProducts_table);
+    setProductsAllInventories(newProductsGeneral);
+  }
 
-  // UseEffect to retrieve the initial data
+  // UseEffect to execute at the beginning
   useEffect(() => {
     retrieveInitialData();
     setMounted(true);
@@ -115,14 +139,7 @@ function InventoryAdmin() {
       <section className="flex-column">
         <h2>Inventario de cada punto físico</h2>
         <div className="search-product">
-          <div className="search">
-            {/* <input
-              type="text"
-              placeholder="Buscar punto físico"
-              disabled={searchCheckedPoint}
-            />
-            <Image src={SearchIcon} alt="search" width={20} height={20} /> */}
-          </div>
+          <div className="search"></div>
           <div className="flex-simple">
             <input
               type="checkbox"
@@ -148,8 +165,7 @@ function InventoryAdmin() {
       <section className="zone-inventary">
         <ConsultaProducto
           products_table={products_table}
-          productsGeneralInventory={productsAllInventories}
-          setProductsGeneralInventory={setProductsAllInventories}
+          changeProductInArrays={changeProductInArrays}
         />
       </section>
     </div>
