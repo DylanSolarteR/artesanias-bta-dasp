@@ -2,6 +2,7 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client
 import fs from "fs";
 import { ImageManager, type ImageParams } from "./imagesManager";
 import { urlencoded } from "express";
+import mime from "mime-types";
 
 export class AwsImageManager implements ImageManager {
 
@@ -29,19 +30,25 @@ export class AwsImageManager implements ImageManager {
 
     async uploadImage(params: ImageParams): Promise<any> {
 
-        let payload
+        let payload, contentType;
         if (params.payload) {
             payload = params.payload
+            contentType = params.contentType
         }
         else {
             payload = fs.readFileSync(params.imagePath)
+            contentType = mime.lookup(params.imagePath)
+        }
+
+        if (!contentType) {
+            throw new Error(params.imagePath + " no tiene un tipo de contenido válido")
         }
 
         const response = await this.s3.send(new PutObjectCommand({
             Bucket: this.bucketName,
             Key: params.key,
             Body: payload,
-            ContentType: params.contentType
+            ContentType: contentType
         }))
 
         return `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${params.key}`;
