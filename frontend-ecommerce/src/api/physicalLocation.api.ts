@@ -1,7 +1,6 @@
 import { AxiosInstance } from '@/api/axios';
 import { isAxiosError } from 'axios';
 import { PHYSICAL_LOCATION } from '@/types/physicalLocation.types';
-import { number } from 'zod';
 
 // Obtener todas las ubicaciones físicas
 export async function listPhysicalLocations(): Promise<PHYSICAL_LOCATION[]> {
