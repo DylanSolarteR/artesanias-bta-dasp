@@ -5,7 +5,7 @@ import { EMPLOYEE } from '@/types/employee.types';
 // Obtener todos los empleados
 export async function listAllEmployees() {
     try {
-        const response = await AxiosInstance.get('/employee/list', {
+        const response = await AxiosInstance.get('/employee/', {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
@@ -22,8 +22,12 @@ export async function listAllEmployees() {
 // Obtener un empleado por ID
 export async function getEmployeeById(id: number) {
     try {
-        const response = await AxiosInstance.get(`/employee/list/${id}`);
-        const employee: EMPLOYEE = response.data;
+        const response = await AxiosInstance.get(`/employee/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        const employee: EMPLOYEE = response.data[0];
         return employee;
     } catch (err) {
         if (isAxiosError(err)) {
@@ -33,10 +37,32 @@ export async function getEmployeeById(id: number) {
 }
 
 // Actualizar un empleado
-export async function updateEmployee(employee: EMPLOYEE) {
+export async function updateEmployee(employeeData: EMPLOYEE) {
+    const { id, email, name, lastName, telephone, role, locationId, active } = employeeData;
     try {
-        const response = await AxiosInstance.put('/employee', employee);
-        return response.data; // Podría ser un mensaje de éxito
+        const response = await AxiosInstance.put('/employee/', { id, email, name, lastName, telephone, role, locationId, active }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        // console.log(response)
+        return response;
+    } catch (err) {
+        if (isAxiosError(err)) {
+            // console.log(err.response)
+            return err.response;
+        }
+    }
+}
+
+export async function deleteEmployee(id: string) {
+    try {
+        const response = await AxiosInstance.delete(`/employee/${id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        });
+        return response.data;
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;

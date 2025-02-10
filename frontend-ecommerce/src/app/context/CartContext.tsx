@@ -1,17 +1,6 @@
 "use client";
 import React, { createContext, useState, useEffect, useContext } from "react";
-
-interface CartItem {
-  productId: number;
-  quantity: number;
-}
-
-interface CartContextType {
-  cart: CartItem[];
-  sessionId: string;
-  addToCart: (item: CartItem) => void;
-  removeFromCart: (productId: number) => void;
-}
+import { CartItem, CartContextType } from "@/types/cart.types";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
@@ -74,13 +63,17 @@ export const CartContextProvider: React.FC<{ children: React.ReactNode }> = ({
     setCart(updatedCart);
   };
 
+  const flushCart = () => {
+    setCart([]);
+  };
+
   useEffect(() => {
     localStorage.setItem(`cart-${sessionId}`, JSON.stringify(cart));
   }, [cart, sessionId]);
 
   return (
     <CartContext.Provider
-      value={{ cart, sessionId, addToCart, removeFromCart }}
+      value={{ cart, sessionId, addToCart, removeFromCart, flushCart }}
     >
       {children}
     </CartContext.Provider>

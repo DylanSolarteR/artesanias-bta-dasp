@@ -1,5 +1,23 @@
 
 
+export class Department {
+    constructor(
+        public name: string,
+        private _id?: number
+    ) { }
+
+    set id(_id) {
+        if (this._id != null) {
+            throw Error('id is inmutable')
+        }
+        this._id = _id;
+    }
+
+    get id() {
+        return this._id;
+    }
+}
+
 export class Product {
 
     public static readonly filterDict = {
@@ -8,6 +26,7 @@ export class Product {
         'category': 'category',
         'name': 'name',
         'price': 'price',
+        'id': 'pk_id'
     }
     constructor(
         public name: string,
@@ -33,6 +52,9 @@ export class Product {
         return this._id;
     }
 
+    getbaseImageKey() {
+        return `prod_${this.id}.`
+    }
 }
 
 
@@ -70,12 +92,14 @@ export class Employee {
     constructor(
         public name: string,
         public lastName: string,
+        public email: string,
         public telephone: string,
         public role: employeeRoles,
         public hashedPassword: string,
         public locationId: number | null,
         public docType: docTypes,
         public docNumber: string,
+        public active: boolean,
         private _id?: number
     ) {
         // Validate role in runtime
@@ -126,6 +150,7 @@ export class PhysicalLocation {
         public active: boolean,
         public latitude: number,
         public longitude: number,
+        public image: string,
         private _id?: number
     ) { }
 
@@ -140,6 +165,10 @@ export class PhysicalLocation {
         this._id = _id;
     }
 
+    getbaseImageKey() {
+        return `loc_${this.id}.`
+    }
+
 }
 export class Inventory {
     constructor(
@@ -148,6 +177,35 @@ export class Inventory {
         public quantity: number,
         public displayQuantity: number,
         public ecommerceAvailable: number
+    ) { }
+}
+
+export class TransactionsAssociation {
+    constructor(
+        public items: any,
+        public support: number
+    ) { }
+}
+
+export class ReportAssociation {
+    constructor(
+        public purchase: number,
+        public product: number
+    ) { }
+}
+
+export class ReportSales {
+    public static readonly filterDict = {
+        'quantitysold': 'quantitysold',
+        'totalsales': 'totalsales'
+    }
+    constructor(
+        public product: string,
+        public category: string,
+        public quantitySold: number | string,
+        public totalSales: number | string,
+        public typeSale: string,
+        public physicalLocation: string | null
     ) { }
 }
 

@@ -1,6 +1,7 @@
 import { AxiosInstance } from '@/api/axios';
 import { isAxiosError } from 'axios';
 import { PHYSICAL_LOCATION } from '@/types/physicalLocation.types';
+import { number } from 'zod';
 
 // Obtener todas las ubicaciones físicas
 export async function listPhysicalLocations(): Promise<PHYSICAL_LOCATION[]> {
@@ -18,12 +19,13 @@ export async function listPhysicalLocations(): Promise<PHYSICAL_LOCATION[]> {
 }
 
 // Obtener una ubicación física por ID
-export async function getPhysicalLocationById(id: string): Promise<PHYSICAL_LOCATION> {
+export async function getPhysicalLocationById(id: string | number): Promise<PHYSICAL_LOCATION> {
     const query = new URLSearchParams();
+    if (typeof id === 'number') id = id.toString();
     query.append('id', id);
     try {
         const response = await AxiosInstance.get(`/location/?${query.toString()}`);
-        const location: PHYSICAL_LOCATION = response.data; // Verifica si el backend devuelve un único objeto o una lista
+        const location: PHYSICAL_LOCATION = response.data[0];
         return location;
     } catch (err) {
         if (isAxiosError(err)) {
@@ -35,14 +37,21 @@ export async function getPhysicalLocationById(id: string): Promise<PHYSICAL_LOCA
 }
 
 
-export async function createPhysicalLocation(location: PHYSICAL_LOCATION) {
+export async function createPhysicalLocation(address: string, telephone: string, latitude: number, longitude: number, image: string) {
     try {
-        const response = await AxiosInstance.post('/location', location, {
+        const form = new FormData();
+        form.append("address", address);
+        form.append("telephone", telephone);
+        form.append("latitude", latitude.toString());
+        form.append("longitude", longitude.toString());
+        form.append("imgFile", image);
+
+        const response = await AxiosInstance.post('/location/', form, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data; // Devuelve el nuevo punto físico creado
+        return response.data;
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;
@@ -51,14 +60,33 @@ export async function createPhysicalLocation(location: PHYSICAL_LOCATION) {
 }
 
 // Actualizar un punto físico existente
-export async function updatePhysicalLocation(location: PHYSICAL_LOCATION) {
+export async function updatePhysicalLocation(
+    id: number,
+    address: string,
+    telephone: string,
+    active: boolean,
+    latitude: number,
+    longitude: number,
+    imgFile: string
+) {
     try {
-        const response = await AxiosInstance.put('/location', location, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        const form = new FormData();
+        form.append("address", address);
+        form.append("telephone", telephone);
+        form.append("active", active.toString());
+        form.append("latitude", latitude.toString());
+        form.append("longitude", longitude.toString());
+        form.append("id", id.toString());
+        form.append("imgFile", imgFile);
+
+        const response = await AxiosInstance.put(`/location/${id}`, form,
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                },
             }
-        });
-        return response.data; // Devuelve un mensaje de éxito
+        );
+        return response.data;
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;
@@ -66,18 +94,21 @@ export async function updatePhysicalLocation(location: PHYSICAL_LOCATION) {
     }
 }
 
-// Eliminar un punto físico por ID
-export async function deletePhysicalLocation(id: string) {
+export async function deletePhysicalLocation(id: number) {
     try {
         const response = await AxiosInstance.delete(`/location/${id}`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data; // Devuelve un mensaje de éxito
+        return response.data;
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;
         }
     }
+}
+
+export function getlistPhysicalLocations() {
+    throw new Error("Function not implemented.");
 }

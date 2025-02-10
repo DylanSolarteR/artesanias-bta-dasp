@@ -1,7 +1,10 @@
 import { docTypes } from "./businessTypes";
 
+interface Prototype {
+    clone(): Prototype
+}
 
-export class ProductRequest {
+export class ProductRequest implements Prototype {
 
     constructor(
         private _locationId: number,
@@ -13,9 +16,17 @@ export class ProductRequest {
         return this._locationId;
     }
 
+    clone(): ProductRequest {
+        return new ProductRequest(
+            this._locationId,
+            this.quantity,
+            this.isComplete
+        )
+    }
+
 }
 
-export class ProductInPurchase {
+export class ProductInPurchase implements Prototype {
     constructor(
         public productId: number,
         public quantity: number,
@@ -37,6 +48,15 @@ export class ProductInPurchase {
             (r) => {
                 return r.locationId !== delteProductReq.locationId
             }
+        )
+    }
+
+    clone(): ProductInPurchase {
+        return new ProductInPurchase(
+            this.productId,
+            this.quantity,
+            this.unitPrice,
+            this.productRequests.map((r) => r.clone())
         )
     }
 }

@@ -1,6 +1,7 @@
 import { PRODUCT } from "@/types/product.types";
-import Image from "next/image";
-import { useEffect } from "react";
+import Link from "next/link";
+import { useState } from "react";
+import ImageFb from "./ImageFb";
 
 type ProductVariantsProps = {
   current_product: PRODUCT;
@@ -11,21 +12,33 @@ function ProductVariants({
   current_product,
   variantsArray,
 }: ProductVariantsProps) {
-  useEffect(() => {}, []);
+  const [productName, setProductName] = useState<string>(current_product?.name);
+
   return (
-    <div>
-      <p className="py-2">Variante: {current_product?.name}</p>
-      <div className="flex flex-row w-full overflow-x-auto flex-nowrap max-h-80 gap-2 items-top  justify-center p-2">
-        {variantsArray.map((variant, index) => (
-          <span key={index} title={variant.name}>
-            <Image
-              src={"https://placehold.co/36"}
-              alt={variant.name}
-              width={80}
-              height={80}
-            />
-          </span>
-        ))}
+    <div className="w-full">
+      <p className="p-2 pt-4">Variante: {productName}</p>
+      <div className="flex flex-row w-full overflow-x-auto h-full max-h-fit gap-4 items-center justify-start px-2 py-1">
+        {variantsArray.map((variant, index) =>
+          variant._id !== current_product._id ? (
+            <span
+              key={index}
+              title={variant.name}
+              onMouseOver={() => setProductName(variant.name)}
+              onMouseLeave={() => setProductName(current_product?.name)}
+              className="shrink-0"
+            >
+              <Link href={`/producto/${variant._id}`}>
+                <ImageFb
+                  src={variant.img}
+                  className="rounded-lg hover:border-2 hover:border-[--color-main] hover:shadow-md "
+                  alt={variant.name}
+                  width={80}
+                  height={80}
+                />
+              </Link>
+            </span>
+          ) : null
+        )}
       </div>
     </div>
   );

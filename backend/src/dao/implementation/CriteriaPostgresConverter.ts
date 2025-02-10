@@ -11,6 +11,9 @@ export class CriteriaPostgresConverter {
      * @param columns Columns of table to query, if it is `true` all columns will be query
      */
     static convert(criteria: Criteria,): [String, any[], { filter: string, order: string, limit: string, offset: string }] {
+        if (criteria == null) {
+            return ['', [], { filter: '', order: '', limit: '', offset: '' }];
+        }
         let filter: string = '';
 
         let paramCount = 0;

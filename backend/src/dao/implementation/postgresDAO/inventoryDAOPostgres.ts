@@ -67,7 +67,7 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
             return new ObjectResponse(true, products, null)
         }
         catch (e) {
-            return new ObjectResponse(false, null, 'Fuera imposible obtener el inventario')
+            return new ObjectResponse(false, null, 'Fue imposible obtener el inventario')
         }
     }
 
@@ -121,53 +121,40 @@ export class InventoryDAOPostgres implements IDAO<Inventory> {
 
             return new ObjectResponse(true, inventories, null);
         } catch (e) {
-            return new ObjectResponse(false, null, "Fuera imposible obtener el inventario");
+            return new ObjectResponse(false, null, "Fue imposible obtener el inventario");
         }
     }
 
 
+    async delete(object: Inventory): Promise<boolean> {
+        throw Error('Unimplemented')
+    }
 
-    async decreaseQuantity(inventory: Inventory): Promise<boolean> {
+    async update(inventory: Inventory): Promise<boolean | ObjectResponse<Inventory>> {
         const query = `
-            UPDATE inventory
-            SET quantity = quantity - $1
-            WHERE pk_fk_product = $2 AND pk_fk_physical_location = $3
-            AND quantity >= $1 -- Asegurarse de que la cantidad no sea negativa
-            RETURNING *;
-        `;
+        UPDATE inventory
+            SET quantity = $1, display_quantity = $2
+        WHERE pk_fk_product = $3 AND pk_fk_physical_location = $4
+        RETURNING *`;
 
         try {
             const pool = await PostgresConnection.getInstance().getPool();
             const res = await pool.query({
                 text: query,
-                values: [inventory.quantity, inventory.productId, inventory.locationId],
+                values: [inventory.quantity, inventory.displayQuantity, inventory.productId, inventory.locationId]
             });
-
             if (res.rowCount === 1) {
-                const updatedInventory = new Inventory(
-                    res.rows[0].pk_fk_product,
-                    res.rows[0].pk_fk_physical_location,
-                    res.rows[0].quantity,
-                    res.rows[0].display_quantity,
-                    res.rows[0].ecommerce_available_quantity
-                );
                 return true;
-            } else {
-                return false;
             }
-        } catch (e) {
-            console.error('Error when decreasing the quantity in inventory', e);
-            return false;
+        } catch (error) {
+            if (error.constraint === 'c_ecommerce_available_quantity_domain') {
+                return new ObjectResponse(false, null,
+                    'No se puede actualizar el inventario, pues la modificación viola la cantidad reservada en compras')
+            }
+            console.log('Error updating inventory', error);
+            console.log(error.constraint)
+            return false
         }
-    }
-
-    async delete(object: Inventory): Promise<boolean> {
-        throw Error('Unimplemented')
-
-    }
-
-    async update(object: Inventory): Promise<boolean> {
-        throw Error('Unimplemented')
 
     }
 }

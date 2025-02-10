@@ -1,14 +1,18 @@
 "use client";
 import { POS_ADDED_PRODUCT } from "@/types/inventory.types";
-import Image from "next/image";
 import DeleteIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { useEffect, useState } from "react";
+import ImageFb from "./ImageFb";
 
 interface ProductCardPOSProps {
   productPos: POS_ADDED_PRODUCT;
   removeFromProductsAdded: (productPos: POS_ADDED_PRODUCT) => void;
-  changeSubtotalByProductId: (productId: number, subtotal: number) => void;
+  changeSubtotalByProductId: (
+    productId: number,
+    quantity: number,
+    subtotal: number
+  ) => void;
 }
 
 function ProductCardPOS({
@@ -21,7 +25,11 @@ function ProductCardPOS({
 
   function setSubtotal(subtotal: number) {
     setSubtotal_(subtotal);
-    changeSubtotalByProductId(productPos.product.productId, subtotal);
+    changeSubtotalByProductId(
+      productPos.product.productId,
+      parseInt(quantity),
+      subtotal
+    );
   }
 
   useEffect(() => {
@@ -51,25 +59,25 @@ function ProductCardPOS({
   }
 
   return (
-    <div className="relative border p-10">
+    <div className="relative border p-3 pt-8">
       <button
         className="delete absolute top-2 right-2"
         onClick={() => removeFromProductsAdded(productPos)}
       >
-        <Image
+        <ImageFb
           src={DeleteIcon}
           alt="Eliminar producto"
           width={20}
           height={20}
         />
       </button>
-      <div className="flex flex-row justify-between">
+      <div className="header-product">
         <span id="title_badge">
           {productPos.product.productName ?? "Artesanía"}
         </span>
         <span>{"C/U: $ " + productPos.product.price}</span>
       </div>
-      <div className="flex flex-col">
+      <div className="details-product">
         <div>
           <label htmlFor="quantity">Cantidad: </label>
           <input
@@ -82,7 +90,7 @@ function ProductCardPOS({
           />
         </div>
         <p>
-          Subtotal: <span>{subtotal}</span>
+          Precio: <span>{subtotal}</span>
         </p>
       </div>
     </div>

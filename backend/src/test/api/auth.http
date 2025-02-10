@@ -12,21 +12,24 @@ Content-Type: application/json
 POST http://localhost:3200/api/auth/singin
 Content-Type: application/json
 
-# body
 {
-    "userId": 6,
-    "password": "0 James Soliban" 
+    "userId": 2,
+    "password": "asdsd" 
 }
+
+###
+@token = token
 
 ### Ejemplo registro
 POST http://localhost:3200/api/auth/singup
 Content-Type: application/json
-Authorization: barer untokenrandom
+Authorization: barer {{token}}
 
 {
-    "name": "James",
+    "name": "Marcelo",
     "locationId": 1,
-    "lastName": "Soliban",
+    "lastName": "Conocelo",
+    "email": "marcelo@gg.com",
     "telephone": "111011",
     "role": "cashier",
     "docType": "CC",
@@ -36,4 +39,25 @@ Authorization: barer untokenrandom
 ### Ejemplo peticion del role del usuario
 GET http://localhost:3200/api/auth/get-role
 Content-Type: application/json
-Authorization: barer untokenrandom
+Authorization: barer {{token}}
+
+### Olvido de contraseña
+POST http://localhost:3200/api/auth/forgot-password
+Content-Type: application/json
+
+{
+    "email": "joseveles285@gmail.com",
+    "id": 3
+}
+
+###
+@reset_pass_token = otrotoken
+
+### Cambio de contraseña
+POST http://localhost:3200/api/auth/reset-password
+Content-Type: application/json
+
+{
+    "password": "123456789",
+    "token": "{{reset_pass_token}}"
+}

@@ -2,23 +2,32 @@
 
 import { useState, useEffect } from "react";
 import { getRole } from "@/api/auth.api";
+import { useRouter } from "next/navigation";
+import { hasPermission } from "@/util/RolePermissions";
+import { useMainContext } from "@/app/context/MainContext";
 
-import Image from "next/image";
 import MenuIcon from "@/app/icons/MenuIcon.svg?url";
 import CloseSquareIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
-import BagIcon from "@/app/icons/BagIcon.svg?url";
 import InventoryIcon from "@/app/icons/InventoryIcon.svg?url";
 import ShopIcon from "@/app/icons/ShopIcon.svg?url";
 import ReportIcon from "@/app/icons/ReportIcon.svg?url";
-import { useRouter } from "next/navigation";
+import ProductAdd from "@/app/icons/ProductAddIcon.svg?url";
+import ProductSearch from "@/app/icons/ProductSearchIcon.svg?url";
+import UserAdd from "@/app/icons/UserAddIcon.svg?url";
+import UserSearch from "@/app/icons/UserIcon.svg?url";
+import LocationAdd from "@/app/icons/LocationAddIcon.svg?url";
+import LocationSearch from "@/app/icons/LocationSearchIcon.svg?url";
+import ReportSales from "@/app/icons/ReportSalesIcon.svg?url";
+import ReportAnalysis from "@/app/icons/ReportAnalysisIcon.svg?url";
+import HomeIcon from "@/app/icons/HomeIcon.svg?url";
+import ProductIcon from "@/app/icons/ProductIcon.svg?url";
 
-import { hasPermission } from "@/util/RolePermissions";
-import { useMainContext } from "@/app/context/MainContext";
 import Link from "next/link";
 
 import "@/app/css/dashboard.css";
+import ImageFb from "./ImageFb";
 
 function DashboardSideBar() {
   const router = useRouter();
@@ -26,7 +35,6 @@ function DashboardSideBar() {
   const { role, setRole } = useMainContext();
   const [showEmployeeMenu, setShowEmployeeMenu] = useState(false);
   const [showProductMenu, setShowProductMenu] = useState(false);
-  const [showInventoryMenu, setShowInventoryMenu] = useState(false);
   const [showPhysicalPointsMenu, setShowPhysicalPointsMenu] = useState(false);
   const [showReportsMenu, setShowReportsMenu] = useState(false);
 
@@ -48,8 +56,8 @@ function DashboardSideBar() {
     return null;
   } else {
     return (
-      <>
-        <aside className={`container-sidebar ${collapsed ? "collapsed" : ""}`}>
+      <div className={`container-sidebar ${collapsed ? "collapsed" : ""}`}>
+        <aside className="h-full">
           <div className="contents">
             {!collapsed && <span className="menu-content-text">Contenido</span>}
             <button
@@ -57,22 +65,59 @@ function DashboardSideBar() {
               onClick={() => setCollapsed(!collapsed)}
             >
               {collapsed ? (
-                <Image src={MenuIcon} alt="Menú" />
+                <ImageFb src={MenuIcon} alt="Menú" />
               ) : (
-                <Image className="close" src={CloseSquareIcon} alt="Cerrar" />
+                <ImageFb className="close" src={CloseSquareIcon} alt="Cerrar" />
               )}
             </button>
           </div>
+
+          {/* Menú Inventario */}
+
+          <div className="option-dashboard">
+            <h5 className="menu-title select-none">
+              <Link href="/dashboard">
+                <span className="icon-and-text">
+                  <ImageFb
+                    src={HomeIcon}
+                    alt="Icono del dashboard"
+                    width={24}
+                    height={24}
+                  />
+                  {!collapsed && " Dashboard"}
+                </span>
+              </Link>
+            </h5>
+          </div>
+
+          {/* Menú Inventario */}
+          {hasPermission(role, "view:inventory") && (
+            <div className="option-dashboard">
+              <h5 className="menu-title select-none">
+                <Link href={`/dashboard/inventario`}>
+                  <span className="icon-and-text">
+                    <ImageFb
+                      src={InventoryIcon}
+                      alt="Icono de inventario"
+                      width={24}
+                      height={24}
+                    />
+                    {!collapsed && " Inventario"}
+                  </span>
+                </Link>
+              </h5>
+            </div>
+          )}
 
           {/* Menú Empleado */}
           {hasPermission(role, "view:employees") && (
             <div className="option-dashboard">
               <h5
                 onClick={() => setShowEmployeeMenu(!showEmployeeMenu)}
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={UserIcon}
                     alt="Icono de empleado"
                     width={24}
@@ -84,19 +129,37 @@ function DashboardSideBar() {
                   <span
                     className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
               {showEmployeeMenu && (
-                <ul className="submenu">
+                <ul className="submenu select-none">
                   <li>
-                    <Link href="/dashboard/empleados/registrar">
-                      Registrar empleado
-                    </Link>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={UserAdd}
+                        alt="Icono de agregar empleado"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/empleados/registrar">
+                        {!collapsed && " Registrar empleado"}
+                      </Link>
+                    </span>
                   </li>
                   <li>
-                    <Link href="/dashboard/empleados">Ver empleados</Link>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={UserSearch}
+                        alt="Icono de buscar empleado"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/empleados">
+                        {!collapsed && " Ver empleado"}
+                      </Link>
+                    </span>
                   </li>
                 </ul>
               )}
@@ -107,11 +170,11 @@ function DashboardSideBar() {
             <div className="option-dashboard">
               <h5
                 onClick={() => setShowProductMenu(!showProductMenu)}
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
-                    src={BagIcon}
+                  <ImageFb
+                    src={ProductIcon}
                     alt="Icono de producto"
                     width={24}
                     height={24}
@@ -122,38 +185,43 @@ function DashboardSideBar() {
                   <span
                     className={`arrow-icon ${showProductMenu ? "open" : ""}`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
+              {showProductMenu && (
+                <ul className="submenu select-none">
+                  <li>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={ProductAdd}
+                        alt="Icono de agregar producto"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/productos/registrar">
+                        {!collapsed && " Registrar producto"}
+                      </Link>
+                    </span>
+                  </li>
+                  <li>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={ProductSearch}
+                        alt="Icono de buscar producto"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/productos">
+                        {!collapsed && " Ver productos"}
+                      </Link>
+                    </span>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
-          {/* Menú Inventario */}
-          {hasPermission(role, "view:inventory") && (
-            <div className="option-dashboard">
-              <h5
-                onClick={() => setShowInventoryMenu(!showInventoryMenu)}
-                className="menu-title"
-              >
-                <span className="icon-and-text">
-                  <Image
-                    src={InventoryIcon}
-                    alt="Icono de inventario"
-                    width={24}
-                    height={24}
-                  />
-                  {!collapsed && " Inventario"}
-                </span>
-                {!collapsed && (
-                  <span
-                    className={`arrow-icon ${showInventoryMenu ? "open" : ""}`}
-                  >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
-                  </span>
-                )}
-              </h5>
-            </div>
-          )}
+
           {/* Menú Puntos Fisicos */}
           {hasPermission(role, "view:physical-stores") && (
             <div className="option-dashboard">
@@ -161,10 +229,10 @@ function DashboardSideBar() {
                 onClick={() =>
                   setShowPhysicalPointsMenu(!showPhysicalPointsMenu)
                 }
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={ShopIcon}
                     alt="Icono de puntos fisicos"
                     width={24}
@@ -178,21 +246,37 @@ function DashboardSideBar() {
                       showPhysicalPointsMenu ? "open" : ""
                     }`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
               {showPhysicalPointsMenu && (
-                <ul className="submenu">
+                <ul className="submenu select-none">
                   <li>
-                    <Link href="/dashboard/puntos-fisicos/registrar">
-                      Registrar punto físico
-                    </Link>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={LocationAdd}
+                        alt="Icono de agregar punto físico"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/puntos-fisicos/registrar">
+                        {!collapsed && " Registrar punto físico"}
+                      </Link>
+                    </span>
                   </li>
                   <li>
-                    <Link href="/dashboard/puntos-fisicos">
-                      Consultar punto físico
-                    </Link>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={LocationSearch}
+                        alt="Icono de buscar punto físico"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/puntos-fisicos">
+                        {!collapsed && " Consultar punto físico"}
+                      </Link>
+                    </span>
                   </li>
                 </ul>
               )}
@@ -203,10 +287,10 @@ function DashboardSideBar() {
             <div className="option-dashboard">
               <h5
                 onClick={() => setShowReportsMenu(!showReportsMenu)}
-                className="menu-title"
+                className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={ReportIcon}
                     alt="Icono de reportes"
                     width={24}
@@ -218,14 +302,44 @@ function DashboardSideBar() {
                   <span
                     className={`arrow-icon ${showReportsMenu ? "open" : ""}`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
+              {showReportsMenu && (
+                <ul className="submenu select-none">
+                  <li>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={ReportSales}
+                        alt="Icono de reporte de ventas"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/reporte/ventas">
+                        {!collapsed && " Reporte de ventas"}
+                      </Link>
+                    </span>
+                  </li>
+                  <li>
+                    <span className="icon-and-text">
+                      <ImageFb
+                        src={ReportAnalysis}
+                        alt="Icono de análisis de reportes"
+                        width={24}
+                        height={24}
+                      />
+                      <Link href="/dashboard/reporte/analisis">
+                        {!collapsed && " Reporte de análisis"}
+                      </Link>
+                    </span>
+                  </li>
+                </ul>
+              )}
             </div>
           )}
         </aside>
-      </>
+      </div>
     );
   }
 }

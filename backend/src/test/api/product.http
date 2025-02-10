@@ -7,3 +7,53 @@ http://localhost:3200/api/product/list?name=desc
 http://localhost:3200/api/product/list?id=2
 ###
 http://localhost:3200/api/product/list
+
+###
+@token = token
+
+### Crear producto, siendo este su misma base
+#NOTA: Para enviar enviar una imagen se debe enviar con el nombre imgFile
+POST http://localhost:3200/api/product
+Content-Type: application/json
+Authorization: Barer {{token}}
+
+{
+    "name": "Sanitario dorado artesanal",
+    "description": "Espectacular sanitario dorado artesanal",
+    "price": 1575000,
+    "img": "si soy una imagen",
+    "categoryId": 1,
+    "isOwnBase": true
+}
+
+### Crear producto con otra base
+POST http://localhost:3200/api/product
+Content-Type: application/json
+Authorization: Barer {{token}}
+
+{
+    "name": "Sanitario arcoiris artesanal",
+    "description": "Espectacular sanitario arcoiris artesanal",
+    "price": 1575000,
+    "img": "si soy una imagen",
+    "categoryId": 1,
+    "baseProductId": 51
+}
+
+### Elimitar producto (inhabilitar)
+DELETE http://localhost:3200/api/product/52
+Content-Type: application/json
+Authorization: Barer {{token}}
+
+### Actualizar producto
+PUT http://localhost:3200/api/product/51
+Content-Type: application/json
+Authorization: Barer {{token}}
+
+{
+    "name": "Sanitario invisible artesanal",
+    "description": "Espectacular sanitario invisible artesanal",
+    "price": 20,
+    "categoryId": 2,
+    "baseProductId": 2
+}

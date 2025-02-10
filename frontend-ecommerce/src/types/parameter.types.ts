@@ -1,0 +1,1 @@
+export interface DEPARTMENT { name: string, _id: number }

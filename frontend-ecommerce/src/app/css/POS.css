@@ -1,0 +1,130 @@
+.container-pos {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    text-align: center;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 54rem;
+    width: 28%;
+    background-color: var(--background);
+    border-right-color: #e0dfdf;
+    border-right-width: 1px;
+    align-items: center;
+}
+
+.container-consul-view {
+    display: flex;
+    width: 72%;
+    height: 100%;
+}
+
+.container-registration {
+    display: flex;
+    width: 100%;
+}
+
+.container-scanner,
+.container-list {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.container-scanner {
+    width: 50%;
+}
+
+.container-list {
+    width: 50%;
+}
+
+.header-product {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.details-product {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+}
+
+#title_badge {
+    background-color: var(--color-main-hover);
+    border-radius: 8px;
+    padding: 0px 10px;
+    max-width: 300px;
+    text-align: left;
+}
+
+.details-product input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.3rem;
+    width: 50px;
+    text-align: center;
+}
+
+.details-product label {
+    margin-right: 0.5rem;
+}
+
+.details-product p {
+    font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+
+    .container-pos {
+        flex-direction: column;
+    }
+    
+    .filter {
+        width: 100%;
+        height: auto;
+        border-right: none;
+    }
+
+    .container-consul-view {
+        width: 100%;
+        flex-direction: column;
+    }
+
+
+    .container-scanner, .container-list {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .container-pos {
+        flex-direction: column;
+    }
+
+    .filter {
+        width: 100%;
+    }
+
+    .container-consul-view {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .container-registration {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .container-scanner, .container-list {
+        width: 100%;
+    }
+}

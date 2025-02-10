@@ -1,16 +1,61 @@
-### Ejemplo actualizar empleado
-PUT http://localhost:3200/api/employee/put
+###
+#admin
+@token = token
+# genrente
+# @token = token
+# cajero
+# @token = token
+
+
+### Ejemplo actualizar empleado basico
+PUT http://localhost:3200/api/employee/
 Content-Type: application/json
-# body
+Authorization: barer {{token}}
+
 {
 	"id": "3",
-	"name": "Jose",
-	"last_name": "Velez",
-	"telephone": "31344532",
-	"locationId":"1" 
+	"name": "Josue",
+	"lastName": "Velezzzz",
+	"email": "jojosue@gmail.com",
+	"telephone": "1111"
 }
 
-### Ejemplo consultar
-GET http://localhost:3200/api/employee/list
+### Ejemplo actualizar empleado completo, Requiere admin
+PUT http://localhost:3200/api/employee/
 Content-Type: application/json
-Authorization: barer untokenrandom
+Authorization: barer {{token}}
+
+{
+	"id": "3",
+	"name": "Josue",
+	"last_name": "Velez",
+	"email": "jojojose@mgail.com",
+	"telephone": "31344532",
+	"role": "cashier",
+	"locationId": 2,
+	"active": true
+}
+### CONSULTA: por defecto solo activos
+GET http://localhost:3200/api/employee/
+Content-Type: application/json
+Authorization: barer {{token}}
+
+### CONSULTA: incluyendo inactivos
+GET http://localhost:3200/api/employee/?inactive=include
+Content-Type: application/json
+Authorization: barer {{token}}
+
+### CONSULTA: solo inactivos
+GET http://localhost:3200/api/employee/?inactive=only
+Content-Type: application/json
+Authorization: barer {{token}}
+
+### CONSULTA: Un unico empleado
+GET http://localhost:3200/api/employee/2
+Content-Type: application/json
+Authorization: barer {{token}}
+
+### Eliminar empleado (Solo lo deja inactivo)
+DELETE http://localhost:3200/api/employee/2
+Content-Type: application/json
+Authorization: barer {{token}}

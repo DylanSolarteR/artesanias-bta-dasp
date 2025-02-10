@@ -1,8 +1,12 @@
 export interface EMPLOYEE {
-    id: number;
-    identificacion: string;
-    nombre: string;
-    rol: string;
-    puntoFisico: string;
-    celular: string;
+    id?: number;
+    name: string;
+    lastName: string;
+    email: string;
+    telephone: string;
+    role?: string;
+    locationId?: string;
+    active?: boolean;
+    docType?: string;
+    docNumber?: string;
 }

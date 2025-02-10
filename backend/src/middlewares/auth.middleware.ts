@@ -8,7 +8,7 @@ export function verifyAuth(req: Request, res: Response, next: NextFunction) {
 
     let token;
     try {
-        token = req.headers.authorization.split(' ')[1];
+        token = req.headers.authorization?.split(' ')[1];
     } catch (error) {
         res.status(401).send('Auth token is required for the query')
         return
@@ -34,6 +34,10 @@ export async function identifyRole(req: Request, res: Response, next: NextFuncti
         return
     }
     const data = verifyToken(token);
+    if (!data) {
+        res.status(401).send('Invalid token')
+        return
+    }
     const userId = data['id'];
 
     try {
