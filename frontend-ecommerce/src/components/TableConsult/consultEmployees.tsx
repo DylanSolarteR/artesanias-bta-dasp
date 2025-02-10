@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { EMPLOYEE } from "@/types/employee.types";
 import { useRouter } from "next/navigation";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
@@ -8,7 +7,7 @@ import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState } from "react";
 import { useEffect } from "react";
-
+import ImageFb from "../ImageFb";
 
 interface ConsultEmployeesProps {
   employees_table: EMPLOYEE[];
@@ -21,7 +20,9 @@ function ConsultEmployees({
 }: ConsultEmployeesProps) {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(true);
-  const [employee_list_filtered, setEmployee_list_filtered] = useState<EMPLOYEE[]>([]);
+  const [employee_list_filtered, setEmployee_list_filtered] = useState<
+    EMPLOYEE[]
+  >([]);
 
   const handleDelete = (id: number) => {
     deleteEmployee(id);
@@ -78,7 +79,7 @@ function ConsultEmployees({
                     <td data-label="Celular">{employee.telephone}</td>
                     <td data-label="Acciones">
                       <button onClick={() => handleUpdate(employee.id)}>
-                        <Image
+                        <ImageFb
                           src={UpdateIcom}
                           alt="update"
                           width={30}
@@ -86,7 +87,7 @@ function ConsultEmployees({
                         />
                       </button>
                       <button onClick={() => handleDelete(employee.id)}>
-                        <Image
+                        <ImageFb
                           src={DeleteIcon}
                           alt="delete"
                           width={30}

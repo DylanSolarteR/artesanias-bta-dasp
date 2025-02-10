@@ -1,18 +1,17 @@
 "use client";
 import CambioContrasenaImage from "@/app/images/CambioContrasenaImage.svg?url";
-import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { decodeToken } from "@/util/utils";
 import toast from "react-hot-toast";
-import { set } from "zod";
 import { resetPasswordSchema } from "@/util/validation";
 import { resetPassword } from "@/api/auth.api";
-import "@/app/css/PasswordProcess.css"
+import "@/app/css/PasswordProcess.css";
+import ImageFb from "@/components/ImageFb";
 
 function validateToken(token: string) {
-  let data
+  let data;
   try {
     data = decodeToken(token);
   } catch (error) {
@@ -34,19 +33,21 @@ function Page() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    console.log(data)
-    const result = resetPasswordSchema.safeParse(Object.fromEntries([
-      ["password", data.pw],
-      ["confirmPassword", data["confirm-pw"]]
-    ]));
-    if(!result.success) {
+    console.log(data);
+    const result = resetPasswordSchema.safeParse(
+      Object.fromEntries([
+        ["password", data.pw],
+        ["confirmPassword", data["confirm-pw"]],
+      ])
+    );
+    if (!result.success) {
       toast.error(result.error.errors[0].message);
-      return
+      return;
     }
     const { password, confirmPassword } = result.data;
-    if(password !== confirmPassword) {
+    if (password !== confirmPassword) {
       toast.error("Las contraseñas no coinciden");
-      return
+      return;
     }
     const toastId = toast.loading("Cambiando contraseña");
     const response = await resetPassword({ password, token });
@@ -59,15 +60,16 @@ function Page() {
       return;
     }
     toast.error(response.message);
-
   }
 
   const [isValidToken, setIsValidToken] = useState(false);
 
   useEffect(() => {
-    const valid = validateToken(token)
+    const valid = validateToken(token);
     if (!valid) {
-      toast.error("El token es inválido o ha expirado\nRedireccionando...", { duration: 5000 });
+      toast.error("El token es inválido o ha expirado\nRedireccionando...", {
+        duration: 5000,
+      });
       setTimeout(() => {
         router.push("/olvidaste-tu-contrasena");
       }, 5000);
@@ -77,17 +79,15 @@ function Page() {
   return (
     <main className="container-tod">
       <div className="container-tod-password">
-        <p className="title-password">
-          Cambia tu contraseña
-        </p>
+        <p className="title-password">Cambia tu contraseña</p>
         <section className="container-password">
           <div className="image-password">
-            <Image
+            <ImageFb
               src={CambioContrasenaImage}
               alt="imagen olvidaste tu contraseña"
             />
           </div>
-          { isValidToken ? (
+          {isValidToken ? (
             <div className="flex flex-col gap-4 justify-center items-center max-w-[400px]">
               <form
                 onSubmit={handlesubmit}
@@ -110,15 +110,18 @@ function Page() {
                 </button>
               </form>
             </div>
-          )
-          : (<div className="flex flex-col gap-4 justify-center items-center">
-            {/* Espacio en blanco del mismo tamaño para que la imagen no salte */}
-            <h2 className="text-center text-balance font-bold my-4" style={{color: "white"}}>
+          ) : (
+            <div className="flex flex-col gap-4 justify-center items-center">
+              {/* Espacio en blanco del mismo tamaño para que la imagen no salte */}
+              <h2
+                className="text-center text-balance font-bold my-4"
+                style={{ color: "white" }}
+              >
                 Introduce tu nueva contraseña para completar el proceso de
                 restablecimiento.
-            </h2>
-          </div>)
-        }
+              </h2>
+            </div>
+          )}
         </section>
       </div>
     </main>

@@ -8,11 +8,11 @@ import { decodeBadEncodeStrings, decodeToken } from "@/util/utils";
 import { USER_INFO } from "@/types/user.types";
 import { getPhysicalLocationById } from "@/api/physicalLocation.api";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
-import Image from "next/image";
 import UpdateAccountDialog from "@/components/UpdateAccountDialog";
 import { updateEmployee } from "@/api/employees.api";
 import toast from "react-hot-toast";
 import { EMPLOYEE } from "@/types/employee.types";
+import ImageFb from "@/components/ImageFb";
 
 const ROLES = {
   cashier: "Cajero",
@@ -75,19 +75,19 @@ function Cuenta() {
     <div className="w-full pt-[87px]">
       <main className="container w-full h-full flex flex-col items-center justify-center">
         <section className="w-full flex flex-col items-center justify-center gap-2">
-        <div className="w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-[#e47b3a] items-center justify-center flex">
-          <Image
-            src={
-              userRole === "administrator"
-                ? UserAdminIcon
-                : userRole === "cashier"
-                ? UserCashierIcon
-                : UserManagerIcon
-            }
-            alt="Icono de usuario"
-            width={100}
-            height={100}
-          />
+          <div className="w-[150px] h-[150px] rounded-full overflow-hidden border-2 border-[#e47b3a] items-center justify-center flex">
+            <ImageFb
+              src={
+                userRole === "administrator"
+                  ? UserAdminIcon
+                  : userRole === "cashier"
+                  ? UserCashierIcon
+                  : UserManagerIcon
+              }
+              alt="Icono de usuario"
+              width={100}
+              height={100}
+            />
           </div>
           <h1>{userName}</h1>
           <div>{/* Linea divisora */}</div>

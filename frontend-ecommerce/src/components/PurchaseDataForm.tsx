@@ -1,7 +1,6 @@
 "use client";
 import "@/app/css/Buy.css";
 import { useState, ChangeEvent, use } from "react";
-import Image from "next/image";
 import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
 import CardIcon from "@/app/icons/CardIcon.svg";
 import GroupIcon from "@/app/icons/GroupIcon.svg";
@@ -16,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { getDepartments } from "@/api/parameters.api";
 import { getDocTypes } from "@/api/parameters.api";
 import { DEPARTMENT } from "@/types/parameter.types";
+import ImageFb from "./ImageFb";
 
 const steps = [
   { Icon: <UserIcon />, step: 1 },
@@ -275,7 +275,7 @@ function PurchaseDataForm() {
                     checked={paymentMethod === "mercadopago"}
                   />
                   <div className="plan-details">
-                    <Image
+                    <ImageFb
                       alt="Logo Mercado Pago"
                       src={MercadoPagoLogo}
                       className="mercadopago"

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
 
-import Image from "next/image";
 import MenuIcon from "@/app/icons/MenuIcon.svg?url";
 import CloseSquareIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
@@ -28,6 +27,7 @@ import ProductIcon from "@/app/icons/ProductIcon.svg?url";
 import Link from "next/link";
 
 import "@/app/css/dashboard.css";
+import ImageFb from "./ImageFb";
 
 function DashboardSideBar() {
   const router = useRouter();
@@ -35,7 +35,6 @@ function DashboardSideBar() {
   const { role, setRole } = useMainContext();
   const [showEmployeeMenu, setShowEmployeeMenu] = useState(false);
   const [showProductMenu, setShowProductMenu] = useState(false);
-  const [showInventoryMenu, setShowInventoryMenu] = useState(false);
   const [showPhysicalPointsMenu, setShowPhysicalPointsMenu] = useState(false);
   const [showReportsMenu, setShowReportsMenu] = useState(false);
 
@@ -66,9 +65,9 @@ function DashboardSideBar() {
               onClick={() => setCollapsed(!collapsed)}
             >
               {collapsed ? (
-                <Image src={MenuIcon} alt="Menú" />
+                <ImageFb src={MenuIcon} alt="Menú" />
               ) : (
-                <Image className="close" src={CloseSquareIcon} alt="Cerrar" />
+                <ImageFb className="close" src={CloseSquareIcon} alt="Cerrar" />
               )}
             </button>
           </div>
@@ -79,7 +78,7 @@ function DashboardSideBar() {
             <h5 className="menu-title select-none">
               <Link href="/dashboard">
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={HomeIcon}
                     alt="Icono del dashboard"
                     width={24}
@@ -97,7 +96,7 @@ function DashboardSideBar() {
               <h5 className="menu-title select-none">
                 <Link href={`/dashboard/inventario`}>
                   <span className="icon-and-text">
-                    <Image
+                    <ImageFb
                       src={InventoryIcon}
                       alt="Icono de inventario"
                       width={24}
@@ -118,7 +117,7 @@ function DashboardSideBar() {
                 className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={UserIcon}
                     alt="Icono de empleado"
                     width={24}
@@ -130,7 +129,7 @@ function DashboardSideBar() {
                   <span
                     className={`arrow-icon ${showEmployeeMenu ? "open" : ""}`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
@@ -138,7 +137,7 @@ function DashboardSideBar() {
                 <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={UserAdd}
                         alt="Icono de agregar empleado"
                         width={24}
@@ -151,7 +150,7 @@ function DashboardSideBar() {
                   </li>
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={UserSearch}
                         alt="Icono de buscar empleado"
                         width={24}
@@ -174,7 +173,7 @@ function DashboardSideBar() {
                 className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={ProductIcon}
                     alt="Icono de producto"
                     width={24}
@@ -186,7 +185,7 @@ function DashboardSideBar() {
                   <span
                     className={`arrow-icon ${showProductMenu ? "open" : ""}`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
@@ -194,7 +193,7 @@ function DashboardSideBar() {
                 <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={ProductAdd}
                         alt="Icono de agregar producto"
                         width={24}
@@ -207,7 +206,7 @@ function DashboardSideBar() {
                   </li>
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={ProductSearch}
                         alt="Icono de buscar producto"
                         width={24}
@@ -233,7 +232,7 @@ function DashboardSideBar() {
                 className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={ShopIcon}
                     alt="Icono de puntos fisicos"
                     width={24}
@@ -247,7 +246,7 @@ function DashboardSideBar() {
                       showPhysicalPointsMenu ? "open" : ""
                     }`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
@@ -255,7 +254,7 @@ function DashboardSideBar() {
                 <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={LocationAdd}
                         alt="Icono de agregar punto físico"
                         width={24}
@@ -268,7 +267,7 @@ function DashboardSideBar() {
                   </li>
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={LocationSearch}
                         alt="Icono de buscar punto físico"
                         width={24}
@@ -291,7 +290,7 @@ function DashboardSideBar() {
                 className="menu-title select-none"
               >
                 <span className="icon-and-text">
-                  <Image
+                  <ImageFb
                     src={ReportIcon}
                     alt="Icono de reportes"
                     width={24}
@@ -303,7 +302,7 @@ function DashboardSideBar() {
                   <span
                     className={`arrow-icon ${showReportsMenu ? "open" : ""}`}
                   >
-                    <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                    <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                   </span>
                 )}
               </h5>
@@ -311,7 +310,7 @@ function DashboardSideBar() {
                 <ul className="submenu select-none">
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={ReportSales}
                         alt="Icono de reporte de ventas"
                         width={24}
@@ -324,7 +323,7 @@ function DashboardSideBar() {
                   </li>
                   <li>
                     <span className="icon-and-text">
-                      <Image
+                      <ImageFb
                         src={ReportAnalysis}
                         alt="Icono de análisis de reportes"
                         width={24}

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import PlusIcon from "@/app/icons/PlusIcon.png";
@@ -13,6 +12,7 @@ import { getProductById } from "@/api/product.api";
 import { PRODUCT } from "@/types/product.types";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import ImageFb from "@/components/ImageFb";
 
 function Carrito() {
   const { cart, addToCart, removeFromCart } = useCart();
@@ -99,7 +99,7 @@ function Carrito() {
       <h1>CARRITO</h1>
       <div className="return">
         <Link href={"/catalogo"}>
-          <Image
+          <ImageFb
             src={BackwardArrowIcon}
             alt={"ArrowReturn"}
             height={30}
@@ -131,7 +131,7 @@ function Carrito() {
                       className="delete"
                       onClick={() => eliminarProducto(product._id)}
                     >
-                      <Image
+                      <ImageFb
                         src={DeleteIcon}
                         alt="Eliminar producto"
                         width={20}
@@ -139,8 +139,9 @@ function Carrito() {
                       />
                     </button>{" "}
                     {/* Aquí va la información de cada producto*/}
-                    <Image
-                      src={ product.img ||
+                    <ImageFb
+                      src={
+                        product.img ||
                         "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
                       }
                       alt={product.name}
@@ -152,7 +153,7 @@ function Carrito() {
                       <h6>$ {product.price}</h6>
                       <div className="cantProduct">
                         <button onClick={() => decreaseQuantity(product._id)}>
-                          <Image
+                          <ImageFb
                             src={MinusIcon}
                             alt="Disminuir cantidad"
                             width={30}
@@ -182,7 +183,7 @@ function Carrito() {
                           }}
                         />
                         <button onClick={() => increaseQuantity(product._id)}>
-                          <Image
+                          <ImageFb
                             src={PlusIcon}
                             alt="Aumentar cantidad"
                             width={30}

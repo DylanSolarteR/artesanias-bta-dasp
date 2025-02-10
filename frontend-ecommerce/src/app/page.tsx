@@ -1,9 +1,8 @@
 "use client";
-import Image from "next/image";
 import { useEffect, Suspense, useState } from "react";
 import CeramicsImage from "@/app/Images/Ceramics.png";
 import DefaultImage from "@/app/Images/Default.jpg";
-import CityEmpress from "@/app/images/cityEmpress.png"
+import CityEmpress from "@/app/images/cityEmpress.png";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
 
@@ -15,6 +14,7 @@ import Catalog from "@/components/Catalog";
 import Map from "@/components/Map";
 import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import Navbar from "@/components/Navbar";
+import ImageFb from "@/components/ImageFb";
 
 export interface PRODUCT {
   id: number;
@@ -99,7 +99,6 @@ export default function Home() {
       .catch((error) => {
         console.error("Error al obtener productos:", error);
       });
-
   };
 
   return (
@@ -118,7 +117,7 @@ export default function Home() {
       </header>
 
       <section className="section-presentation">
-        <Image
+        <ImageFb
           src={CeramicsImage}
           alt="Icono de carrito"
           width={70}
@@ -183,14 +182,14 @@ export default function Home() {
           diferentes regiones del país.
         </p>
         <div>
-        <Suspense fallback={<Loading />}  >
-          <Map
-            apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
-            center={center}
-            zoom={12}
-            markers={markers}
-            allowSelection={false}
-          />
+          <Suspense fallback={<Loading />}>
+            <Map
+              apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY}
+              center={center}
+              zoom={12}
+              markers={markers}
+              allowSelection={false}
+            />
           </Suspense>
         </div>
       </section>
@@ -208,14 +207,21 @@ export default function Home() {
             <p className="mb-0">info@artesaniasbogota.shop</p>
           </div>
           <div className="flex flex-col gap-0 items-center">
-            <h6 className="mb-0">Ingresa aquí para iniciar sesión si eres un empleado</h6>
-            <Image
+            <h6 className="mb-0">
+              Ingresa aquí para iniciar sesión si eres un empleado
+            </h6>
+            <ImageFb
               src={CityEmpress}
               alt="Icono de carrito"
               width={200}
               height={200}
             />
-            <button id="button-standard" onClick={() => (window.location.href = "/login")}>Iniciar sesión</button>
+            <button
+              id="button-standard"
+              onClick={() => (window.location.href = "/login")}
+            >
+              Iniciar sesión
+            </button>
           </div>
         </div>
       </section>

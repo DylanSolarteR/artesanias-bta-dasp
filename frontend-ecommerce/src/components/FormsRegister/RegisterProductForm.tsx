@@ -1,19 +1,31 @@
 "use client";
 import { useState, useEffect } from "react";
 import { onlyNumberInput } from "@/util/utils";
-import Image from "next/image";
 import defaultImage from "@/app/icons/BagsadIcon.png";
 import * as apiCategory from "@/api/category.api";
+import ImageFb from "../ImageFb";
 
-function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (data: any) => void }) {
-  const [baseProductId, setProductBase] = useState<string>(product?.baseProductId || "");
+function RegisterProductForm({
+  product,
+  onSubmit,
+}: {
+  product?: any;
+  onSubmit: (data: any) => void;
+}) {
+  const [baseProductId, setProductBase] = useState<string>(
+    product?.baseProductId || ""
+  );
   const [name, setName] = useState<string>(product?.name || "");
-  const [description, setDescription] = useState<string>(product?.description || "");
+  const [description, setDescription] = useState<string>(
+    product?.description || ""
+  );
   const [price, setPrice] = useState<number>(product?.price || "");
   const [img, setImage] = useState<string>(product?.img || "");
   const [imgFile, setImageFile] = useState<File>();
   const [isOwnBase, setOwnBase] = useState<Boolean>();
-  const [categoryId, setCategoryId] = useState<string>(product?.categoryId || "");
+  const [categoryId, setCategoryId] = useState<string>(
+    product?.categoryId || ""
+  );
   const [category, setCategory] = useState<string>(product?.categoryName || "");
   const [categories, setCategories] = useState([]);
 
@@ -33,17 +45,26 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
 
     setOwnBase(newOwnBase);
 
-    onSubmit({ name, description, price, imgFile, categoryId, baseProductId: newBaseProductId, isOwnBase: newOwnBase });
+    onSubmit({
+      name,
+      description,
+      price,
+      imgFile,
+      categoryId,
+      baseProductId: newBaseProductId,
+      isOwnBase: newOwnBase,
+    });
   };
-
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      console.log('sisa')
+      console.log("sisa");
       const maxSize = 500000;
       if (file.size > maxSize) {
-        alert(`El tamaño de la imagen no puede ser mayor a ${maxSize / 1000} KB.`);
+        alert(
+          `El tamaño de la imagen no puede ser mayor a ${maxSize / 1000} KB.`
+        );
         return;
       }
 
@@ -53,7 +74,7 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
           setImage(event.target.result); // Guardar la imagen como base64
         }
       };
-      console.log(file)
+      console.log(file);
       setImageFile(file);
       reader.readAsDataURL(file);
     }
@@ -100,7 +121,9 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
               value={categoryId}
               name="category"
               onChange={(e) => {
-                const selectedCategory = categories.find(cat => cat.id == e.target.value);
+                const selectedCategory = categories.find(
+                  (cat) => cat.id == e.target.value
+                );
                 if (selectedCategory) {
                   setCategoryId(selectedCategory.id);
                   setCategory(selectedCategory.name);
@@ -128,7 +151,7 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-4">
               <div className="w-full md:w-1/2 flex justify-center">
                 <div className="relative w-[300px] h-[300px]">
-                  <Image
+                  <ImageFb
                     src={img || defaultImage}
                     alt="Seleccionada"
                     fill
@@ -139,7 +162,10 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
                 </div>
               </div>
               <div className="w-full md:w-1/2 text-center">
-                <label htmlFor="imageUpload" className="block text-gray-700 mb-4">
+                <label
+                  htmlFor="imageUpload"
+                  className="block text-gray-700 mb-4"
+                >
                   Selecciona una imagen
                 </label>
                 <input
@@ -158,14 +184,16 @@ function RegisterProductForm({ product, onSubmit }: { product?: any; onSubmit: (
                 </label>
                 {img && (
                   <p className="mt-4 text-gray-600">
-                    Has subido una imagen con éxito. Puedes cambiarla seleccionando otra.
+                    Has subido una imagen con éxito. Puedes cambiarla
+                    seleccionando otra.
                   </p>
                 )}
               </div>
             </div>
 
-            <button id="button-standard" type="submit">Guardar</button>
-
+            <button id="button-standard" type="submit">
+              Guardar
+            </button>
           </form>
         </div>
       </div>

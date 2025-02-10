@@ -1,7 +1,7 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
-import Image from "next/image";
 import { useState } from "react";
 import { noAccents } from "@/util/utils";
+import ImageFb from "./ImageFb";
 
 type SearchBarMenuProps = {
   search_name: string;
@@ -42,27 +42,27 @@ function SearchBarMenu({
   return (
     <>
       <div className="wrapper_search_bar">
-          <div className="search">
-            <input
-              spellCheck={false}
-              type="text"
-              placeholder={`Buscar ${search_name}`}
-              value={searchTerm}
-              onChange={handleSearch}
-              onBlur={(e) => {
-                if (typeof onBlur === "function") {
-                  onBlur(e);
-                }
-              }}
-              onFocus={() => {
-                if (typeof onFocus === "function") {
-                  onFocus();
-                }
-              }}
-            />
-            <Image src={SearchIcon} alt="Icono Buscar" width={20} height={20} />
-          </div>
+        <div className="search">
+          <input
+            spellCheck={false}
+            type="text"
+            placeholder={`Buscar ${search_name}`}
+            value={searchTerm}
+            onChange={handleSearch}
+            onBlur={(e) => {
+              if (typeof onBlur === "function") {
+                onBlur(e);
+              }
+            }}
+            onFocus={() => {
+              if (typeof onFocus === "function") {
+                onFocus();
+              }
+            }}
+          />
+          <ImageFb src={SearchIcon} alt="Icono Buscar" width={20} height={20} />
         </div>
+      </div>
     </>
   );
 }

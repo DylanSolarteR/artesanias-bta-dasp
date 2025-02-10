@@ -1,11 +1,11 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import ChangeStockButton from "./ChangeStockButton";
-import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { LOW_STOCK_THRESHOLD, noAccents } from "@/util/utils";
 import { useState, useEffect } from "react";
 import { updateProductInInventoryQuantity } from "@/api/inventory.api";
 import toast from "react-hot-toast";
+import ImageFb from "./ImageFb";
 
 function ProductInventoryList({
   products_table,
@@ -86,7 +86,7 @@ function ProductInventoryList({
             onChange={handleSearchChange}
             placeholder="Buscar producto"
           />
-          <Image src={SearchIcon} alt="search" width={20} height={20} />
+          <ImageFb src={SearchIcon} alt="search" width={20} height={20} />
         </div>
       </div>
       <table className="table">

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PRODUCT } from "@/types/product.types";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
@@ -7,6 +6,7 @@ import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState, useEffect } from "react";
+import ImageFb from "../ImageFb";
 
 interface ConsultProductsProps {
   products_table: PRODUCT[];
@@ -19,7 +19,9 @@ function ConsultProducts({
 }: ConsultProductsProps) {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(true);
-  const [product_list_filtered, setProduct_list_filtered] = useState<PRODUCT[]>([]);
+  const [product_list_filtered, setProduct_list_filtered] = useState<PRODUCT[]>(
+    []
+  );
 
   const handleDelete = (id: number) => {
     deleteProduct(id);
@@ -78,7 +80,7 @@ function ConsultProducts({
                     <td>{product.categoryName}</td>
                     <td>
                       <button onClick={() => handleUpdate(product._id)}>
-                        <Image
+                        <ImageFb
                           src={UpdateIcom}
                           alt="update"
                           width={30}
@@ -86,7 +88,7 @@ function ConsultProducts({
                         />
                       </button>
                       <button onClick={() => handleDelete(product._id)}>
-                        <Image
+                        <ImageFb
                           src={DeleteIcon}
                           alt="delete"
                           width={30}

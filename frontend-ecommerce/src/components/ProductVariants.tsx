@@ -1,7 +1,7 @@
 import { PRODUCT } from "@/types/product.types";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import ImageFb from "./ImageFb";
 
 type ProductVariantsProps = {
   current_product: PRODUCT;
@@ -28,7 +28,7 @@ function ProductVariants({
               className="shrink-0"
             >
               <Link href={`/producto/${variant._id}`}>
-                <Image
+                <ImageFb
                   src={variant.img}
                   className="rounded-lg hover:border-2 hover:border-[--color-main] hover:shadow-md "
                   alt={variant.name}

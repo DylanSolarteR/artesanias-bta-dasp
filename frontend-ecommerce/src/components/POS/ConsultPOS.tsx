@@ -1,8 +1,8 @@
 "use client";
 import SearchBarMenu from "@/components/SearchBarMenu";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
-import Image from "next/image";
 import { useState } from "react";
+import ImageFb from "../ImageFb";
 
 interface ConsultaPOSProps {
   product_list: PRODUCT_FROM_INVENTARY[];
@@ -62,7 +62,7 @@ function ConsultaPOS({ product_list }: ConsultaPOSProps) {
             </h1>
             <div className="flex flex-row w-full justify-center gap-4">
               <div>
-                <Image
+                <ImageFb
                   src={
                     product_selected.productImage ??
                     "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"

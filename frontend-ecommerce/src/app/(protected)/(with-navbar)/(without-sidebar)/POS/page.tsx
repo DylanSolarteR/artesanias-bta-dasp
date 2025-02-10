@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { useAuthContext } from "@/app/context/AuthContext";
@@ -10,6 +9,7 @@ import BoxSearch from "@/app/icons/BoxSearchIcon.svg?url";
 import RegistroPOS from "@/components/POS/RegisterPOS";
 import ConsultaPOS from "@/components/POS/ConsultPOS";
 import "@/app/css/POS.css";
+import ImageFb from "@/components/ImageFb";
 
 export type PAY_METHOD = "credit_card" | "debit_card" | "cash" | "";
 
@@ -47,14 +47,14 @@ function Page() {
               className="flex items-center gap-4"
               onClick={() => setSidebarPage("register")}
             >
-              <Image alt="icono" src={Bill} width={80} height={80} />
+              <ImageFb alt="icono" src={Bill} width={80} height={80} />
               <span className="text-[2.875rem]">Registrar productos</span>
             </button>
             <button
               className="flex items-center gap-4"
               onClick={() => setSidebarPage("search")}
             >
-              <Image alt="icono" src={BoxSearch} width={80} height={80} />
+              <ImageFb alt="icono" src={BoxSearch} width={80} height={80} />
               <span className="text-[2.875rem]">Consulta productos</span>
             </button>
           </div>

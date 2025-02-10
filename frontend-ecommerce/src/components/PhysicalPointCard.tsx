@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import { listProductsFromInventory } from "@/api/inventory.api";
+import ImageFb from "./ImageFb";
 //For the inventory page
 function PhysicalPointCard({
   physicalPoint,
@@ -55,8 +55,11 @@ function PhysicalPointCard({
         disabled={disabledCheck}
       />
       <div className="w-[300px] h-[200px] overflow-hidden">
-        <Image
-          src= {physicalPoint?.image || "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"}
+        <ImageFb
+          src={
+            physicalPoint?.image ||
+            "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
+          }
           alt={physicalPoint.address}
           width={500}
           height={350}

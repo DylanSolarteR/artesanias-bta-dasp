@@ -1,16 +1,16 @@
 import { PRODUCT } from "@/app/(non-protected)/(with-navbar)/(without-sidebar)/catalogo/page";
 import BagsadIcon from "@/app/icons/BagsadIcon.png";
-import Image from "next/image";
 import Link from "next/link";
 import { useMainContext } from "@/app/context/MainContext";
 import "@/app/css/Catalog-product.css";
+import ImageFb from "./ImageFb";
 
 function Catalog({ products }: { products: PRODUCT[] }) {
   const { gridClass } = useMainContext();
 
   return products?.length === 0 ? (
     <div className="empty-message">
-      <Image src={BagsadIcon} alt="Nothing" width={100} height={100} />
+      <ImageFb src={BagsadIcon} alt="Nothing" width={100} height={100} />
       <p>Lo sentimos, no se encuentran productos en este momento.</p>
     </div>
   ) : (
@@ -18,7 +18,7 @@ function Catalog({ products }: { products: PRODUCT[] }) {
       {products?.map((product: PRODUCT, index: number) => (
         <article key={index}>
           <div className="img-container">
-            <Image
+            <ImageFb
               src={
                 product.imagen ??
                 "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"

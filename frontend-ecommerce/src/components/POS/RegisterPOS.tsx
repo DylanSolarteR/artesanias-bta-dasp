@@ -1,9 +1,8 @@
 "use client";
-import Image from "next/image";
 
 import SearchBarMenu from "@/components/SearchBarMenu";
 import ProductCardPOS from "../ProductCardPOS";
-import ShoppingPOSImage from "@/app/images/ShoppingPOSImage.jpg"
+import ShoppingPOSImage from "@/app/images/ShoppingPOSImage.jpg";
 
 import {
   POS_ADDED_PRODUCT,
@@ -14,6 +13,7 @@ import { basicUserDataSchema, productSchema } from "@/types/purchase.types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { completePosPurchase } from "@/api/purchase.api";
+import ImageFb from "../ImageFb";
 
 interface RegistroPOSProps {
   product_list: PRODUCT_FROM_INVENTARY[];
@@ -25,9 +25,7 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
   >([]);
 
   const [total, setTotal] = useState<number>(0);
-  const [imageSource, setImageSource] = useState<string>(
-    ShoppingPOSImage.src
-  );
+  const [imageSource, setImageSource] = useState<string>(ShoppingPOSImage.src);
 
   const [products_added, setProducts_added] = useState<POS_ADDED_PRODUCT[]>([]);
 
@@ -126,7 +124,7 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
         {/* producto */}
         <div className="flex flex-col w-full justify-start">
           <div className="flex justify-center">
-            <Image
+            <ImageFb
               className="self-center rounded-md"
               alt=""
               src={
@@ -139,7 +137,7 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
                 objectFit: "cover",
                 borderRadius: "8px",
                 border: "1px solid #ccc",
-                boxShadow: "1px 2px 5px rgba(0,0,0,0.2)"
+                boxShadow: "1px 2px 5px rgba(0,0,0,0.2)",
               }}
             />
           </div>
@@ -208,17 +206,17 @@ function ProductCardSelect({ product }: { product: PRODUCT_FROM_INVENTARY }) {
   return (
     <div className="flex gap-2 items-center w-full">
       <div className="">
-        <Image
-          src={
-            product.productImage
-          }
+        <ImageFb
+          src={product.productImage}
           alt={product.productName}
           width={100}
           height={100}
         />
       </div>
       <div className="text-left">
-        <span>{product.productName} | Precio: {product.price}</span>
+        <span>
+          {product.productName} | Precio: {product.price}
+        </span>
       </div>
     </div>
   );

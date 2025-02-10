@@ -1,13 +1,12 @@
 "use client";
-import Image from "next/image";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import { useRouter } from "next/navigation";
-import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
 import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState, useEffect } from "react";
+import ImageFb from "../ImageFb";
 
 interface ConsultPhysicalLocationsProps {
   physicalLocation_table: PHYSICAL_LOCATION[];
@@ -20,7 +19,8 @@ function ConsultPhysicalLocations({
 }: ConsultPhysicalLocationsProps) {
   const router = useRouter();
   const [showLoader, setShowLoader] = useState(true);
-  const [physicalLocation_list_filtered, setPhysicalLocation_list_filtered] = useState<PHYSICAL_LOCATION[]>([]);
+  const [physicalLocation_list_filtered, setPhysicalLocation_list_filtered] =
+    useState<PHYSICAL_LOCATION[]>([]);
 
   const handleDelete = (id: number) => {
     deletePhysicalLocation(id);
@@ -74,16 +74,20 @@ function ConsultPhysicalLocations({
                     <td data-label="Dirección">{physicalLocation.address}</td>
                     <td data-label="Teléfono">{physicalLocation.telephone}</td>
                     <td data-label="Acciones">
-                      <button onClick={() => handleUpdate(physicalLocation._id)}>
-                        <Image
+                      <button
+                        onClick={() => handleUpdate(physicalLocation._id)}
+                      >
+                        <ImageFb
                           src={UpdateIcom}
                           alt="update"
                           width={30}
                           height={30}
                         />
                       </button>
-                      <button onClick={() => handleDelete(physicalLocation._id)}>
-                        <Image
+                      <button
+                        onClick={() => handleDelete(physicalLocation._id)}
+                      >
+                        <ImageFb
                           src={DeleteIcon}
                           alt="delete"
                           width={30}

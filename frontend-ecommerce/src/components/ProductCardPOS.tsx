@@ -1,9 +1,9 @@
 "use client";
 import { POS_ADDED_PRODUCT } from "@/types/inventory.types";
-import Image from "next/image";
 import DeleteIcon from "@/app/icons/CloseSquareIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { useEffect, useState } from "react";
+import ImageFb from "./ImageFb";
 
 interface ProductCardPOSProps {
   productPos: POS_ADDED_PRODUCT;
@@ -64,7 +64,7 @@ function ProductCardPOS({
         className="delete absolute top-2 right-2"
         onClick={() => removeFromProductsAdded(productPos)}
       >
-        <Image
+        <ImageFb
           src={DeleteIcon}
           alt="Eliminar producto"
           width={20}

@@ -1,13 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import OlvidasteContrasenaImage from "@/app/images/OlvidasteContrasenaImage.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { recoveryDataSchema } from "@/util/validation";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
 import { forgotPassword } from "@/api/auth.api";
-import "@/app/css/PasswordProcess.css"
+import "@/app/css/PasswordProcess.css";
+import ImageFb from "@/components/ImageFb";
 
 function Page() {
   async function handleSubmit(e: React.FormEvent) {
@@ -24,7 +23,7 @@ function Page() {
       let { employeeId, email } = result.data;
       const response = await forgotPassword({ id: employeeId, email });
       if (response.success) {
-        toast.success(response.message, {duration: 5000});
+        toast.success(response.message, { duration: 5000 });
         return;
       }
       toast.error(response.message);
@@ -35,12 +34,10 @@ function Page() {
   return (
     <main className="container-tod">
       <div className="container-tod-password">
-        <p className="title-password">
-          ¿Olvidaste tu contraseña?
-        </p>
+        <p className="title-password">¿Olvidaste tu contraseña?</p>
         <section className="container-password">
           <div className="image-password">
-            <Image
+            <ImageFb
               src={OlvidasteContrasenaImage}
               alt="imagen olvidaste tu contraseña"
             />
