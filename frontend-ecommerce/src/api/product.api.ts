@@ -136,7 +136,7 @@ export async function getProductsByBaseId(baseid: number) {
     }
 }
 
-export async function updateProduct(id: number, baseProductId: String, name: String, description: String, price: String, img: String, categoryId: String) {
+export async function updateProduct(id: number, baseProductId: string, name: string, description: string, price: string, img: string, categoryId: string) {
     try {
         const response = await AxiosInstance.put(`/product/${id}`, { baseProductId, name, description, price, img, categoryId }, {
             headers: {

@@ -22,7 +22,7 @@ function RegisterProductForm({
   const [price, setPrice] = useState<number>(product?.price || "");
   const [img, setImage] = useState<string>(product?.img || "");
   const [imgFile, setImageFile] = useState<File>();
-  const [isOwnBase, setOwnBase] = useState<Boolean>();
+  const [isOwnBase, setOwnBase] = useState<boolean>();
   const [categoryId, setCategoryId] = useState<string>(
     product?.categoryId || ""
   );
