@@ -1,16 +1,20 @@
 "use client";
-import PdfIcon from "@/app/icons/PdfIcon.svg?url";
+
 import DatePicker from "react-datepicker";
+import DownloadPDFButton from "@/components/GeneratePDFAssociation";
 import "react-datepicker/dist/react-datepicker.css";
-import Image from "next/image";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
+import { useAuthContext } from "@/app/context/AuthContext";
+import { decodeBadEncodeStrings } from "@/util/utils";
+import { decodeToken } from "@/util/utils";
 import * as apiReport from "@/api/report.api";
 import * as apiCategory from "@/api/category.api";
 import * as apiProduct from "@/api/product.api";
 
 function page() {
+
   const [dateStart, setDateStart] = useState<Date>(new Date());
   const [dateEnd, setDateEnd] = useState<Date>(new Date());
   const [saleType, setSaleType] = useState<string | null>(null);
@@ -19,7 +23,23 @@ function page() {
   const [categories, setCategories] = useState<any[]>([]);
   const [reportData, setReportData] = useState<any[]>([]);
   const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
-  const [formattedItems, setFormattedItems] = useState({});
+  const { isLogged, clearToken } = useAuthContext();
+  const [employeeName, setEmployeeName] = useState("");
+
+  useEffect(() => {
+    if (isLogged() && typeof window !== "undefined") {
+      const token = localStorage.getItem("authToken");
+      if (!token || token === "") {
+        return;
+      }
+
+      const jwtPayload = decodeToken(token);
+      const correctedName = decodeBadEncodeStrings(
+        jwtPayload.name + " " + jwtPayload.lastName
+      );
+      setEmployeeName(correctedName);
+    }
+  }, []);
 
   useEffect(() => {
     listPhysicalLocations()
@@ -194,7 +214,22 @@ function page() {
             <h2>Tabla de reporte</h2>
             <span className="flex flex-row gap-[5px]">
               Exportar:
-              <Image src={PdfIcon} alt="pdf-export" width={30} height={30} />
+              <DownloadPDFButton 
+                key={reportData.length}
+                issueDate={new Date().toLocaleDateString() || "Hoy"}
+                createdBy={employeeName}
+                startDate={dateStart.toLocaleDateString() || "Buscar la fecha más antigua"}
+                endDate={dateEnd.toLocaleDateString() || "Buscar la fecha más reciente"}
+                saleType={saleType
+                  ? saleType === "true"
+                    ? "Físico"
+                    : "Online"
+                  : "Todos los tipos de ventas (Online y Físicos)"
+                }
+                physicalLocation={physicalPoint ? physicalPoints.find(p => p._id === physicalPoint)?.address : "Todos los puntos físicos"}
+                order={category ? categories.find(p => p.id === category)?.name : "Todos las categorías"}
+                sales={reportData}
+              />
             </span>
           </div>
           <div><table>
