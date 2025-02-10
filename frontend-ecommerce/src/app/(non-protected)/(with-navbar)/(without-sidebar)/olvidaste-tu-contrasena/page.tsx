@@ -1,47 +1,57 @@
 "use client";
 
-import Image from "next/image";
 import OlvidasteContrasenaImage from "@/app/images/OlvidasteContrasenaImage.svg?url";
 import { onlyNumberInput } from "@/util/utils";
 import { recoveryDataSchema } from "@/util/validation";
+import toast from "react-hot-toast";
+import { forgotPassword } from "@/api/auth.api";
+import "@/app/css/PasswordProcess.css";
+import ImageFb from "@/components/ImageFb";
 
 function Page() {
-  function handleFormAction(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target as HTMLFormElement);
     const userData = Object.fromEntries(formData);
-    console.log(userData);
     const result = recoveryDataSchema.safeParse({
       employeeId: parseInt(userData.employeeId as string),
       email: userData.email,
     });
     if (result.success) {
-      console.log("Formulario enviado");
+      console.log(result.data);
+      const { employeeId, email } = result.data;
+      const response = await forgotPassword({ id: employeeId, email });
+      if (response.success) {
+        toast.success(response.message, { duration: 5000 });
+        return;
+      }
+      toast.error(response.message);
     } else {
-      console.log(result.error);
+      toast.error(result.error.errors[0].message);
     }
   }
   return (
-    <main className="container">
-      <div className="flex flex-col justify-start items-center md:px-48 px-2 h-full pt-24">
-        <p className="font-black text-6xl p-10 text-[color:var(--color-main)]">
-          ¿Olvidaste tu contraseña?
-        </p>
-        <section className="flex justify-around items-center gap-2">
-          <div className="grow shrink-0">
-            <Image
+    <main className="container-tod">
+      <div className="container-tod-password">
+        <p className="title-password">¿Olvidaste tu contraseña?</p>
+        <section className="container-password">
+          <div className="image-password">
+            <ImageFb
               src={OlvidasteContrasenaImage}
               alt="imagen olvidaste tu contraseña"
             />
           </div>
-          <div className="flex flex-col gap-4 justify-center items-center">
-            <h2 className="text-center text-balance font-bold my-4">
-              Introduce tu identificación de usuario y correo electrónico
-              asociado a tu cuenta, y te enviaremos un enlace para restablecer
-              tu contraseña.
-            </h2>
+          <div className="flex flex-col gap-4 justify-center items-center max-w-[620px]">
             <form
-              action={handleFormAction}
+              onSubmit={handleSubmit}
               className="flex flex-col gap-4 text-center "
             >
+              <h2 className="text-center text-balance font-bold">
+                Introduce tu identificación de usuario y correo electrónico
+                asociado a tu cuenta, y te enviaremos un enlace para restablecer
+                tu contraseña.
+              </h2>
               <label htmlFor="employeeId">Identificación de Usuario*</label>
               <input
                 type="text"
@@ -54,11 +64,11 @@ function Page() {
               <button type="submit" id="button-standard">
                 Enviar
               </button>
+              <p className="text-left">
+                Si el correo electrónico existe en nuestra base de datos,
+                recibirás un enlace en tu bandeja de entrada.
+              </p>
             </form>
-            <p>
-              Si el correo electrónico existe en nuestra base de datos,
-              recibirás un enlace en tu bandeja de entrada.
-            </p>
           </div>
         </section>
       </div>

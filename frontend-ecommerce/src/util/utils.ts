@@ -2,7 +2,7 @@ export const LOW_STOCK_THRESHOLD = 30; //%
 
 import { KeyboardEvent } from "react";
 export const onlyNumberInput = (e: KeyboardEvent) => {
-    if (!/[0-9]|Delete|Backspace|ArrowLeft|ArrowRight/i.test(e.key)) {
+    if (!/[0-9]|Delete|Backspace|ArrowLeft|Tab|ArrowRight/i.test(e.key)) {
         e.preventDefault()
     }
 };
@@ -32,7 +32,7 @@ export function shuffle(array: any[]) {
     while (currentIndex !== 0) {
 
         // Pick a remaining element...
-        let randomIndex = Math.floor(Math.random() * currentIndex);
+        const randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex--;
 
         // And swap it with the current element.

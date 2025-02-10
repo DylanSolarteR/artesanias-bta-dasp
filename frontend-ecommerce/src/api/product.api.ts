@@ -69,7 +69,7 @@ export async function listProducts({
         // TODO No hay imagenes de los productos
         // NOTE En las pages no se usa el id, lo dejo por si acaso
         return products.map(p => ({
-            imagen: "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage",
+            imagen: p.img,
             // imagen: <string>p.img,
             nombre: <string>p.name,
             precio: <number>p.price,
@@ -136,7 +136,7 @@ export async function getProductsByBaseId(baseid: number) {
     }
 }
 
-export async function updateProduct(id: number, baseProductId: String, name: String, description: String, price: String, img: String, categoryId: String) {
+export async function updateProduct(id: number, baseProductId: string, name: string, description: string, price: string, img: string, categoryId: string) {
     try {
         const response = await AxiosInstance.put(`/product/${id}`, { baseProductId, name, description, price, img, categoryId }, {
             headers: {
@@ -165,4 +165,3 @@ export async function deleteProduct(id: string) {
         }
     }
 }
-

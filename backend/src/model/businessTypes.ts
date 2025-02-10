@@ -180,3 +180,32 @@ export class Inventory {
     ) { }
 }
 
+export class TransactionsAssociation {
+    constructor(
+        public items: any,
+        public support: number
+    ) { }
+}
+
+export class ReportAssociation {
+    constructor(
+        public purchase: number,
+        public product: number
+    ) { }
+}
+
+export class ReportSales {
+    public static readonly filterDict = {
+        'quantitysold': 'quantitysold',
+        'totalsales': 'totalsales'
+    }
+    constructor(
+        public product: string,
+        public category: string,
+        public quantitySold: number | string,
+        public totalSales: number | string,
+        public typeSale: string,
+        public physicalLocation: string | null
+    ) { }
+}
+

@@ -1,8 +1,5 @@
 "use client";
-import Image from "next/image";
 import { ChangeEvent, Suspense, useEffect, useRef, useState } from "react";
-import Grid3Icon from "@/app/icons/Grid3x3.png";
-import Grid4Icon from "@/app/icons/Grid4x4.png";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import { onlyNumberInput } from "@/util/utils";
@@ -10,8 +7,8 @@ import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
 import "@/app/css/Catalog-product.css";
 import Loading from "@/components/Loading";
-import { useMainContext } from "@/app/context/MainContext";
 import Catalog from "@/components/Catalog";
+import ImageFb from "@/components/ImageFb";
 
 export interface PRODUCT {
   id: number;
@@ -21,7 +18,6 @@ export interface PRODUCT {
 }
 
 export default function Home() {
-
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState<PRODUCT[]>([]);
   const [showLoader, setShowLoader] = useState(true);
@@ -107,14 +103,15 @@ export default function Home() {
               <span
                 className={`arrow-icon ${showCategories ? "open" : "close"}`}
               >
-                <Image src={ArrowDownIcon} alt="Arrow" />
+                <ImageFb src={ArrowDownIcon} alt="Arrow" />
               </span>
             </h2>
 
             <div
               ref={categoryOptionsRef} // Asigna la referencia al contenedor de opciones
-              className={`category-options ${showCategories ? "open" : "close"
-                }`}
+              className={`category-options ${
+                showCategories ? "open" : "close"
+              }`}
               style={{
                 maxHeight: maxHeight, // Aplica el maxHeight calculado
               }}
@@ -205,7 +202,7 @@ export default function Home() {
             <div className="flex justify-end">
               <div className="search">
                 <input type="input" placeholder="Buscar" ref={nameProdRef} />
-                <Image
+                <ImageFb
                   src={SearchIcon}
                   alt="Search"
                   width={20}

@@ -14,7 +14,7 @@ function Page({ }: Props) {
 
   const handleSubmit = async (data) => {
     try {
-      await apiPhysicalLocation.createPhysicalLocation(data.address, data.telephone, data.latitude, data.longitude);
+      await apiPhysicalLocation.createPhysicalLocation(data.address, data.telephone, data.latitude, data.longitude, data.imgFile);
       router.push("/dashboard/puntos-fisicos");
     } catch (error) {
       console.error("Error al crear un punto físico:", error);

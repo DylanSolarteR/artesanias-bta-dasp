@@ -70,8 +70,32 @@ function InventoryAdmin() {
     getAllPhysicalPoints();
     getAllProducts();
   }
+  function changeProductInArrays(product: PRODUCT_FROM_INVENTARY) {
+    const newProducts_table = products_table.map((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        return product;
+      }
+      return product_from_list;
+    });
+    const newProductsGeneral = productsAllInventories.map(
+      (product_from_list) => {
+        if (
+          product_from_list.productId === product.productId &&
+          product_from_list.locationId === product.locationId
+        ) {
+          return product;
+        }
+        return product_from_list;
+      }
+    );
+    setProducts_table(newProducts_table);
+    setProductsAllInventories(newProductsGeneral);
+  }
 
-  // UseEffect to retrieve the initial data
+  // UseEffect to execute at the beginning
   useEffect(() => {
     retrieveInitialData();
     setMounted(true);
@@ -98,60 +122,54 @@ function InventoryAdmin() {
 
   return mounted ? (
     <div className="container-dashboard">
-      <h1 className="">INVENTARIO</h1>
-      <section className="zone-count">
-        <KPICard title={"Puntos físicos"} value={physicalPoints.length} />
-        <KPICard title={"Categorías"} value={categories.length} />
-        <KPICard
-          title={"Productos"}
-          value={
-            searchCheckedPoint
-              ? productsAllInventories.length
-              : products_table.length
-          }
-        />
-        <KPICard title={"Bajo stock"} value={productsBelowThreshold} />
-      </section>
-      <section className="flex-column">
-        <h2>Inventario de cada punto físico</h2>
-        <div className="search-product">
-          <div className="search">
-            {/* <input
-              type="text"
-              placeholder="Buscar punto físico"
-              disabled={searchCheckedPoint}
-            />
-            <Image src={SearchIcon} alt="search" width={20} height={20} /> */}
+      <div className="flex-column">
+        <h1 className="">INVENTARIO</h1>
+        <section className="zone-count">
+          <KPICard title={"Puntos físicos"} value={physicalPoints.length} />
+          <KPICard title={"Categorías"} value={categories.length} />
+          <KPICard
+            title={"Productos"}
+            value={
+              searchCheckedPoint
+                ? productsAllInventories.length
+                : products_table.length
+            }
+          />
+          <KPICard title={"Bajo stock"} value={productsBelowThreshold} />
+        </section>
+        <section className="flex-column">
+          <h2>Inventario de cada punto físico</h2>
+          <div className="search-product">
+            <div className="search"></div>
+            <div className="flex-simple">
+              <input
+                type="checkbox"
+                name="allPoints"
+                defaultChecked={searchCheckedPoint}
+                onChange={() => handleCheckboxChange()}
+              />
+              <label htmlFor="allPoints">Todos los puntos físicos</label>
+            </div>
           </div>
-          <div className="flex-simple">
-            <input
-              type="checkbox"
-              name="allPoints"
-              defaultChecked={searchCheckedPoint}
-              onChange={() => handleCheckboxChange()}
-            />
-            <label htmlFor="allPoints">Todos los puntos físicos</label>
+          <div className="zone-physical">
+            {physicalPoints.map((physicalPoint, index) => (
+              <PhysicalPointCard
+                physicalPoint={physicalPoint}
+                addToProductsTable={addToProductsTable}
+                deleteFromProductsTable={deleteFromProductsTable}
+                disabledCheck={searchCheckedPoint}
+                key={index}
+              />
+            ))}
           </div>
-        </div>
-        <div className="zone-physical">
-          {physicalPoints.map((physicalPoint, index) => (
-            <PhysicalPointCard
-              physicalPoint={physicalPoint}
-              addToProductsTable={addToProductsTable}
-              deleteFromProductsTable={deleteFromProductsTable}
-              disabledCheck={searchCheckedPoint}
-              key={index}
-            />
-          ))}
-        </div>
-      </section>
-      <section className="zone-inventary">
-        <ConsultaProducto
-          products_table={products_table}
-          productsGeneralInventory={productsAllInventories}
-          setProductsGeneralInventory={setProductsAllInventories}
-        />
-      </section>
+        </section>
+        <section className="zone-inventary">
+          <ConsultaProducto
+            products_table={products_table}
+            changeProductInArrays={changeProductInArrays}
+          />
+        </section>
+      </div>
     </div>
   ) : (
     <Loading />

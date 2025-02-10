@@ -7,8 +7,8 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { useState } from "react";
-import { docTypes } from "@/types/purchase.types";
+import { useState, use } from "react";
+import { getDocTypes } from "@/api/parameters.api";
 import { onlyNumberInput } from "@/util/utils";
 import { PurchaseCustomerInfoScheme } from "@/util/validation";
 import { basicUserDataSchema } from "@/types/purchase.types";
@@ -19,13 +19,15 @@ interface CustomerDataFormDialogProps {
   productsAddedLength: number;
 }
 
+const docTypes = getDocTypes();
 function CustomerDataFormDialog({
   confirmPurchase,
   productsAddedLength,
 }: CustomerDataFormDialogProps) {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [documentType, setDocumentType] = useState<docTypes>(docTypes.cc);
+  const docTypesArray = use(docTypes);
+  const [documentType, setDocumentType] = useState<string>(docTypesArray[0]);
   const [documentNum, setDocumentNum] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [errors, setErrors] = useState<Map<string | number, string>>(new Map());
@@ -34,7 +36,7 @@ function CustomerDataFormDialog({
   function resetStates() {
     setName("");
     setEmail("");
-    setDocumentType(docTypes.cc);
+    setDocumentType(docTypesArray[0]);
     setDocumentNum("");
     setPhone("");
   }
@@ -124,10 +126,10 @@ function CustomerDataFormDialog({
               id="input-standard"
               defaultValue={documentType}
               onChange={(e) => {
-                setDocumentType(e.target.value as docTypes);
+                setDocumentType(e.target.value);
               }}
             >
-              {Object.values(docTypes).map((docType) => (
+              {docTypesArray.map((docType) => (
                 <option key={docType} value={docType}>
                   {docType}
                 </option>

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import CarritoIcon from "@/app/icons/ShoppingCartIcon.png";
 import ArrowDownIcon from "@/app/icons/ArrowDownIcon.png";
 import Link from "next/link";
-import Image from "next/image";
 import "@/app/css/Navbar.css";
 import UserIcon from "@/app/icons/UserIcon.svg?url";
 import HomeIcon from "@/app/icons/HomeIcon.svg?url";
@@ -13,6 +12,7 @@ import { useAuthContext } from "@/app/context/AuthContext";
 import { useCart } from "@/app/context/CartContext";
 import { decodeBadEncodeStrings } from "@/util/utils";
 import { decodeToken } from "@/util/utils";
+import ImageFb from "./ImageFb";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +20,11 @@ function Navbar() {
   const { isLogged, clearToken } = useAuthContext();
   const [employeeName, setEmployeeName] = useState("");
   const { cart } = useCart();
+  const [cartLength, setCartLength] = useState(0);
+
+  useEffect(() => {
+    setCartLength(cart.length);
+  }, [cart]);
 
   useEffect(() => {
     if (isLogged() && typeof window !== "undefined") {
@@ -82,13 +87,13 @@ function Navbar() {
               className="count"
               onClick={() => (window.location.href = "/carrito")}
             >
-              <Image
+              <ImageFb
                 src={CarritoIcon}
                 alt="Icono de carrito"
                 width={25}
                 height={25}
               />
-              <span className="counter">{cart.length}</span>
+              <span className="counter">{cartLength}</span>
             </button>
           </div>
         </li>
@@ -102,19 +107,23 @@ function Navbar() {
                   setIsOpenEmployee(!isOpenEmployee);
                 }}
               >
-                <Image className="foto" src={UserIcon} alt="Icono de usuario" />
+                <ImageFb
+                  className="foto"
+                  src={UserIcon}
+                  alt="Icono de usuario"
+                />
                 <span>{employeeName}</span>
                 <span className={`arrow-icon ${isOpenEmployee ? "open" : ""}`}>
-                  <Image src={ArrowDownIcon} alt="Flecha despliegue" />
+                  <ImageFb src={ArrowDownIcon} alt="Flecha despliegue" />
                 </span>
               </button>
               <ul className={isOpenEmployee ? "" : "invisible"}>
                 <li className="account-item">
-                  <Image src={HomeIcon} alt="Icono de dashboard" />
+                  <ImageFb src={HomeIcon} alt="Icono de dashboard" />
                   <Link href="/dashboard">Dashboard</Link>
                 </li>
                 <li className="account-item">
-                  <Image src={ProfileIcon} alt="Icono de cuenta" />
+                  <ImageFb src={ProfileIcon} alt="Icono de cuenta" />
                   <Link href="/cuenta">Cuenta</Link>
                 </li>
                 <li className="account-item">
@@ -124,7 +133,7 @@ function Navbar() {
                       clearToken();
                     }}
                   >
-                    <Image src={LogoutIcon} alt="Icono de cerrar sesión" />
+                    <ImageFb src={LogoutIcon} alt="Icono de cerrar sesión" />
                     <Link href="/login">Cerrar sesión</Link>
                   </button>
                 </li>

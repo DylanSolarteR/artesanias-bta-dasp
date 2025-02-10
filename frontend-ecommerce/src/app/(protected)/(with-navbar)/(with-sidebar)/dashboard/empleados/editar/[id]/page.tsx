@@ -29,16 +29,16 @@ function EditEmployeePage() {
   }, [id]);
 
   const handleSubmit = async (data) => {
-    await apiEmployee.updateEmployee(
-      Number(id),
-      data.email,
-      data.name,
-      data.lastName,
-      data.telephone,
-      data.role,
-      data.locationId,
-      data.activeS
-    );
+    await apiEmployee.updateEmployee({
+      id: Number(id),
+      email: data.email,
+      name: data.name,
+      lastName: data.lastName,
+      telephone: data.telephone,
+      role: data.role,
+      locationId: data.locationId,
+      active: data.activeS,
+    });
     router.push("/dashboard/empleados");
   };
 

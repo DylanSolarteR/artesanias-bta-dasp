@@ -1,8 +1,6 @@
 "use client";
 import "@/app/css/Buy.css";
-import { useState, ChangeEvent } from "react";
-import Image from "next/image";
-import StripeLogo from "@/app/icons/StripeLogo.svg?url";
+import { useState, ChangeEvent, use } from "react";
 import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
 import CardIcon from "@/app/icons/CardIcon.svg";
 import GroupIcon from "@/app/icons/GroupIcon.svg";
@@ -10,11 +8,14 @@ import UserIcon from "@/app/icons/UserIcon.svg";
 import CheckIcon from "@/app/icons/TickcircleIcon.svg";
 import toast from "react-hot-toast";
 import { PurchaseDataScheme } from "@/util/validation";
-import { docTypes } from "@/types/purchase.types";
 import { noAccents, onlyNumberInput } from "@/util/utils";
 import { useCart } from "@/app/context/CartContext";
-import { completePurchase, initializePurchase } from "@/api/purchase.api";
+import { initializePurchase } from "@/api/purchase.api";
 import { useRouter } from "next/navigation";
+import { getDepartments } from "@/api/parameters.api";
+import { getDocTypes } from "@/api/parameters.api";
+import { DEPARTMENT } from "@/types/parameter.types";
+import ImageFb from "./ImageFb";
 
 const steps = [
   { Icon: <UserIcon />, step: 1 },
@@ -22,17 +23,22 @@ const steps = [
   { Icon: <CardIcon />, step: 3 },
 ];
 
+const docTypesArray = getDocTypes();
+
+const departments: Promise<DEPARTMENT[]> = getDepartments();
 function PurchaseDataForm() {
   const { cart, flushCart } = useCart();
   const router = useRouter();
+  const depts = use(departments);
+  const docTypes = use(docTypesArray);
 
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [documentType, setDocumentType] = useState<docTypes>(docTypes.cc);
+  const [documentType, setDocumentType] = useState<string>(docTypes[0]);
   const [documentNum, setDocumentNum] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
-  const [department, setDepartment] = useState<string>("");
+  const [department, setDepartment] = useState<string>(depts[0].name);
   const [city, setCity] = useState<string>("");
   const [zip, setZip] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("mercadopago");
@@ -63,11 +69,10 @@ function PurchaseDataForm() {
       telephone: phone,
     };
     const addressData = {
-      departmentId: 1,
+      departmentId: depts.find((dept) => dept.name === department)?._id ?? 1,
       deliveryAddress: address,
       zipCode: zip,
     };
-
     const productList = cart.map((product) => {
       return {
         id: product.productId,
@@ -99,13 +104,24 @@ function PurchaseDataForm() {
       toast.error(result.error.errors[0].message);
       return;
     }
-    const purchaseId = await initializePurchase(data);
-    await completePurchase(purchaseId);
-    toast.success("Compra realizada correctamente, redirigiendo...");
-    flushCart();
-    setTimeout(() => {
-      router.push("/catalogo");
-    }, 1500);
+    try {
+      const url = await initializePurchase(data);
+      if (!url) {
+        toast.error("Error al inicializar la compra");
+        return;
+      }
+
+      toast.success("Redirigiendo a la pasarela...");
+      setTimeout(() => {
+        flushCart();
+        router.push(url);
+      }, 1500);
+    } catch (error) {
+      if (error.response.status === 500) {
+        toast.error(error.response.data);
+        router.push("/carrito");
+      }
+    }
   }
 
   return (
@@ -165,10 +181,10 @@ function PurchaseDataForm() {
                 id="input-standard"
                 defaultValue={documentType}
                 onChange={(e) => {
-                  setDocumentType(e.target.value as docTypes);
+                  setDocumentType(e.target.value);
                 }}
               >
-                {Object.values(docTypes).map((docType) => (
+                {docTypes.map((docType) => (
                   <option key={docType} value={docType}>
                     {docType}
                   </option>
@@ -208,13 +224,21 @@ function PurchaseDataForm() {
                 onChange={(e) => setAddress(e.target.value)}
               />
               <label htmlFor="department">Departamento: </label>
-              <input
-                className="input-standard"
-                type="text"
-                value={department}
+              <select
                 name="department"
-                onChange={(e) => setDepartment(e.target.value)}
-              />
+                id="input-standard"
+                defaultValue={department}
+                onChange={(e) => {
+                  setDepartment(e.target.value);
+                }}
+                className="select-with-height"
+              >
+                {depts.map((dept) => (
+                  <option key={dept._id} value={dept.name}>
+                    {dept.name}
+                  </option>
+                ))}
+              </select>
               <label htmlFor="city">Ciudad: </label>
               <input
                 className="input-standard"
@@ -239,22 +263,6 @@ function PurchaseDataForm() {
               {/* Paso 3: Datos de pago */}
               <h2>Método de pago</h2>
               <div className="flex-grid">
-                {/* <label className="card">
-                  <input
-                    className="radio"
-                    type="radio"
-                    name="paymentMethod"
-                    value="stripe"
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setPaymentMethod(e.target.value)
-                    }
-                    checked={paymentMethod === "stripe"}
-                  />
-                  <div className="plan-details">
-                    <Image alt="Logo Stripe" src={StripeLogo} />
-                  </div>
-                </label> */}
-
                 <label className="card">
                   <input
                     className="radio"
@@ -267,7 +275,7 @@ function PurchaseDataForm() {
                     checked={paymentMethod === "mercadopago"}
                   />
                   <div className="plan-details">
-                    <Image
+                    <ImageFb
                       alt="Logo Mercado Pago"
                       src={MercadoPagoLogo}
                       className="mercadopago"

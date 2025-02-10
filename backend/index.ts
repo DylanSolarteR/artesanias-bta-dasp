@@ -8,6 +8,8 @@ import purchaseRoutes from "./src/routes/purchase.routes";
 import employeeRoutes from "./src/routes/employee.routes";
 import inventoryRoutes from "./src/routes/inventory.routes";
 import parametersRoutes from "./src/routes/parameters.routes";
+import reportAssociationRoutes from "./src/routes/reportAssociation.routes";
+import reportSalesRoutes from "./src/routes/reportSales.routes";
 import cors from 'cors'
 
 //For env File 
@@ -28,6 +30,8 @@ app.use('/api/purchase', purchaseRoutes)
 app.use('/api/employee', employeeRoutes)
 app.use('/api/inventory', inventoryRoutes)
 app.use('/api/parameters', parametersRoutes)
+app.use('/api/reportAssociation', reportAssociationRoutes)
+app.use('/api/reportSales', reportSalesRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Panthousand api :)');

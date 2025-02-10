@@ -1,18 +1,18 @@
 import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import ChangeStockButton from "./ChangeStockButton";
-import Image from "next/image";
 import { PRODUCT_FROM_INVENTARY } from "@/types/inventory.types";
 import { LOW_STOCK_THRESHOLD, noAccents } from "@/util/utils";
 import { useState, useEffect } from "react";
+import { updateProductInInventoryQuantity } from "@/api/inventory.api";
+import toast from "react-hot-toast";
+import ImageFb from "./ImageFb";
 
 function ProductInventoryList({
   products_table,
-  productsGeneralInventory,
-  setProductsGeneralInventory,
+  changeProductInArrays,
 }: {
   products_table: PRODUCT_FROM_INVENTARY[];
-  productsGeneralInventory: PRODUCT_FROM_INVENTARY[];
-  setProductsGeneralInventory: (products: PRODUCT_FROM_INVENTARY[]) => void;
+  changeProductInArrays: (product: PRODUCT_FROM_INVENTARY) => void;
 }) {
   const [search, setSearch] = useState("");
   const [products_table_display, setProducts_table_display] = useState<
@@ -24,30 +24,38 @@ function ProductInventoryList({
     setSearch(e.target.value);
   }
 
-  function handleStockChange(
+  async function handleStockChange(
     product: PRODUCT_FROM_INVENTARY,
-    stockQuantity: number
+    stockQuantity: number,
+    stockQuantityDisplay: number
   ) {
-    products_table.forEach((product_from_list) => {
-      if (
-        product_from_list.productId === product.productId &&
-        product_from_list.locationId === product.locationId
-      ) {
-        product_from_list.ecommerceQuantity = stockQuantity;
-      }
-    });
-    productsGeneralInventory.forEach((product_from_list) => {
-      if (
-        product_from_list.productId === product.productId &&
-        product_from_list.locationId === product.locationId
-      ) {
-        product_from_list.ecommerceQuantity = stockQuantity;
-      }
-    });
-
-    setProducts_table_display([...products_table]);
-    setProductsGeneralInventory([...productsGeneralInventory]);
     //Aca iria la llamada a la API para actualizar el stock segun la locationId y productId
+    const result = await updateProductInInventoryQuantity(
+      product.productId,
+      stockQuantity,
+      stockQuantityDisplay,
+      product.locationId
+    );
+    if (result.success) {
+      toast.success(result.message);
+      product.totalQuantity = stockQuantity;
+      product.displayQuantity = stockQuantityDisplay;
+      updateProductInArrays(product);
+    } else toast.error(result.message);
+  }
+
+  function updateProductInArrays(product: PRODUCT_FROM_INVENTARY) {
+    const newProducts_table = products_table.map((product_from_list) => {
+      if (
+        product_from_list.productId === product.productId &&
+        product_from_list.locationId === product.locationId
+      ) {
+        return product;
+      }
+      return product_from_list;
+    });
+    setProducts_table_display(newProducts_table);
+    changeProductInArrays(product);
   }
 
   useEffect(() => {
@@ -78,7 +86,7 @@ function ProductInventoryList({
             onChange={handleSearchChange}
             placeholder="Buscar producto"
           />
-          <Image src={SearchIcon} alt="search" width={20} height={20} />
+          <ImageFb src={SearchIcon} alt="search" width={20} height={20} />
         </div>
       </div>
       <table className="table">
@@ -88,7 +96,8 @@ function ProductInventoryList({
             <th scope="col">Nombre producto</th>
             <th scope="col">Categoría</th>
             <th scope="col">Punto Físico</th>
-            <th scope="col">Cantidad</th>
+            <th scope="col">Stock Bodega</th>
+            <th scope="col">Stock Vitrina</th>
             <th scope="col">Acciones Stock</th>
           </tr>
         </thead>
@@ -98,7 +107,7 @@ function ProductInventoryList({
             ? products_table_display.map((product, index) => (
                 <tr
                   className={
-                    (LOW_STOCK_THRESHOLD >= product.ecommerceQuantity &&
+                    (LOW_STOCK_THRESHOLD >= product.totalQuantity &&
                       `text-amber-700 font-bold`) + ` text center h-full`
                   }
                   key={index}
@@ -107,7 +116,8 @@ function ProductInventoryList({
                   <td>{product.productName}</td>
                   <td>{product.categoryName}</td>
                   <td>{product.locationAddress}</td>
-                  <td>{product.ecommerceQuantity}</td>
+                  <td>{product.totalQuantity}</td>
+                  <td>{product.displayQuantity}</td>
                   <td>
                     <ChangeStockButton
                       product={product}
@@ -121,7 +131,7 @@ function ProductInventoryList({
         <tfoot>
           {products_table.length === 0 ? (
             <tr className="text-center">
-              <td colSpan={6}>Añade un producto</td>
+              <td colSpan={6}>Selecciona un punto físico.</td>
             </tr>
           ) : null}
         </tfoot>

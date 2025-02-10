@@ -1,5 +1,4 @@
 import z from 'zod';
-import { docTypes } from '@/types/purchase.types';
 
 export const loginSchema = z.object({
     userId: z.number({ message: "Id de usuario no valida" }),
@@ -9,7 +8,11 @@ export const loginSchema = z.object({
             .max(20, { message: "Contraseña incorrecta" })
 });
 
-
+enum docTypes {
+    cc = 'CC',
+    ce = 'CE',
+    ti = 'TI'
+}
 
 const docTypeValues = Object.values(docTypes) as [string, ...string[]]
 
@@ -34,7 +37,7 @@ export const PurchaseDataScheme = z.object({
     ),
     department: z.string().min(4, { message: "El departamento debe tener mínimo 4 caracteres" }),
     city: z.string().min(4, { message: "La ciudad debe tener mínimo 4 caracteres" }),
-    zip: z.string().min(5, { message: "El código postal debe tener mínimo 5 caracteres" }),
+    zip: z.string().min(5, { message: "El código postal debe tener mínimo 5 caracteres" }).max(6, { message: "El código postal debe tener máximo 6 caracteres" }),
 })
 
 export const PurchaseCustomerInfoScheme = z.object({
@@ -98,6 +101,14 @@ export const PhysicalLocationDataScheme = z.object({
 })
 
 export const recoveryDataSchema = z.object({
-    employeeId: z.number(),
+    employeeId: z.number({ message: 'Id de empleado inválido' }),
     email: z.string().email({ message: 'Email inválido' })
+});
+
+export const resetPasswordSchema = z.object({
+    password: z.string().min(8, { message: 'Contraseña inválida. Debe tener al menos 8 caracteres' }),
+    confirmPassword: z.string()
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas deben coincidir",
+    path: ["confirmPassword"], // Se asigna el error a este campo
 });

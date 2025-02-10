@@ -12,8 +12,7 @@ function Page() {
 
   const handleSubmit = async (data) => {
     try {
-      await apiUser.createUser(data)
-      console.log(apiUser.createUser(data));
+      await apiUser.createUser(data);
       router.push("/dashboard/empleados");
     } catch (error) {
       console.error("Error al crear empleado:", error);

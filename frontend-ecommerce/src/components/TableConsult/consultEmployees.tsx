@@ -1,11 +1,13 @@
 "use client";
-import Image from "next/image";
 import { EMPLOYEE } from "@/types/employee.types";
 import { useRouter } from "next/navigation";
-import SearchIcon from "@/app/icons/SearchIcon.svg?url";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
-
+import SearchBarMenu from "../SearchBarMenu";
+import Loading from "@/components/Loading";
+import { useState } from "react";
+import { useEffect } from "react";
+import ImageFb from "../ImageFb";
 
 interface ConsultEmployeesProps {
   employees_table: EMPLOYEE[];
@@ -17,6 +19,10 @@ function ConsultEmployees({
   deleteEmployee,
 }: ConsultEmployeesProps) {
   const router = useRouter();
+  const [showLoader, setShowLoader] = useState(true);
+  const [employee_list_filtered, setEmployee_list_filtered] = useState<
+    EMPLOYEE[]
+  >([]);
 
   const handleDelete = (id: number) => {
     deleteEmployee(id);
@@ -25,15 +31,25 @@ function ConsultEmployees({
   const handleUpdate = (id: number) => {
     router.push(`empleados/editar/${id}`);
   };
+
+  useEffect(() => {
+    setEmployee_list_filtered(employees_table);
+    setShowLoader(false);
+  }, [employees_table]);
+
   return (
     <div className="container-dashboard">
       <div className="flex-column">
         <h1>EMPLEADOS</h1>
         <div className="content-right">
-          <div className="search">
-            <input type="text" placeholder="Buscar empleado" />
-            <Image src={SearchIcon} alt="search" width={20} height={20} />
-          </div>
+          <section className="flex flex-col justify-start items-center max-h-20">
+            <SearchBarMenu
+              search_name="empleado"
+              data_array={employees_table}
+              filter_keys={["name", "_id"]}
+              onFilter={setEmployee_list_filtered}
+            />
+          </section>
         </div>
         <table className="table">
           <thead>
@@ -48,37 +64,43 @@ function ConsultEmployees({
           </thead>
 
           <tbody>
-            {employees_table.length !== 0 ? (
-              employees_table.map((employee) => (
-                <tr key={employee.id} className="text-center">
-                  <td data-label="Identificación">{employee.id}</td>
-                  <td data-label="Nombre">{employee.name}</td>
-                  <td data-label="Rol">{employee.role}</td>
-                  <td data-label="Punto Físico">{employee.locationId}</td>
-                  <td data-label="Celular">{employee.telephone}</td>
-                  <td data-label="Acciones">
-                    <button onClick={() => handleUpdate(employee.id)}>
-                      <Image
-                        src={UpdateIcom}
-                        alt="update"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                    <button onClick={() => handleDelete(employee.id)}>
-                      <Image
-                        src={DeleteIcon}
-                        alt="delete"
-                        width={30}
-                        height={30}
-                      />
-                    </button>
-                  </td>
-                </tr>
-              ))
+            {showLoader ? (
+              <td colSpan={7} className="text-center">
+                <Loading />
+              </td>
+            ) : employee_list_filtered.length !== 0 ? (
+              employee_list_filtered.map((employee) =>
+                employee.active ? (
+                  <tr key={employee.id} className="text-center">
+                    <td data-label="Identificación">{employee.id}</td>
+                    <td data-label="Nombre">{employee.name}</td>
+                    <td data-label="Rol">{employee.role}</td>
+                    <td data-label="Punto Físico">{employee.locationId}</td>
+                    <td data-label="Celular">{employee.telephone}</td>
+                    <td data-label="Acciones">
+                      <button onClick={() => handleUpdate(employee.id)}>
+                        <ImageFb
+                          src={UpdateIcom}
+                          alt="update"
+                          width={30}
+                          height={30}
+                        />
+                      </button>
+                      <button onClick={() => handleDelete(employee.id)}>
+                        <ImageFb
+                          src={DeleteIcon}
+                          alt="delete"
+                          width={30}
+                          height={30}
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                ) : null
+              )
             ) : (
               <tr className="text-center">
-                <td colSpan={6}>No se encontraron empleados</td>
+                <td colSpan={7}>No se encontraron productos</td>
               </tr>
             )}
           </tbody>

@@ -15,7 +15,7 @@ function Page() {
   const [physicalLocation_table, setPhysicalLocation_table] = useState<PHYSICAL_LOCATION[]>([]);
 
   function deletePhysicalLocation(id: number) {
-    apiPhysicalLocation.deletePhysicalLocation(String(id));
+    apiPhysicalLocation.deletePhysicalLocation(id);
     const newPhysicalLocations = physicalLocation_table.filter((physicalLocation) => physicalLocation._id !== id);
     setPhysicalLocation_table(newPhysicalLocations);
   }
@@ -38,7 +38,7 @@ function Page() {
     <Loading />
   ) : (
     <>
-      {hasPermission(role, "view:products") && (
+      {hasPermission(role, "view:physical-stores") && (
         <ConsultPhysicalLocation
           physicalLocation_table={physicalLocation_table}
           deletePhysicalLocation={deletePhysicalLocation}

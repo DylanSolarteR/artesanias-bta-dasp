@@ -35,7 +35,7 @@ function EditProductPage() {
       data.name,
       data.description,
       data.price,
-      data.img,
+      data.imgFile,
       data.categoryId
     );
     router.push("/dashboard/productos");
