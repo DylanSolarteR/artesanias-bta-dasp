@@ -33,7 +33,6 @@ function Page() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    console.log(data);
     const result = resetPasswordSchema.safeParse(
       Object.fromEntries([
         ["password", data.pw],

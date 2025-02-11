@@ -46,7 +46,6 @@ export default function Home() {
   };
 
   const filterhandle = () => {
-    // console.log("filtrando");
     apiProduct
       .listProducts({
         orderBy: [

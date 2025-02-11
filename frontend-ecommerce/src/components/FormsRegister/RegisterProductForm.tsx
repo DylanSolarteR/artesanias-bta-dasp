@@ -59,7 +59,6 @@ function RegisterProductForm({
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      console.log("sisa");
       const maxSize = 500000;
       if (file.size > maxSize) {
         alert(
@@ -74,7 +73,6 @@ function RegisterProductForm({
           setImage(event.target.result); // Guardar la imagen como base64
         }
       };
-      console.log(file);
       setImageFile(file);
       reader.readAsDataURL(file);
     }
