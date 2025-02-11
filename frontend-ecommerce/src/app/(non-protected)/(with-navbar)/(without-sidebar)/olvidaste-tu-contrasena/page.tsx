@@ -19,7 +19,6 @@ function Page() {
       email: userData.email,
     });
     if (result.success) {
-      console.log(result.data);
       const { employeeId, email } = result.data;
       const response = await forgotPassword({ id: employeeId, email });
       if (response.success) {
