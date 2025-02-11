@@ -5,7 +5,7 @@ import MercadoPagoLogo from "@/app/icons/MercadoPagoLogo.svg?url";
 import CardIcon from "@/app/icons/CardIcon.svg";
 import GroupIcon from "@/app/icons/GroupIcon.svg";
 import UserIcon from "@/app/icons/UserIcon.svg";
-import CheckIcon from "@/app/icons/TickcircleIcon.svg";
+import CheckIcon from "@/app/icons/TickCircleIcon.svg";
 import toast from "react-hot-toast";
 import { PurchaseDataScheme } from "@/util/validation";
 import { noAccents, onlyNumberInput } from "@/util/utils";

@@ -74,10 +74,10 @@ function RegisterPhysicalLocationForm({
             <h1>Registrar Punto Físico</h1>
             <p>
               Para usar el mapa, escribe una dirección en el campo de búsqueda y
-              haz clic en "Buscar". El mapa se centrará en esa ubicación y
-              colocará un marcador en ella (debe ser precisa). También puedes
-              hacer clic directamente en cualquier área del mapa para
-              seleccionar una ubicación y agregar un marcador.
+              haz clic en &quot;Buscar&quot;. El mapa se centrará en esa
+              ubicación y colocará un marcador en ella (debe ser precisa).
+              También puedes hacer clic directamente en cualquier área del mapa
+              para seleccionar una ubicación y agregar un marcador.
             </p>
             <div>
               <Map

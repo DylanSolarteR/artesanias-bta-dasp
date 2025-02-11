@@ -13,8 +13,7 @@ import * as apiReport from "@/api/report.api";
 import * as apiCategory from "@/api/category.api";
 import * as apiProduct from "@/api/product.api";
 
-function page() {
-
+function Page() {
   const [dateStart, setDateStart] = useState<Date>(new Date());
   const [dateEnd, setDateEnd] = useState<Date>(new Date());
   const [saleType, setSaleType] = useState<string | null>(null);
@@ -23,7 +22,7 @@ function page() {
   const [categories, setCategories] = useState<any[]>([]);
   const [reportData, setReportData] = useState<any[]>([]);
   const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
-  const { isLogged, clearToken } = useAuthContext();
+  const { isLogged } = useAuthContext();
   const [employeeName, setEmployeeName] = useState("");
 
   useEffect(() => {
@@ -44,7 +43,9 @@ function page() {
   useEffect(() => {
     listPhysicalLocations()
       .then(setPhysicalPoints)
-      .catch((error) => console.error("Error al cargar puntos físicos:", error));
+      .catch((error) =>
+        console.error("Error al cargar puntos físicos:", error)
+      );
   }, []);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ function page() {
         dateEnd: dateEnd.toISOString().split("T")[0],
         typeSale: saleType,
         physicalLocation: physicalPoint,
-        category: category
+        category: category,
       });
 
       const formattedData = data.map((item) => ({
@@ -95,9 +96,13 @@ function page() {
     }
   };
 
-  async function formatReportData(reportData: { items: number[]; support: number }[]) {
+  async function formatReportData(
+    reportData: { items: number[]; support: number }[]
+  ) {
     try {
-      const uniqueItemIds = [...new Set(reportData.flatMap((data) => data.items))];
+      const uniqueItemIds = [
+        ...new Set(reportData.flatMap((data) => data.items)),
+      ];
 
       const productPromises = uniqueItemIds.map(async (itemId) => {
         try {
@@ -110,11 +115,15 @@ function page() {
       });
 
       const productList = await Promise.all(productPromises);
-      const productMap = Object.fromEntries(productList.map((p) => [p.id, p.name]));
+      const productMap = Object.fromEntries(
+        productList.map((p) => [p.id, p.name])
+      );
 
       return reportData.map((data) => ({
         ...data,
-        items: data.items.map((itemId) => productMap[itemId] || "Producto no encontrado").join(", "),
+        items: data.items
+          .map((itemId) => productMap[itemId] || "Producto no encontrado")
+          .join(", "),
       }));
     } catch (error) {
       console.error("Error general en formatReportData:", error);
@@ -168,7 +177,9 @@ function page() {
               className="w-[90px]"
               onChange={(e) => {
                 const value = e.target.value;
-                setSaleType(value === "true" ? "true" : value === "false" ? "false" : null);
+                setSaleType(
+                  value === "true" ? "true" : value === "false" ? "false" : null
+                );
               }}
             >
               <option value="null">Todo</option>
@@ -179,8 +190,9 @@ function page() {
               name="physical-point-select"
               id=""
               className="w-[550px]"
-              onChange={(e) => setPhysicalPoint(e.target.value ? Number(e.target.value) : null
-              )}
+              onChange={(e) =>
+                setPhysicalPoint(e.target.value ? Number(e.target.value) : null)
+              }
             >
               <option value="">Todos los puntos</option>
               {physicalPoints.map((point) => (
@@ -193,8 +205,9 @@ function page() {
               name="category-select"
               id=""
               className="w-[200px]"
-              onChange={(e) => setCategory(e.target.value ? Number(e.target.value) : null
-              )}
+              onChange={(e) =>
+                setCategory(e.target.value ? Number(e.target.value) : null)
+              }
             >
               <option value="">Todas las categorías</option>
               {categories.map((categ) => (
@@ -214,50 +227,67 @@ function page() {
             <h2>Tabla de reporte</h2>
             <span className="flex flex-row gap-[5px]">
               Exportar:
-              <DownloadPDFButton 
+              <DownloadPDFButton
                 key={reportData.length}
                 issueDate={new Date().toLocaleDateString() || "Hoy"}
                 createdBy={employeeName}
-                startDate={dateStart.toLocaleDateString() || "Buscar la fecha más antigua"}
-                endDate={dateEnd.toLocaleDateString() || "Buscar la fecha más reciente"}
-                saleType={saleType
-                  ? saleType === "true"
-                    ? "Físico"
-                    : "Online"
-                  : "Todos los tipos de ventas (Online y Físicos)"
+                startDate={
+                  dateStart.toLocaleDateString() ||
+                  "Buscar la fecha más antigua"
                 }
-                physicalLocation={physicalPoint ? physicalPoints.find(p => p._id === physicalPoint)?.address : "Todos los puntos físicos"}
-                order={category ? categories.find(p => p.id === category)?.name : "Todos las categorías"}
+                endDate={
+                  dateEnd.toLocaleDateString() || "Buscar la fecha más reciente"
+                }
+                saleType={
+                  saleType
+                    ? saleType === "true"
+                      ? "Físico"
+                      : "Online"
+                    : "Todos los tipos de ventas (Online y Físicos)"
+                }
+                physicalLocation={
+                  physicalPoint
+                    ? physicalPoints.find((p) => p._id === physicalPoint)
+                        ?.address
+                    : "Todos los puntos físicos"
+                }
+                order={
+                  category
+                    ? categories.find((p) => p.id === category)?.name
+                    : "Todos las categorías"
+                }
                 sales={reportData}
               />
             </span>
           </div>
-          <div><table>
-            <thead>
-              <tr>
-                <th>Soporte</th>
-                <th>Conjuntos de asociación</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reportData.length > 0 ? (
-                reportData.map((data, index) => (
-                  <tr key={index}>
-                    <td>{data.support}</td>
-                    <td>{data.items}</td>
-                  </tr>
-                ))
-              ) : (
+          <div>
+            <table>
+              <thead>
                 <tr>
-                  <td colSpan={6}>No hay datos</td>
+                  <th>Soporte</th>
+                  <th>Conjuntos de asociación</th>
                 </tr>
-              )}
-            </tbody>
-          </table></div>
+              </thead>
+              <tbody>
+                {reportData.length > 0 ? (
+                  reportData.map((data, index) => (
+                    <tr key={index}>
+                      <td>{data.support}</td>
+                      <td>{data.items}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={6}>No hay datos</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </section>
       </main>
     </div>
   );
 }
 
-export default page;
+export default Page;

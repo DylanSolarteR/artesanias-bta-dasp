@@ -131,7 +131,7 @@ function ProductInventoryList({
         <tfoot>
           {products_table.length === 0 ? (
             <tr className="text-center">
-              <td colSpan={6}>Añade un producto</td>
+              <td colSpan={6}>Selecciona un punto físico.</td>
             </tr>
           ) : null}
         </tfoot>

@@ -20,7 +20,7 @@ function Page() {
     });
     if (result.success) {
       console.log(result.data);
-      let { employeeId, email } = result.data;
+      const { employeeId, email } = result.data;
       const response = await forgotPassword({ id: employeeId, email });
       if (response.success) {
         toast.success(response.message, { duration: 5000 });
