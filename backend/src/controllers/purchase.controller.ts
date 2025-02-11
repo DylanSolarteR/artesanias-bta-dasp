@@ -47,8 +47,8 @@ async function sendBill(purchase: Purchase) {
     const renderedWithStyles = await inlineCss(rendered, { url: '/', })
 
     const mailSender = new MailSender()
-    mailSender.sendMail({
-        to: 'cfplhcfplh@gmail.com',
+    await mailSender.sendMail({
+        to: purchase.email,
         subject: 'Factura de compra en artesaniasbogota.shop #' + purchase.id,
         html: renderedWithStyles
     })
@@ -354,5 +354,5 @@ export async function completePosPurchase(req: Request, res: Response) {
     const completePurchase = purchaseRes.value
 
     res.status(200).send(completePurchase)
-    sendBill(purchase)
+    await sendBill(purchase)
 }
