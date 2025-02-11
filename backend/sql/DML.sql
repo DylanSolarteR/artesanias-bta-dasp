@@ -79,6 +79,8 @@ INSERT INTO product VALUES
 (46, 10, 'Bolso Tela Amarillo', 'Bolso de tela amarillo.', 23000, 'https://artesaniasbucket.s3.us-east-2.amazonaws.com/prod_46.png', true, 4),
 (47, 10, 'Bolso Tela Negro', 'Bolso de tela negro.', 24000, 'https://artesaniasbucket.s3.us-east-2.amazonaws.com/prod_47.png', true, 4);
 
+-- Setea el serial en 48
+ALTER SEQUENCE product_pk_id_seq RESTART WITH 48;
 
 -- Departamentos
 INSERT INTO department VALUES (DEFAULT, 'Amazonas'),
