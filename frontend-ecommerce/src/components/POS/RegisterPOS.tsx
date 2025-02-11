@@ -41,8 +41,6 @@ function RegistroPOS({ product_list, location_id }: RegistroPOSProps) {
       locationId: location_id,
     });
 
-    // console.log(purchaseData);
-
     if (purchaseData.status === 777) {
       toast.error(
         "No es posible establecer conexión con el servidor, verifica tu conexión a internet."
