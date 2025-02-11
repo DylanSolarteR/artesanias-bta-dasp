@@ -21,6 +21,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
         const query =
             `SELECT * FROM purchase \n` +
             filters + ';'
+        const queryProducts = `SELECT * FROM product_in_purchase WHERE pk_fk_purchase = $1;`
         const pool = await PostgresConnection.getInstance().getPool();
         try {
             let res = await pool.query({
@@ -32,13 +33,14 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
             const queryPhysicalPurchase = `SELECT * FROM physical_purchase WHERE pk_fk_purchase = $1;`
             const queryEcommercePurchase = `SELECT * FROM ecommerce_purchase WHERE pk_fk_purchase = $1;`
             for (let purchaseRow of res.rows) {
+                let purchase: Purchase;
                 if (purchaseRow.is_physical_purchase) {
                     let physicalPurchaseRes = await pool.query(queryPhysicalPurchase, [purchaseRow.pk_id])
                     if (physicalPurchaseRes.rowCount !== 1) {
                         return new ObjectResponse(false, null, 'Error al consultar las compras')
                     }
                     let physicalPurchaseRow = physicalPurchaseRes.rows[0]
-                    purchases.push(new PhysicalPurchase(
+                    purchase = new PhysicalPurchase(
                         purchaseRow.date,
                         purchaseRow.email,
                         purchaseRow.name,
@@ -49,7 +51,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                         physicalPurchaseRow.fk_employee,
                         null,
                         purchaseRow.pk_id
-                    ))
+                    )
                 }
                 else {
                     let ecommercePurchaseRes = await pool.query(queryEcommercePurchase, [purchaseRow.pk_id])
@@ -57,7 +59,7 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                         return new ObjectResponse(false, null, 'Error al consultar las compras')
                     }
                     let ecommercePurchaseRow = ecommercePurchaseRes.rows[0]
-                    purchases.push(new EcommercePurchase(
+                    purchase = new EcommercePurchase(
                         purchaseRow.date,
                         purchaseRow.email,
                         purchaseRow.name,
@@ -72,8 +74,22 @@ export class PurchaseDAOPostgres implements IDAO<Purchase> {
                         ecommercePurchaseRow.is_complete,
                         [],
                         purchaseRow.pk_id
-                    ))
+                    )
                 }
+                let productsRes = await pool.query(queryProducts, [purchaseRow.pk_id])
+                if (productsRes.rowCount === 0) {
+                    return new ObjectResponse(false, null, 'Error al consultar las compras')
+                }
+                for (let productRow of productsRes.rows) {
+                    let product = new ProductInPurchase(
+                        productRow.pk_fk_product,
+                        productRow.quantity,
+                        productRow.unit_price,
+                        []
+                    )
+                    purchase.addProduct(product)
+                }
+                purchases.push(purchase)
             }
             return new ObjectResponse(true, purchases, null)
         }

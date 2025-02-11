@@ -38,7 +38,6 @@ export class MailSender {
         }
         else {
             from = `"${from}" <${this.mail}>`;
-            console.log(from);
         }
 
         if (html === '' && text === '') {
