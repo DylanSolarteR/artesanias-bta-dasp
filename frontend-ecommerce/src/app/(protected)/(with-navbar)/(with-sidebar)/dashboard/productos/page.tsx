@@ -22,7 +22,7 @@ function Page() {
 
   useEffect(() => {
     apiProduct
-      .getlistProducts({ orderBy: ["price", "desc"] })
+      .getlistProducts({ orderBy: ["price", "desc"], limit: null })
       .then((products) => {
         setProducts_table(products);
       })

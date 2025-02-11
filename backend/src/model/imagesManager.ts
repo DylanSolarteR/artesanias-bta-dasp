@@ -1,5 +1,5 @@
 
-export type ImageParams = { key: string, contentType?: string } &
+export type ImageParams = { key: string, contentType?: string, extension?: string } &
     ({ imagePath: string, payload?: never } | { payload: string, imagePath?: never });
 
 export interface ImageManager {
