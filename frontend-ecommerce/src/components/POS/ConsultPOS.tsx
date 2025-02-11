@@ -7,11 +7,10 @@ import ImageFb from "../ImageFb";
 interface ConsultaPOSProps {
   product_list: PRODUCT_FROM_INVENTARY[];
 }
+
 function ConsultaPOS({ product_list }: ConsultaPOSProps) {
-  const [product_list_filtered, setProduct_list_filtered] =
-    useState<PRODUCT_FROM_INVENTARY[]>(product_list);
-  const [product_selected, setProduct_selected] =
-    useState<PRODUCT_FROM_INVENTARY | null>(null);
+  const [product_list_filtered, setProduct_list_filtered] = useState<PRODUCT_FROM_INVENTARY[]>(product_list);
+  const [product_selected, setProduct_selected] = useState<PRODUCT_FROM_INVENTARY | null>(null);
   const [isListVisible, setIsListVisible] = useState(false);
 
   function handleFocus() {
@@ -19,8 +18,10 @@ function ConsultaPOS({ product_list }: ConsultaPOSProps) {
   }
 
   return (
-    <main className="flex flex-col justify-start items-center h-full">
-      <section className="flex flex-col justify-start items-center max-h-20 pt-10 pb-20">
+    <main className="flex flex-col justify-center items-center w-full h-[600px]">
+      <section className="container-consult">
+        <h1 className="text-3x1 font-bold">Consultar detalles de los productos en el inventario</h1>
+        <div className="search-round">
         <SearchBarMenu
           search_name="producto"
           data_array={product_list}
@@ -29,15 +30,16 @@ function ConsultaPOS({ product_list }: ConsultaPOSProps) {
           onFocus={handleFocus}
           onBlur={() => setTimeout(() => setIsListVisible(false), 200)}
         />
+        
         {isListVisible && (
-          <div className="relative z-10">
-            <ul className="absolute z-10 bg-white w-96 top-0 -left-52 border border-gray-300 rounded-md h-24 overflow-auto">
+          <div className="relative w-full">
+            <ul className="absolute bg-white w-full border border-gray-300 rounded-md max-h-40 overflow-auto mt-2 shadow-md">
               {product_list_filtered.length === 0 && <li>No hay productos</li>}
               {product_list_filtered.map((product) => {
                 return (
                   <li
                     key={product.productId}
-                    className="hover:bg-[--color-main-soft] overflow-x-clip"
+                    className="p-2 cursor-pointer hover:bg-gray-100 transition-colors"
                     onClick={() => {
                       setProduct_selected(product);
                       setIsListVisible(false);
@@ -47,76 +49,38 @@ function ConsultaPOS({ product_list }: ConsultaPOSProps) {
                   </li>
                 );
               })}
-            </ul>
+            </ul> 
           </div>
         )}
+        </div>
       </section>
-      <section className="flex grow flex-col justify-start w-full p-20">
-        {product_selected !== null && (
-          <div
-            key={product_selected.productId}
-            className="flex flex-col gap-4 items-start justify-center"
-          >
-            <h1 className="px-0">
-              {product_selected.productId + ". "} {product_selected.productName}
-            </h1>
-            <div className="flex flex-row w-full justify-center gap-4">
-              <div>
-                <ImageFb
-                  src={
-                    product_selected.productImage ??
-                    "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
-                  }
-                  alt={product_selected.productName}
-                  width={600}
-                  height={400}
-                  className="self-center rounded-lg"
-                />
-              </div>
-              <div className="flex flex-row w-full justify-center items-center">
-                <div className="flex flex-col items-start w-full ">
-                  <p className="text-4xl font-bold">
-                    Precio:{" "}
-                    <span className="font-normal">
-                      {product_selected.price}
-                    </span>
-                  </p>
-                  <p className="text-4xl font-bold">
-                    Stock Total:{" "}
-                    <span className="font-normal">
-                      {product_selected.totalQuantity}
-                    </span>
-                  </p>
-                  <p className="text-4xl font-bold">
-                    Stock en vitrina:{" "}
-                    <span className="font-normal">
-                      {product_selected.displayQuantity}
-                    </span>
-                  </p>
-                  <p className="text-4xl font-bold">
-                    Stock disponible:{" "}
-                    <span className="font-normal">
-                      {product_selected.ecommerceQuantity}
-                    </span>
-                  </p>
-                  <p className="text-4xl font-bold">
-                    Categoria:{" "}
-                    <span className="font-normal">
-                      {product_selected.categoryName}
-                    </span>
-                  </p>
-                  <p className="text-4xl font-bold">
-                    Tienda:{" "}
-                    <span className="font-normal">
-                      {product_selected.locationAddress}
-                    </span>
-                  </p>
-                </div>
-              </div>
+      {product_selected && (
+        <section className="bg-white w-full max-w-3xl">
+          <h1 className="text-3xl font-semibold text-gray-800 mb-4">
+            {product_selected.productId + ". "} {product_selected.productName}
+          </h1>
+          <div className="flex flex-col md:flex-row pl-4 pr-4 items-center gap-6">
+            <ImageFb
+              src={
+                product_selected.productImage ??
+                "https://placehold.co/600x400/EEE/31343C?font=lato&text=NoImage"
+              }
+              alt={product_selected.productName}
+              width={300}
+              height={200}
+              className="rounded-lg border border-gray-200 shadow-sm"
+            />
+            <div className="flex flex-col text-left gap-4">
+              <p><strong>Precio:</strong> {product_selected.price}</p>
+              <p><strong>Stock Total:</strong> {product_selected.totalQuantity}</p>
+              <p><strong>Stock en vitrina:</strong> {product_selected.displayQuantity}</p>
+              <p><strong>Stock disponible:</strong> {product_selected.ecommerceQuantity}</p>
+              <p><strong>Categoría:</strong> {product_selected.categoryName}</p>
+              <p><strong>Tienda:</strong> {product_selected.locationAddress}</p>
             </div>
           </div>
-        )}
-      </section>
+        </section>
+      )}
     </main>
   );
 }
