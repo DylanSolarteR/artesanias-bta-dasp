@@ -50,11 +50,20 @@ export async function createPhysicalLocation(address: string, telephone: string,
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data;
+        return { success: true, data: response.data, status: response.status };
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return {
+                success: false,
+                message: err.response.data,
+                status: err.response.status
+            };
         }
+        return {
+            success: false,
+            message: 'Error inesperado, revise los datos.',
+            status: 500
+        };
     }
 }
 
@@ -85,11 +94,20 @@ export async function updatePhysicalLocation(
                 },
             }
         );
-        return response.data;
+        return { success: true, data: response.data, status: response.status };
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return {
+                success: false,
+                message: err.response.data,
+                status: err.response.status
+            };
         }
+        return {
+            success: false,
+            message: 'Error inesperado, revise los datos.',
+            status: 500
+        };
     }
 }
 
@@ -102,9 +120,18 @@ export async function deletePhysicalLocation(id: number) {
         });
         return response.data;
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return {
+                success: false,
+                message: err.response.data,
+                status: err.response.status
+            };
         }
+        return {
+            success: false,
+            message: 'Error inesperado, revise los datos.',
+            status: 500
+        };
     }
 }
 

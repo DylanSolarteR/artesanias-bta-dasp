@@ -28,9 +28,18 @@ export async function createProduct(product) {
         });
         return response.data;
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 }
 
@@ -102,7 +111,6 @@ export async function getlistProducts({
     } catch (err) {
         if (isAxiosError(err)) {
             throw err;
-            console.log("Error de extracción de datos")
         }
     }
 
@@ -117,7 +125,7 @@ export async function getProductById(id: number) {
         return product
     } catch (err) {
         if (isAxiosError(err)) {
-            console.log("Error de extracción de datos")
+            throw err;
         }
     }
 }
@@ -145,9 +153,18 @@ export async function updateProduct(id: number, baseProductId: string, name: str
         });
         return response.data;
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 }
 

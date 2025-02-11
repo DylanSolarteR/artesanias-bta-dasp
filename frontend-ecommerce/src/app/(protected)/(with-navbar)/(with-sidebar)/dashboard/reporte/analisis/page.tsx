@@ -136,60 +136,61 @@ function Page() {
       <main className="flex-column">
         {/* Seccion Filtros */}
         <h1>Reporte de asociación</h1>
-        <section className="flex-column border border-gray p-2 rounded-xl">
-          <h2>Filtros de búsqueda</h2>
-          <div className="flex-simple">
-            <DatePicker
-              selected={dateStart}
-              onChange={(date: Date) => setDateStart(date)}
-              dateFormat={"dd/MM/yyyy"}
-              showYearDropdown={true}
-              showMonthDropdown={true}
-              scrollableYearDropdown={true}
-              title="Fecha de inicio"
-              dateFormatCalendar=" "
-              customInput={
-                <input
-                  className="input-standard"
-                  placeholder="Select Month and Year"
-                />
-              }
-            />
-            <DatePicker
-              selected={dateEnd}
-              onChange={(date: Date) => setDateEnd(date)}
-              dateFormat={"dd/MM/yyyy"}
-              showYearDropdown={true}
-              showMonthDropdown={true}
-              scrollableYearDropdown={true}
-              title="Fecha de inicio"
-              dateFormatCalendar=" "
-              customInput={
-                <input
-                  className="input-standard"
-                  placeholder="Select Month and Year"
-                />
-              }
-            />
+        <section className="flex flex-col border border-gray p-2 rounded-xl">
+          <h2 className="font-bold text-lg mb-2">Filtros de búsqueda</h2>
+          <div className="flex gap-2">
+            {/* Fecha de inicio */}
+            <div className="flex-[1] min-w-[120px]">
+              <DatePicker
+                selected={dateStart}
+                onChange={(date: Date) => setDateStart(date)}
+                dateFormat={"dd/MM/yyyy"}
+                showYearDropdown={true}
+                showMonthDropdown={true}
+                scrollableYearDropdown={true}
+                title="Fecha de inicio"
+                dateFormatCalendar=" "
+                customInput={
+                  <input className="input-standard w-full" placeholder="Inicio" />
+                }
+              />
+            </div>
+
+            {/* Fecha de fin */}
+            <div className="flex-[1] min-w-[120px]">
+              <DatePicker
+                selected={dateEnd}
+                onChange={(date: Date) => setDateEnd(date)}
+                dateFormat={"dd/MM/yyyy"}
+                showYearDropdown={true}
+                showMonthDropdown={true}
+                scrollableYearDropdown={true}
+                title="Fecha de fin"
+                dateFormatCalendar=" "
+                customInput={
+                  <input className="input-standard w-full" placeholder="Fin" />
+                }
+              />
+            </div>
+
+            {/* Tipo de venta */}
             <select
               name="sale-type-select"
-              id=""
-              className="w-[90px]"
+              className="w-[140px] flex-[1]"
               onChange={(e) => {
                 const value = e.target.value;
-                setSaleType(
-                  value === "true" ? "true" : value === "false" ? "false" : null
-                );
+                setSaleType(value === "true" ? "true" : value === "false" ? "false" : null);
               }}
             >
               <option value="null">Todo</option>
               <option value="false">Online</option>
               <option value="true">Físico</option>
             </select>
+
+            {/* Punto físico */}
             <select
               name="physical-point-select"
-              id=""
-              className="w-[550px]"
+              className="flex-[2] min-w-[150px]"
               onChange={(e) =>
                 setPhysicalPoint(e.target.value ? Number(e.target.value) : null)
               }
@@ -201,10 +202,11 @@ function Page() {
                 </option>
               ))}
             </select>
+
+            {/* Categoría */}
             <select
               name="category-select"
-              id=""
-              className="w-[200px]"
+              className="flex-[1.5] min-w-[150px]"
               onChange={(e) =>
                 setCategory(e.target.value ? Number(e.target.value) : null)
               }
@@ -248,7 +250,7 @@ function Page() {
                 physicalLocation={
                   physicalPoint
                     ? physicalPoints.find((p) => p._id === physicalPoint)
-                        ?.address
+                      ?.address
                     : "Todos los puntos físicos"
                 }
                 order={

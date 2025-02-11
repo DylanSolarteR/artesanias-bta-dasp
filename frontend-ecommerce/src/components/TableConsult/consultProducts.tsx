@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { PRODUCT } from "@/types/product.types";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
+import ConfirmationDialog from "@/components/ConfirmationDialog"
 import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState, useEffect } from "react";
@@ -22,6 +23,13 @@ function ConsultProducts({
   const [product_list_filtered, setProduct_list_filtered] = useState<PRODUCT[]>(
     []
   );
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedProductId, setselectedProductId] = useState<number | null>(null);
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setselectedProductId(id);
+    setOpenDialog(true);
+  };
 
   const handleDelete = (id: number) => {
     deleteProduct(id);
@@ -87,7 +95,7 @@ function ConsultProducts({
                           height={30}
                         />
                       </button>
-                      <button onClick={() => handleDelete(product._id)}>
+                      <button onClick={() => handleOpenDeleteDialog(product._id)}>
                         <ImageFb
                           src={DeleteIcon}
                           alt="delete"
@@ -106,6 +114,14 @@ function ConsultProducts({
             )}
           </tbody>
         </table>
+        {openDialog && selectedProductId !== null && (
+          <ConfirmationDialog
+            open={openDialog}
+            setOpen={setOpenDialog}
+            action={() => handleDelete(selectedProductId)}
+            message="¿Estás seguro de que deseas eliminar este producto?"
+          />
+        )}
       </div>
     </div>
   );

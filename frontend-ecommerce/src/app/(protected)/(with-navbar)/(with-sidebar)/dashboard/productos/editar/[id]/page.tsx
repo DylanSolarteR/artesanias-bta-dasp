@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { hasPermission } from "@/util/RolePermissions";
 import { useMainContext } from "@/app/context/MainContext";
 import RegisterProduct from "@/components/FormsRegister/RegisterProductForm";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import * as apiProduct from "@/api/product.api";
 import Loading from "@/components/Loading";
 
@@ -13,6 +14,9 @@ function EditProductPage() {
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (id) {
@@ -29,16 +33,26 @@ function EditProductPage() {
   }, [id]);
 
   const handleSubmit = async (data) => {
-    await apiProduct.updateProduct(
-      Number(id),
-      data.baseProductId,
-      data.name,
-      data.description,
-      data.price,
-      data.imgFile,
-      data.categoryId
-    );
-    router.push("/dashboard/productos");
+    try {
+      const result = await apiProduct.updateProduct(
+        Number(id),
+        data.baseProductId,
+        data.name,
+        data.description,
+        data.price,
+        data.imgFile,
+        data.categoryId
+      );
+      if (result.success) {
+        setMessage("Producto creado con éxito.");
+      } else {
+        setMessage(`${result.message}`);
+      }
+    } catch (error) {
+      setMessage("Error inesperado al crear un producto.");
+    } finally {
+      setOpen(true);
+    }
   };
 
   useEffect(() => {
@@ -52,7 +66,12 @@ function EditProductPage() {
   ) : loading ? (
     <Loading />
   ) : (
-    <RegisterProduct onSubmit={handleSubmit} product={productData} />
+    <><RegisterProduct onSubmit={handleSubmit} product={productData} /><ConfirmationDialog
+      message={message}
+      open={open}
+      setOpen={setOpen}
+      showCancel={false}
+      confirmText="Aceptar" /></>
   );
 }
 

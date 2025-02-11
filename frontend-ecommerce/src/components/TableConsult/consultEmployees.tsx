@@ -7,6 +7,7 @@ import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState } from "react";
 import { useEffect } from "react";
+import ConfirmationDialog from "@/components/ConfirmationDialog"
 import ImageFb from "../ImageFb";
 
 interface ConsultEmployeesProps {
@@ -23,6 +24,13 @@ function ConsultEmployees({
   const [employee_list_filtered, setEmployee_list_filtered] = useState<
     EMPLOYEE[]
   >([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setSelectedEmployeeId(id);
+    setOpenDialog(true);
+  };
 
   const handleDelete = (id: number) => {
     deleteEmployee(id);
@@ -86,7 +94,7 @@ function ConsultEmployees({
                           height={30}
                         />
                       </button>
-                      <button onClick={() => handleDelete(employee.id)}>
+                      <button onClick={() => handleOpenDeleteDialog(employee.id)}>
                         <ImageFb
                           src={DeleteIcon}
                           alt="delete"
@@ -100,11 +108,19 @@ function ConsultEmployees({
               )
             ) : (
               <tr className="text-center">
-                <td colSpan={7}>No se encontraron productos</td>
+                <td colSpan={7}>No se encontraron empleados</td>
               </tr>
             )}
           </tbody>
         </table>
+        {openDialog && selectedEmployeeId !== null && (
+          <ConfirmationDialog
+            open={openDialog}
+            setOpen={setOpenDialog}
+            action={() => handleDelete(selectedEmployeeId)}
+            message="¿Estás seguro de que deseas eliminar este empleado?"
+          />
+        )}
       </div>
     </div>
   );

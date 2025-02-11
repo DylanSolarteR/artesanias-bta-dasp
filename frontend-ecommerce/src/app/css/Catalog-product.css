@@ -50,12 +50,14 @@
     width: 100%;
     gap: 10px;
     transition: all 0.3s ease-in-out;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 320px));
+    grid-auto-columns: max-content;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
     .catalog {
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
     }
   }
   

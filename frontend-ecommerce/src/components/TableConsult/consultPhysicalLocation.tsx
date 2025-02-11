@@ -3,6 +3,7 @@ import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import { useRouter } from "next/navigation";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
+import ConfirmationDialog from "@/components/ConfirmationDialog"
 import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState, useEffect } from "react";
@@ -21,6 +22,13 @@ function ConsultPhysicalLocations({
   const [showLoader, setShowLoader] = useState(true);
   const [physicalLocation_list_filtered, setPhysicalLocation_list_filtered] =
     useState<PHYSICAL_LOCATION[]>([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedPhysicalLocationId, setselectedPhysicalLocationId] = useState<number | null>(null);
+
+  const handleOpenDeleteDialog = (id: number) => {
+    setselectedPhysicalLocationId(id);
+    setOpenDialog(true);
+  };
 
   const handleDelete = (id: number) => {
     deletePhysicalLocation(id);
@@ -85,7 +93,7 @@ function ConsultPhysicalLocations({
                         />
                       </button>
                       <button
-                        onClick={() => handleDelete(physicalLocation._id)}
+                        onClick={() => handleOpenDeleteDialog(physicalLocation._id)}
                       >
                         <ImageFb
                           src={DeleteIcon}
@@ -105,6 +113,14 @@ function ConsultPhysicalLocations({
             )}
           </tbody>
         </table>
+        {openDialog && selectedPhysicalLocationId !== null && (
+          <ConfirmationDialog
+            open={openDialog}
+            setOpen={setOpenDialog}
+            action={() => handleDelete(selectedPhysicalLocationId)}
+            message="¿Estás seguro de que deseas eliminar este punto físico?"
+          />
+        )}
       </div>
     </div>
   );
