@@ -1,9 +1,10 @@
 import { AxiosInstance } from '@/api/axios';
 import { isAxiosError } from 'axios';
 import { EMPLOYEE } from '@/types/employee.types';
+import { ERROR_RETURN } from '@/types/error.types';
 
 // Obtener todos los empleados
-export async function listAllEmployees() {
+export async function listAllEmployees(): Promise<EMPLOYEE[] | ERROR_RETURN> {
     try {
         const response = await AxiosInstance.get('/employee/', {
             headers: {
@@ -14,19 +15,12 @@ export async function listAllEmployees() {
         return employees;
     } catch (err) {
         if (isAxiosError(err) && err.response) {
-            return { 
-                success: false, 
-                message: err.response.data, 
-                status: err.response.status 
-            };
+            throw err;
         }
-        return { 
-            success: false, 
-            message: 'Error inesperado, revise los datos.', 
-            status: 500 
-        };
-    }
+        throw err;
+    };
 }
+
 
 // Obtener un empleado por ID
 export async function getEmployeeById(id: number) {
@@ -40,16 +34,16 @@ export async function getEmployeeById(id: number) {
         return employee;
     } catch (err) {
         if (isAxiosError(err) && err.response) {
-            return { 
-                success: false, 
-                message: err.response.data, 
-                status: err.response.status 
+            return {
+                success: false,
+                message: err.response.data,
+                status: err.response.status
             };
         }
-        return { 
-            success: false, 
-            message: 'Error inesperado, revise los datos.', 
-            status: 500 
+        return {
+            success: false,
+            message: 'Error inesperado, revise los datos.',
+            status: 500
         };
     }
 }
@@ -68,16 +62,16 @@ export async function updateEmployee(employeeData: EMPLOYEE) {
 
     } catch (err) {
         if (isAxiosError(err) && err.response) {
-            return { 
-                success: false, 
-                message: err.response.data, 
-                status: err.response.status 
+            return {
+                success: false,
+                message: err.response.data,
+                status: err.response.status
             };
         }
-        return { 
-            success: false, 
-            message: 'Error inesperado, revise los datos.', 
-            status: 500 
+        return {
+            success: false,
+            message: 'Error inesperado, revise los datos.',
+            status: 500
         };
     }
 }
@@ -92,16 +86,16 @@ export async function deleteEmployee(id: string) {
         return response.data;
     } catch (err) {
         if (isAxiosError(err) && err.response) {
-            return { 
-                success: false, 
-                message: err.response.data, 
-                status: err.response.status 
+            return {
+                success: false,
+                message: err.response.data,
+                status: err.response.status
             };
         }
-        return { 
-            success: false, 
-            message: 'Error inesperado, revise los datos.', 
-            status: 500 
+        return {
+            success: false,
+            message: 'Error inesperado, revise los datos.',
+            status: 500
         };
     }
 }
