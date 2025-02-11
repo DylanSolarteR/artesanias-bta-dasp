@@ -83,11 +83,22 @@ export async function createPhysicalLocation(req: Request, res: Response) {
         return
     }
     const imageManager: ImageManager = new AwsImageManager()
-    const imgurl = await imageManager.uploadImage({
-        key: location.getbaseImageKey() + req.file.originalname.split('.').pop(),
-        contentType: req.file.mimetype,
-        imagePath: req.file.path
-    })
+    const extension = req.file.originalname.split('.').pop();
+    let imgurl = ''
+    try {
+        imgurl = await imageManager.uploadImage({
+            key: location.getbaseImageKey() + extension,
+            contentType: req.file.mimetype,
+            imagePath: req.file.path,
+            extension: extension
+        })
+
+    } catch (error) { }
+
+    if (imgurl === '') {
+        res.status(200).send({ location: location, message: 'No se pudo subir la imagen' })
+        return
+    }
 
     location.image = imgurl
     const updateResult = await dao.update(location)
@@ -177,7 +188,8 @@ export async function updatePhysicalLocation(req: Request, res: Response) {
             img = await imageManager.uploadImage({
                 key: location.getbaseImageKey() + extension,
                 contentType: req.file.mimetype,
-                imagePath: req.file.path
+                imagePath: req.file.path,
+                extension: extension
             })
         } catch (error) {
             res.status(500).send("Error al subir la imagen")

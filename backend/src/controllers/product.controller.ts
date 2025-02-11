@@ -105,10 +105,12 @@ export async function createProduct(req: MulterRequest, res: Response) {
     const imageManager: ImageManager = new AwsImageManager()
     let imgUrl: string
     try {
+        const extension = file.originalname.split('.').pop()
         imgUrl = await imageManager.uploadImage({
-            key: product.getbaseImageKey() + file.originalname.split('.').pop(),
+            key: product.getbaseImageKey() + extension,
             contentType: file.mimetype,
-            imagePath: file.path
+            imagePath: file.path,
+            extension
         })
     } catch (error) {
         res.status(200).send({ product, message: "Producto creado (sin imagen)" })
@@ -121,7 +123,7 @@ export async function createProduct(req: MulterRequest, res: Response) {
         return
     }
 
-    res.status(200).send({ product })
+    res.status(200).send({ product, message: 'Producto creado con exito' })
 }
 
 export async function listProducts(req: Request, res: Response) {
@@ -246,7 +248,8 @@ export async function updateProduct(req: MulterRequest, res: Response) {
             img = await imageManager.uploadImage({
                 key: product.getbaseImageKey() + extension,
                 contentType: req.file.mimetype,
-                imagePath: req.file.path
+                imagePath: req.file.path,
+                extension
             })
         } catch (error) {
             res.status(500).send("Error al subir la imagen")
