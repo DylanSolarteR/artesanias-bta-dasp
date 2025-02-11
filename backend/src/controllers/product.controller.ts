@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { ProductDAOPostgres } from '../dao/implementation/postgresDAO/productDAOPostgres';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
-import { employeeRoles, Product } from '../model/businessTypes';
+import { employeeRoles, Inventory, Product } from '../model/businessTypes';
 import { MulterRequest } from '../custom';
 import fs from 'fs';
 import { AwsImageManager } from "../model/AwsImageManager";
 import { ImageManager } from '../model/imagesManager';
 import { z } from 'zod';
+import { PhysicalLocationDAOPostgres } from '../dao/implementation/postgresDAO/physicalLocationDAOPostgres';
+import { InventoryDAOPostgres } from '../dao/implementation/postgresDAO/inventoryDAOPostgres';
 
 const createProductSchema = z.object({
     name: z.string(),
@@ -61,6 +63,31 @@ export async function createProduct(req: MulterRequest, res: Response) {
 
     let product = insertResult.value
 
+    const locationDao = new PhysicalLocationDAOPostgres()
+    const resLocations = await locationDao.query(new Criteria({}))
+    if (resLocations.hasResponse()) {
+        const locations = resLocations.value
+
+        const inventoryDao = new InventoryDAOPostgres()
+        for (let location of locations) {
+            const inventory = new Inventory(
+                product.id,
+                location.id,
+                0,
+                0,
+                0
+            )
+            const inventoryRes = await inventoryDao.create(inventory)
+            if (!inventoryRes.hasResponse()) {
+                console.log(inventoryRes.error)
+            }
+        }
+    }
+    else {
+        console.log(resLocations.error)
+    }
+
+
     if (isOwnBase) {
         product.baseProductId = product.id
         const updateResult = await dao.update(product)
@@ -74,6 +101,7 @@ export async function createProduct(req: MulterRequest, res: Response) {
         res.status(200).send({ product, message: "Producto creado (No se envió imagen)" })
         return
     }
+
     const imageManager: ImageManager = new AwsImageManager()
     let imgUrl: string
     try {
