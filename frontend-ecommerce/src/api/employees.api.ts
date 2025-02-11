@@ -13,9 +13,18 @@ export async function listAllEmployees() {
         const employees: EMPLOYEE[] = response.data;
         return employees;
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 }
 
@@ -30,9 +39,18 @@ export async function getEmployeeById(id: number) {
         const employee: EMPLOYEE = response.data[0];
         return employee;
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 }
 
@@ -45,13 +63,22 @@ export async function updateEmployee(employeeData: EMPLOYEE) {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        // console.log(response)
-        return response;
+
+        return { success: true, data: response.data, status: response.status };
+
     } catch (err) {
-        if (isAxiosError(err)) {
-            // console.log(err.response)
-            return err.response;
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 }
 
@@ -64,8 +91,17 @@ export async function deleteEmployee(id: string) {
         });
         return response.data;
     } catch (err) {
-        if (isAxiosError(err)) {
-            throw err;
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 }

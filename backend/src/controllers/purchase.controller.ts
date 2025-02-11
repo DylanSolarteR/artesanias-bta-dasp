@@ -10,10 +10,49 @@ import { EmployeeDAOPostgres } from "../dao/implementation/postgresDAO/employeeD
 import { Preference, Payment } from "mercadopago";
 import { Items } from "mercadopago/dist/clients/commonTypes";
 import { clienteMercadoPago } from "../model/MercadoPago";
+import { MailSender } from '../utils/EmailSender';
+import fs from 'fs';
+import Handlebars from "handlebars";
+import inlineCss from "inline-css";
 
 const docTypeValues = Object.values(docTypes) as [string, ...string[]]
 
+const billTemplate = Handlebars.compile(fs.readFileSync("src/templates/mail/bill.html", "utf8"))
+async function sendBill(purchase: Purchase) {
+    let content = ''
 
+    const products = []
+    const productDao = new ProductDAOPostgres()
+    for (let product of purchase.products) {
+        const productRes = await productDao.query(new Criteria({
+            filters: [new Filter('product.pk_id', product.productId, matchType.strictEqual)]
+        }))
+        const productDetails = productRes.value[0]
+        products.push({
+            name: productDetails.name,
+            quantity: product.quantity,
+            price: product.unitPrice,
+            subtotal: product.quantity * product.unitPrice
+        })
+    }
+
+    const total = products.reduce((acc, product) => acc + product.subtotal, 0)
+    const rendered = billTemplate({
+        name: purchase.name,
+        id: purchase.id,
+        products,
+        total
+    })
+
+    const renderedWithStyles = await inlineCss(rendered, { url: '/', })
+
+    const mailSender = new MailSender()
+    await mailSender.sendMail({
+        to: purchase.email,
+        subject: 'Factura de compra en artesaniasbogota.shop #' + purchase.id,
+        html: renderedWithStyles
+    })
+}
 
 
 const basicUserDataSchema = z.object({
@@ -73,8 +112,6 @@ const posPurchaseSchema = z.object({
     productList: z.array(productSchema),
     locationId: z.number({ message: 'La id del punto físico es requerida' }).min(1)
 });
-
-
 
 export async function initializePurchase(req: Request, res: Response) {
     try {
@@ -170,7 +207,6 @@ export async function initializePurchase(req: Request, res: Response) {
     }
 }
 
-
 export async function completePurchase(req: Request, res: Response) {
     if (!req.body.data.id) {
         res.status(400).send('No se envió el id de la compra')
@@ -206,6 +242,7 @@ export async function completePurchase(req: Request, res: Response) {
             purchaseDao.completePurchase(purchase)
 
             res.status(200).send('Compra completada')
+            sendBill(purchase)
         }
         res.status(200)
     } catch (e) {
@@ -317,5 +354,5 @@ export async function completePosPurchase(req: Request, res: Response) {
     const completePurchase = purchaseRes.value
 
     res.status(200).send(completePurchase)
-
+    await sendBill(purchase)
 }

@@ -6,7 +6,6 @@ import "@/app/css/Catalog-product.css";
 import ImageFb from "./ImageFb";
 
 function Catalog({ products }: { products: PRODUCT[] }) {
-  const { gridClass } = useMainContext();
 
   return products?.length === 0 ? (
     <div className="empty-message">
@@ -14,7 +13,7 @@ function Catalog({ products }: { products: PRODUCT[] }) {
       <p>Lo sentimos, no se encuentran productos en este momento.</p>
     </div>
   ) : (
-    <div className={`list-product ${gridClass}`}>
+    <div className={`list-product`}>
       {products?.map((product: PRODUCT, index: number) => (
         <article key={index}>
           <div className="img-container">

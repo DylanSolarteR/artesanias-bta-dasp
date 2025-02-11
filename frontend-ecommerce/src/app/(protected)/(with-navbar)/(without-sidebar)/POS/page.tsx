@@ -67,7 +67,7 @@ function Page() {
             />
           )}
           {sidebarPage === "search" && (
-            <div className="h-[54rem]">
+            <div className="container-consult-product">
               <ConsultaPOS product_list={product_list} />
             </div>
           )}

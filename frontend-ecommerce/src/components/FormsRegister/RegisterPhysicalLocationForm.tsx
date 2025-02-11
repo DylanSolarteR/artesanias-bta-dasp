@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { onlyNumberInput } from "@/util/utils";
 import defaultImage from "@/app/icons/BagsadIcon.png";
 import Map from "@/components/Map";
 import ImageFb from "../ImageFb";
@@ -39,7 +40,7 @@ function RegisterPhysicalLocationForm({
     lat: number;
     lng: number;
   }) => {
-    setAddress(location.address);
+    setAddress(location.address.substring(0, 55));
     setLatitude(Number(location.lat.toFixed(6)));
     setLongitude(Number(location.lng.toFixed(6)));
   };
@@ -105,6 +106,7 @@ function RegisterPhysicalLocationForm({
               type="text"
               value={telephone}
               name="telephone"
+              onKeyDown={onlyNumberInput}
               onChange={(e) => setTelephone(e.target.value)}
             />
 

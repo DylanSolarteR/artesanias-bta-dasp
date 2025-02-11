@@ -6,6 +6,18 @@ import { MulterRequest } from '../custom';
 import fs from 'fs';
 import { AwsImageManager } from "../model/AwsImageManager";
 import { ImageManager } from '../model/imagesManager';
+import { z } from 'zod';
+
+const createProductSchema = z.object({
+    name: z.string(),
+    description: z.string(),
+    price: z.coerce.number(),
+    categoryId: z.coerce.number().int(),
+    baseProductId: z.union([z.string(), z.number(), z.null()])
+        .transform((val) => (val === "null" || val === null ? null : Number(val)))
+        .refine((val) => val === null || !isNaN(val), { message: "Debe ser un número o null" }),
+    isOwnBase: z.coerce.boolean()
+})
 
 export async function createProduct(req: MulterRequest, res: Response) {
     const file = req.file // Require uploadMiddleware.single('imgFile') (See Multer)
@@ -16,12 +28,13 @@ export async function createProduct(req: MulterRequest, res: Response) {
         return
     }
 
-    let { name, description, price, img, categoryId, baseProductId, isOwnBase } = req.body;
-    const dao = new ProductDAOPostgres();
-    if (!name || !description || !price || !categoryId) {
-        res.status(400).send('Los campos nombre, descripcion, precio, imagen y categoria son requeridos')
+    const parseRes = createProductSchema.safeParse(req.body)
+    if (!parseRes.success) {
+        res.status(400).send(parseRes.error)
         return
     }
+
+    let { name, description, price, categoryId, baseProductId, isOwnBase } = parseRes.data;
 
     if (!isOwnBase && !baseProductId) {
         res.status(400).send('El campo baseProductId es requerido')
@@ -39,6 +52,7 @@ export async function createProduct(req: MulterRequest, res: Response) {
         true
     )
 
+    const dao = new ProductDAOPostgres();
     let insertResult = await dao.create(newProduct)
     if (!insertResult.hasResponse()) {
         res.status(500).send(insertResult.error)

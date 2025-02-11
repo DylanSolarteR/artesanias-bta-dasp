@@ -57,12 +57,20 @@ export async function createUser(employee) {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         })
-        return response.data;
+        return { success: true, data: response.data, status: response.status };
     } catch (err) {
-        if (isAxiosError(err)) {
-            return { success: false, message: err.response.data, status: err.status }
+        if (isAxiosError(err) && err.response) {
+            return { 
+                success: false, 
+                message: err.response.data, 
+                status: err.response.status 
+            };
         }
-        return { success: false, message: 'Error inesperado, revise los datos.', status: 400 }
+        return { 
+            success: false, 
+            message: 'Error inesperado, revise los datos.', 
+            status: 500 
+        };
     }
 
 }

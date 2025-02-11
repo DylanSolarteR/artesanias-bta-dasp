@@ -1,21 +1,32 @@
 "use client";
 import RegisterProduct from "@/components/FormsRegister/RegisterProductForm";
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import { useMainContext } from "@/app/context/MainContext";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { hasPermission } from "@/util/RolePermissions";
 import * as apiProduct from "@/api/product.api";
+import { useState } from "react";
 
 function Page() {
   const { role } = useMainContext();
   const router = useRouter();
 
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
   const handleSubmit = async (data) => {
     try {
-      await apiProduct.createProduct(data);
-      router.push("/dashboard/productos");
+      const result = await apiProduct.createProduct(data);
+      if (result.success) {
+        setMessage("Producto creado con éxito.");
+      } else {
+        setMessage(`${result.message}`);
+      }
     } catch (error) {
-      console.error("Error al crear producto:", error);
+      setMessage("Error inesperado al crear un producto.");
+    } finally {
+      setOpen(true);
     }
   };
 
@@ -24,7 +35,12 @@ function Page() {
   ) : !hasPermission(role, "create:products") ? (
     router.push("/POS")
   ) : (
-    <RegisterProduct onSubmit={handleSubmit} />
+    <><RegisterProduct onSubmit={handleSubmit} /><ConfirmationDialog
+      message={message}
+      open={open}
+      setOpen={setOpen}
+      showCancel={false}
+      confirmText="Aceptar" /></>
   );
 }
 

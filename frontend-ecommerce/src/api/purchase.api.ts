@@ -6,10 +6,7 @@ import { addressDataSchema, basicUserDataSchema, productSchema } from '../types/
 export async function initializePurchase(data: { basicUserData: basicUserDataSchema, addressData: addressDataSchema, productList: productSchema[] }): Promise<string> {
     try {
         const response = await AxiosInstance.post('/purchase/initialize-purchase', data);
-        console.log(response.data.purchaseId)
-        console.log(response.data.url)
         return response.data.url;
-        return
     } catch (err) {
         if (isAxiosError(err)) {
             console.log(err)
@@ -53,6 +50,9 @@ export async function completePosPurchase(
         return response;
     } catch (err) {
         if (isAxiosError(err)) {
+            if (err.code === "ERR_NETWORK") {
+                return { success: false, message: 'No es posible establecer conexión con el servidor, verifica tu conexión a internet.', status: 777 }
+            }
             return err.response;
         }
     }
