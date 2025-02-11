@@ -7,6 +7,7 @@ import { EMPLOYEE } from "@/types/employee.types";
 import ConsultEmployees from "@/components/TableConsult/consultEmployees";
 import Loading from "@/components/Loading";
 import * as apiEmployees from "@/api/employees.api";
+import { ERROR_RETURN } from "@/types/error.types";
 
 function Page() {
   const { role } = useMainContext();
@@ -23,7 +24,8 @@ function Page() {
   }
 
   useEffect(() => {
-    apiEmployees.listAllEmployees().then((employee) => {
+    apiEmployees.listAllEmployees().then((result) => {
+      const employee = result as EMPLOYEE[];
       setEmployees_table(employee);
     });
   }, []);
