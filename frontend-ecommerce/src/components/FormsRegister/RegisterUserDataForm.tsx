@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import { onlyNumberInput } from "@/util/utils";
+import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
+import { listPhysicalLocations } from "@/api/physicalLocation.api";
 
 function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data: any) => void }) {
   const [name, setName] = useState<string>(user?.name || "");
@@ -8,11 +10,17 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
   const [email, setEmail] = useState<string>(user?.email || "");
   const [telephone, setTelephone] = useState<string>(user?.telephone || "");
   const [role, setRole] = useState<string>(user?.role || "Cashier");
+  const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
   const [locationId, setLocationId] = useState<string>(user?.locationId || "");
   const [docType, setDocType] = useState<string>(user?.docType || "CC");
   const [docNumber, setDocNumber] = useState<string>(user?.docNumber || "");
 
-  console.log(user);
+  // Para listar los puntos físicos
+  useEffect(() => {
+    listPhysicalLocations()
+      .then(setPhysicalPoints)
+      .catch((error) => console.error("Error al cargar puntos físicos:", error));
+  }, []);
 
   // Para enviar el formulario
   const handleSubmit = (e) => {
@@ -25,7 +33,7 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
     <div className="container-dashboard">
       <div className="main-center">
         <div className="container-inf-step">
-          <form className="form-inf-buy"  onSubmit={handleSubmit}>
+          <form className="form-inf-buy" onSubmit={handleSubmit}>
             <h1>Registrar Empleado</h1>
             {/* Sección de Datos Personales */}
             <h2>Datos personales</h2>
@@ -104,15 +112,18 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
               <option value="cashier">Cajero</option>
             </select>
 
-            <label htmlFor="locationId">Número de tienda: </label>
-            <input
+            <label htmlFor="locationId">Punto Físico: </label>
+            <select
               className="input-standard"
-              type="text"
-              value={locationId}
-              name="locationId"
-              onKeyDown={onlyNumberInput}
+              name="physical-point-select"
               onChange={(e) => setLocationId(e.target.value)}
-            />
+            >
+              {physicalPoints.map((point) => (
+                <option key={point._id} value={point._id}>
+                  {point.address}
+                </option>
+              ))}
+            </select>
 
             <button id="button-standard" type="submit">Guardar</button>
 
