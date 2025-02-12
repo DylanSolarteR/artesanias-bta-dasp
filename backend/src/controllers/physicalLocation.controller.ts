@@ -23,6 +23,9 @@ export async function listPhysicalLocations(req: Request, res: Response) {
         filters.push(new Filter('active',
             <string>req.query['active'], matchType.strictEqual));
     }
+    else {
+        filters.push(new Filter('active', true, matchType.strictEqual));
+    }
 
     let sorts = []
     let result = await dao.query(new Criteria({
