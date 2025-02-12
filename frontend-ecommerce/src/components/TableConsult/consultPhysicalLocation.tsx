@@ -3,7 +3,7 @@ import { PHYSICAL_LOCATION } from "@/types/physicalLocation.types";
 import { useRouter } from "next/navigation";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
-import ConfirmationDialog from "@/components/ConfirmationDialog"
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState, useEffect } from "react";
@@ -23,7 +23,9 @@ function ConsultPhysicalLocations({
   const [physicalLocation_list_filtered, setPhysicalLocation_list_filtered] =
     useState<PHYSICAL_LOCATION[]>([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedPhysicalLocationId, setselectedPhysicalLocationId] = useState<number | null>(null);
+  const [selectedPhysicalLocationId, setselectedPhysicalLocationId] = useState<
+    number | null
+  >(null);
 
   const handleOpenDeleteDialog = (id: number) => {
     setselectedPhysicalLocationId(id);
@@ -81,7 +83,10 @@ function ConsultPhysicalLocations({
                     <td data-label="Identificación">{physicalLocation._id}</td>
                     <td data-label="Dirección">{physicalLocation.address}</td>
                     <td data-label="Teléfono">{physicalLocation.telephone}</td>
-                    <td data-label="Acciones">
+                    <td
+                      data-label="Acciones"
+                      className="flex flex-col items-center justify-center gap-2"
+                    >
                       <button
                         onClick={() => handleUpdate(physicalLocation._id)}
                       >
@@ -93,7 +98,9 @@ function ConsultPhysicalLocations({
                         />
                       </button>
                       <button
-                        onClick={() => handleOpenDeleteDialog(physicalLocation._id)}
+                        onClick={() =>
+                          handleOpenDeleteDialog(physicalLocation._id)
+                        }
                       >
                         <ImageFb
                           src={DeleteIcon}
