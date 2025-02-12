@@ -3,11 +3,13 @@ import { useRouter } from "next/navigation";
 import { PRODUCT } from "@/types/product.types";
 import DeleteIcon from "@/app/icons/TrashIcon.svg?url";
 import UpdateIcom from "@/app/icons/EditIcon.svg?url";
-import ConfirmationDialog from "@/components/ConfirmationDialog"
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState, useEffect } from "react";
 import ImageFb from "../ImageFb";
+import { DataTable } from "@/components/DataTable/DataTable";
+import { ColumnDef } from "@tanstack/react-table";
 
 interface ConsultProductsProps {
   products_table: PRODUCT[];
@@ -24,7 +26,9 @@ function ConsultProducts({
     []
   );
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedProductId, setselectedProductId] = useState<number | null>(null);
+  const [selectedProductId, setselectedProductId] = useState<number | null>(
+    null
+  );
 
   const handleOpenDeleteDialog = (id: number) => {
     setselectedProductId(id);
@@ -44,6 +48,69 @@ function ConsultProducts({
     setShowLoader(false);
   }, [products_table]);
 
+  const columns: ColumnDef<PRODUCT>[] = [
+    {
+      accessorKey: "_id",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">ID</div>
+      ),
+    },
+    {
+      accessorKey: "baseProductId",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">ID base</div>
+      ),
+    },
+    {
+      accessorKey: "name",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">Nombre</div>
+      ),
+    },
+    {
+      accessorKey: "description",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">
+          Descripción
+        </div>
+      ),
+    },
+    {
+      accessorKey: "price",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">Precio</div>
+      ),
+    },
+    {
+      accessorKey: "categoryName",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">
+          Categoría
+        </div>
+      ),
+    },
+    {
+      accessorKey: "actions",
+      header: () => (
+        <div className="text-center text-white text-xl font-bold">Acciones</div>
+      ),
+      cell: ({ row }) => {
+        const product = row.original;
+
+        return (
+          <div className="flex flexrow justify-center items-center">
+            <button onClick={() => handleUpdate(product._id)}>
+              <ImageFb src={UpdateIcom} alt="update" width={30} height={30} />
+            </button>
+            <button onClick={() => handleOpenDeleteDialog(product._id)}>
+              <ImageFb src={DeleteIcon} alt="delete" width={30} height={30} />
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+
   return (
     <div className="container-dashboard">
       <div className="flex-column">
@@ -58,7 +125,7 @@ function ConsultProducts({
             />
           </section>
         </div>
-        <table className="table">
+        {/* <table className="table">
           <thead>
             <tr>
               <th scope="col">ID</th>
@@ -95,7 +162,9 @@ function ConsultProducts({
                           height={30}
                         />
                       </button>
-                      <button onClick={() => handleOpenDeleteDialog(product._id)}>
+                      <button
+                        onClick={() => handleOpenDeleteDialog(product._id)}
+                      >
                         <ImageFb
                           src={DeleteIcon}
                           alt="delete"
@@ -113,7 +182,8 @@ function ConsultProducts({
               </tr>
             )}
           </tbody>
-        </table>
+        </table> */}
+        <DataTable columns={columns} data={product_list_filtered}></DataTable>
         {openDialog && selectedProductId !== null && (
           <ConfirmationDialog
             open={openDialog}

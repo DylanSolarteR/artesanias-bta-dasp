@@ -7,7 +7,7 @@ import SearchBarMenu from "../SearchBarMenu";
 import Loading from "@/components/Loading";
 import { useState } from "react";
 import { useEffect } from "react";
-import ConfirmationDialog from "@/components/ConfirmationDialog"
+import ConfirmationDialog from "@/components/ConfirmationDialog";
 import ImageFb from "../ImageFb";
 
 interface ConsultEmployeesProps {
@@ -25,7 +25,9 @@ function ConsultEmployees({
     EMPLOYEE[]
   >([]);
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(null);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | null>(
+    null
+  );
 
   const handleOpenDeleteDialog = (id: number) => {
     setSelectedEmployeeId(id);
@@ -85,7 +87,10 @@ function ConsultEmployees({
                     <td data-label="Rol">{employee.role}</td>
                     <td data-label="Punto Físico">{employee.locationId}</td>
                     <td data-label="Celular">{employee.telephone}</td>
-                    <td data-label="Acciones">
+                    <td
+                      data-label="Acciones"
+                      className="flex flex-col items-center justify-center gap-2"
+                    >
                       <button onClick={() => handleUpdate(employee.id)}>
                         <ImageFb
                           src={UpdateIcom}
@@ -94,7 +99,9 @@ function ConsultEmployees({
                           height={30}
                         />
                       </button>
-                      <button onClick={() => handleOpenDeleteDialog(employee.id)}>
+                      <button
+                        onClick={() => handleOpenDeleteDialog(employee.id)}
+                      >
                         <ImageFb
                           src={DeleteIcon}
                           alt="delete"
