@@ -33,11 +33,15 @@ export class AwsImageManager implements ImageManager {
         let payload, contentType;
         if (params.payload) {
             payload = params.payload
-            contentType = params.contentType
         }
         else {
             payload = fs.readFileSync(params.imagePath)
-            contentType = mime.lookup(params.imagePath)
+        }
+        if (params.contentType) {
+            contentType = params.contentType
+        }
+        else {
+            contentType = mime.lookup(params.extension)
         }
 
         if (!contentType) {

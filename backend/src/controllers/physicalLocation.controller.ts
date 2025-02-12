@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import { Criteria, Filter, matchType, Sort } from '../dao/Criteria';
 import { PhysicalLocationDAOPostgres } from '../dao/implementation/postgresDAO/physicalLocationDAOPostgres';
-import { Employee, employeeRoles, PhysicalLocation } from '../model/businessTypes';
+import { Employee, employeeRoles, Inventory, PhysicalLocation } from '../model/businessTypes';
 import { ImageManager } from '../model/imagesManager';
 import { AwsImageManager } from '../model/AwsImageManager';
 import { number, z } from 'zod';
+import { ProductDAOPostgres } from '../dao/implementation/postgresDAO/productDAOPostgres';
+import { InventoryDAOPostgres } from '../dao/implementation/postgresDAO/inventoryDAOPostgres';
 
 
 
@@ -17,12 +19,19 @@ export async function listPhysicalLocations(req: Request, res: Response) {
         filters.push(new Filter('pk_id',
             <string>req.query['id'], matchType.strictEqual));
     }
+    if (req.query['active'] != null) {
+        filters.push(new Filter('active',
+            <string>req.query['active'], matchType.strictEqual));
+    }
+    else {
+        filters.push(new Filter('active', true, matchType.strictEqual));
+    }
 
     let sorts = []
     let result = await dao.query(new Criteria({
         filters,
         sortBy: sorts,
-        limit: query['limit'] || 10,
+        limit: query['limit'],
         offset: query['offset'] || null
 
     }));
@@ -66,16 +75,37 @@ export async function createPhysicalLocation(req: Request, res: Response) {
         return
     }
     const location = result.value
+
+    const productDao = new ProductDAOPostgres()
+    const productRes = await productDao.query(new Criteria({}))
+    const inventoryDao = new InventoryDAOPostgres()
+    if (productRes.hasResponse()) {
+        for (let product of productRes.value) {
+            await inventoryDao.create(new Inventory(product.id, location.id, 0, 0, 0))
+        }
+    }
+
     if (!req.file) {
         res.status(200).send({ location: location, message: 'No se subió imagen, usando imagen por defecto' })
         return
     }
     const imageManager: ImageManager = new AwsImageManager()
-    const imgurl = await imageManager.uploadImage({
-        key: location.getbaseImageKey() + req.file.originalname.split('.').pop(),
-        contentType: req.file.mimetype,
-        imagePath: req.file.path
-    })
+    const extension = req.file.originalname.split('.').pop();
+    let imgurl = ''
+    try {
+        imgurl = await imageManager.uploadImage({
+            key: location.getbaseImageKey() + extension,
+            contentType: req.file.mimetype,
+            imagePath: req.file.path,
+            extension: extension
+        })
+
+    } catch (error) { }
+
+    if (imgurl === '') {
+        res.status(200).send({ location: location, message: 'No se pudo subir la imagen' })
+        return
+    }
 
     location.image = imgurl
     const updateResult = await dao.update(location)
@@ -165,7 +195,8 @@ export async function updatePhysicalLocation(req: Request, res: Response) {
             img = await imageManager.uploadImage({
                 key: location.getbaseImageKey() + extension,
                 contentType: req.file.mimetype,
-                imagePath: req.file.path
+                imagePath: req.file.path,
+                extension: extension
             })
         } catch (error) {
             res.status(500).send("Error al subir la imagen")

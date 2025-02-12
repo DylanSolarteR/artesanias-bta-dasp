@@ -11,7 +11,7 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
   const [telephone, setTelephone] = useState<string>(user?.telephone || "");
   const [role, setRole] = useState<string>(user?.role || "Cashier");
   const [physicalPoints, setPhysicalPoints] = useState<PHYSICAL_LOCATION[]>([]);
-  const [locationId, setLocationId] = useState<string>(user?.locationId || "");
+  const [locationId, setLocationId] = useState<string>();  
   const [docType, setDocType] = useState<string>(user?.docType || "CC");
   const [docNumber, setDocNumber] = useState<string>(user?.docNumber || "");
 
@@ -21,6 +21,14 @@ function RegisterUserDataForm({ user, onSubmit }: { user?: any; onSubmit: (data:
       .then(setPhysicalPoints)
       .catch((error) => console.error("Error al cargar puntos físicos:", error));
   }, []);
+
+  useEffect(() => {
+    if (user?.locationId) {
+      setLocationId(user.locationId);
+    } else if (physicalPoints.length > 0) {
+      setLocationId(String(physicalPoints[0]._id));
+    }
+  }, [user?.locationId, physicalPoints]);
 
   // Para enviar el formulario
   const handleSubmit = (e) => {

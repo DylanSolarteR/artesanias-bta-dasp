@@ -3,6 +3,10 @@ import { useEffect, Suspense, useState } from "react";
 import CeramicsImage from "@/app/images/Ceramics.png";
 import DefaultImage from "@/app/images/Default.jpg";
 import CityEmpress from "@/app/images/cityEmpress.png";
+import Category1 from "@/app/images/Category1Image.jpg";
+import Category3 from "@/app/images/Category3Image.jpg";
+import Category4 from "@/app/images/Category4Image.jpg";
+import Category5 from "@/app/images/Category5Image.jpg";
 import * as apiProduct from "@/api/product.api";
 import * as apiCategory from "@/api/category.api";
 
@@ -15,6 +19,15 @@ import Map from "@/components/Map";
 import { listPhysicalLocations } from "@/api/physicalLocation.api";
 import Navbar from "@/components/Navbar";
 import ImageFb from "@/components/ImageFb";
+import { StaticImageData } from "next/image";
+
+const categoryImages: Record<number, StaticImageData> = {
+  1: Category1,
+  2: DefaultImage,
+  3: Category3,
+  4: Category4,
+  5: Category5
+};
 
 export interface PRODUCT {
   id: number;
@@ -149,7 +162,7 @@ export default function Home() {
                 onClick={() => handleCategorySelect(category.id)}
                 style={{ cursor: "pointer" }}
               >
-                <CategCard title={category.name} backImg={DefaultImage} />
+                <CategCard title={category.name} backImg={categoryImages[category.id] || DefaultImage} />
               </div>
             ))}
           </div>

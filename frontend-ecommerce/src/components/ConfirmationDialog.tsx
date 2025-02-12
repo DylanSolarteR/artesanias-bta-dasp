@@ -36,12 +36,12 @@ function ConfirmationDialog({
       <DialogContent className="flex flex-col gap-2 bg-[color:var(--background)]">
         <DialogHeader>
           <DialogTitle className="text-[color: var(--foreground)] font-bold text-xl">
-            {showCancel ? "Confirmación" : "Notificación"} {/* Cambia el título según el uso */}
+            {showCancel ? "Confirmación" : "Notificación"} 
           </DialogTitle>
         </DialogHeader>
         <p className="text-gray-700">{message}</p>
         <DialogFooter className="pt-2 flex justify-end">
-          {showCancel && ( // Solo muestra el botón cancelar si showCancel es true
+          {showCancel && ( 
             <DialogClose asChild>
               <button className="bg-[color:var(--color-gray)] text-black rounded-md p-2">
                 {cancelText}
