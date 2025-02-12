@@ -69,6 +69,7 @@ function ConsultEmployees({
               <th scope="col">Rol</th>
               <th scope="col">Punto Físico</th>
               <th scope="col">Celular</th>
+              <th scope="col">Correo electrónico</th>
               <th scope="col">Acciones</th>
             </tr>
           </thead>
@@ -87,6 +88,7 @@ function ConsultEmployees({
                     <td data-label="Rol">{employee.role}</td>
                     <td data-label="Punto Físico">{employee.locationId}</td>
                     <td data-label="Celular">{employee.telephone}</td>
+                    <td data-label="Correo electrónico">{employee.email}</td>
                     <td
                       data-label="Acciones"
                       className="flex flex-col items-center justify-center gap-2"
