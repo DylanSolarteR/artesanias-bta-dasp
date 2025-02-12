@@ -25,7 +25,7 @@ export async function createProduct(product) {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data;
+        return { success: true, data: response.data, status: response.status };
     } catch (err) {
         if (isAxiosError(err) && err.response) {
             return {
@@ -150,7 +150,7 @@ export async function updateProduct(id: number, baseProductId: string, name: str
                 Authorization: `barer ${localStorage.getItem('authToken')}`
             }
         });
-        return response.data;
+        return { success: true, data: response.data, status: response.status };
     } catch (err) {
         if (isAxiosError(err) && err.response) {
             return {
