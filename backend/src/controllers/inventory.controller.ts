@@ -50,6 +50,10 @@ export async function listInventory(req: Request, res: Response) {
         filters.push(new Filter('inventory.pk_fk_physical_location', <string>query['locationId'], matchType.strictEqual));
     }
 
+    filters.push(new Filter('product.active', true, matchType.strictEqual));
+    filters.push(new Filter('physical_location.active', true, matchType.strictEqual));
+
+
     let sorts = [];
     if (query.hasOwnProperty('orderBy')) {
         if (!Array.isArray(query['orderBy'])) {
