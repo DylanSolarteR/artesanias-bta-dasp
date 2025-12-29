@@ -19,6 +19,7 @@ export class PostgresConnection {
             host: process.env.BD_HOST,
             port: parseInt(process.env.BD_PORT),
             database: process.env.BD_NAME,
+            ssl: true,
         }
 
         if (process.env.NODE_ENV === 'production') {
