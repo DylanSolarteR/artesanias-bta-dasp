@@ -26,7 +26,7 @@ const categoryImages: Record<number, StaticImageData> = {
   2: DefaultImage,
   3: Category3,
   4: Category4,
-  5: Category5
+  5: Category5,
 };
 
 export interface PRODUCT {
@@ -93,9 +93,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    apiCategory.listCategories().then((categories) => {
-      setCategories(categories);
-    });
+    apiCategory
+      .listCategories()
+      .then((categories) => {
+        setCategories(categories);
+      })
+      .catch((error) => {
+        console.error("Error al obtener categorías:", error);
+      });
   }, []);
 
   const handleCategorySelect = async (category) => {
@@ -150,26 +155,31 @@ export default function Home() {
           colombianos, destacando la riqueza cultural y las tradiciones de las
           diferentes regiones del país.
         </p>
-        <div className="carousel">
-          <button className="arrow left" onClick={() => scrollLeft()}>
-            &#8592;
-          </button>
-          <div className="carousel-track" id="track">
-            {categories.map((category, index) => (
-              <div
-                className="carousel-item"
-                key={index}
-                onClick={() => handleCategorySelect(category.id)}
-                style={{ cursor: "pointer" }}
-              >
-                <CategCard title={category.name} backImg={categoryImages[category.id] || DefaultImage} />
-              </div>
-            ))}
+        {categories && categories.length > 0 ? (
+          <div className="carousel">
+            <button className="arrow left" onClick={() => scrollLeft()}>
+              &#8592;
+            </button>
+            <div className="carousel-track" id="track">
+              {categories.map((category, index) => (
+                <div
+                  className="carousel-item"
+                  key={index}
+                  onClick={() => handleCategorySelect(category.id)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <CategCard
+                    title={category.name}
+                    backImg={categoryImages[category.id] || DefaultImage}
+                  />
+                </div>
+              ))}
+            </div>
+            <button className="arrow right" onClick={() => scrollRight()}>
+              &#8594;
+            </button>
           </div>
-          <button className="arrow right" onClick={() => scrollRight()}>
-            &#8594;
-          </button>
-        </div>
+        ) : null}
       </section>
 
       <section className="section-products">
