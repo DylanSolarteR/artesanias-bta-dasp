@@ -90,7 +90,7 @@ export class ProductDAOPostgres implements IDAO<Product> {
         }
 
     }
-    
+
     async delete(product: Product): Promise<boolean> {
         const query = ` UPDATE product 
                         SET 

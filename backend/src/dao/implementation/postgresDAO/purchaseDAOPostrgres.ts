@@ -1,6 +1,6 @@
 
 import { PoolClient } from "pg";
-import { docTypes, Inventory } from "../../../model/businessTypes";
+import { Inventory } from "../../../model/businessTypes";
 import { Purchase, EcommercePurchase, PhysicalPurchase, ProductInPurchase, ProductRequest } from "../../../model/purchase";
 import { Criteria, Filter, matchType, Sort } from "../../Criteria";
 import { IDAO, ObjectResponse } from "../../dao";
