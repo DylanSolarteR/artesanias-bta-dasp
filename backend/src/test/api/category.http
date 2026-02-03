@@ -1,2 +1,6 @@
 
 http://localhost:3200/api/category/list
+
+
+###
+GET http://localhost:3200/

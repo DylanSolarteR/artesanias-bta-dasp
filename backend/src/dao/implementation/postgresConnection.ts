@@ -1,6 +1,4 @@
-import { Pool, Client, PoolConfig } from "pg";
-
-
+import { Pool, PoolConfig } from "pg";
 
 export class PostgresConnection {
 
@@ -19,13 +17,7 @@ export class PostgresConnection {
             host: process.env.BD_HOST,
             port: parseInt(process.env.BD_PORT),
             database: process.env.BD_NAME,
-            ssl: true,
-        }
-
-        if (process.env.NODE_ENV === 'production') {
-            config.ssl = {
-                rejectUnauthorized: false
-            }
+            ssl: { rejectUnauthorized: false },
         }
 
         this.singletonVerify = Math.random()
